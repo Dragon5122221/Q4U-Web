@@ -1,0 +1,9 @@
+@using Q4UPrototypeWeb.Models
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{ Layout="_AuthLayout"; ViewData["Title"]="Sign in"; }
+<h1>Welcome to Q4U.</h1><p>Manage your vehicles, renewals and fleet in one place.</p>
+<div asp-validation-summary="All" role="alert"></div>
+@if((bool)ViewBag.Demo){<div class="feedback"><strong>Interactive prototype</strong><p>Choose a profile to explore its workspace. No password is required. Use sample information only.</p></div><form method="post" action="/Account/Demo" class="form-grid">@Html.AntiForgeryToken()<label class="full">Profile<select name="role">@foreach(var role in Roles.All){<option>@role</option>}</select></label><button class="primary">Open demo workspace →</button></form>}
+else {<form id="firebase-login" class="form-grid" data-api-key="@Configuration["Firebase:WebApiKey"]" data-auth-domain="@Configuration["Firebase:AuthDomain"]" data-project="@Configuration["Firebase:ProjectId"]"><label class="full">Email<input id="firebase-email" type="email" autocomplete="username" required /></label><label class="full">Password<input id="firebase-password" type="password" autocomplete="current-password" required /></label><button type="submit" class="primary">Sign in</button><button type="button" class="secondary" id="firebase-reset">Send password reset email</button><p id="auth-status" role="status"></p></form><form method="post" action="/Account/Firebase" id="firebase-exchange">@Html.AntiForgeryToken()<input type="hidden" name="idToken" id="firebase-token" /></form>}
+<p class="field-help">Need a new account? <a href="/Account/Register">Account access information</a></p>
+@section Scripts { <script type="module" src="~/js/firebase-login.js" asp-append-version="true"></script> }

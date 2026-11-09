@@ -1,0 +1,21 @@
+bin/
+obj/
+.vs/
+*.user
+App_Data/
+**/service-account*.json
+appsettings.Local.json
+# Firebase Admin keys are downloaded as <project>-firebase-adminsdk-<id>.json. We musn't commit them.
+*firebase-adminsdk*.json
+tools/provision/node_modules/
+.firebase/
+firebase-debug.log
+# Each person keeps their own Firebase server key here, outside the project. Never commit a key.
+firebase-key.json
+*-key.json
+
+# Temporary GitHub authentication and test output
+gha-creds-*.json
+**/gha-creds-*.json
+TestResults/
+**/TestResults/

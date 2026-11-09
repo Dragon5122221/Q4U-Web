@@ -1,0 +1,561 @@
+﻿@model ServiceRequestTrackViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Track Service Request";
+    ViewData["ActiveNavigation"] = "Requests";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/service-requests.css"
+          asp-append-version="true" />
+}
+
+
+<div class="q4u-service-back">
+
+    <a asp-controller="ServiceRequests"
+       asp-action="Index">
+        ← Back to Service Requests
+    </a>
+
+</div>
+
+
+<section class="q4u-service-track-header">
+
+    <div>
+
+        <span>
+            SERVICE TRACKING
+        </span>
+
+        <h1>
+            @Model.Reference
+        </h1>
+
+        <p>
+            @Model.ServiceName · Submitted @Model.SubmittedDate
+        </p>
+
+    </div>
+
+
+    <div class="q4u-service-track-actions">
+
+        <button type="button"
+                data-prototype-action
+                data-message="A prototype service summary has been prepared.">
+
+            Export Summary
+        </button>
+
+
+        <button type="button"
+                class="q4u-service-outline-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#cancelServiceModal">
+
+            Cancel Request
+        </button>
+
+
+        <a href="tel:+27118302067"
+           class="q4u-portal-primary-button">
+            Contact Q4U
+        </a>
+
+    </div>
+
+</section>
+
+
+<section class="q4u-service-track-summary">
+
+    <article class="q4u-service-track-vehicle">
+
+        <div>
+
+            <span>
+                SERVICE
+            </span>
+
+            <strong>
+                @Model.ServiceName
+            </strong>
+
+            <small>
+                @Model.VehicleName
+            </small>
+
+        </div>
+
+
+        <div class="q4u-service-track-plate">
+
+            @{
+                var registrationParts =
+                    Model.Registration.Split(' ');
+
+                var province =
+                    registrationParts.Last();
+
+                var plate =
+                    string.Join(
+                        " ",
+                        registrationParts.Take(
+                            registrationParts.Length - 1));
+            }
+
+            <span>ZA</span>
+
+            <strong>
+                @plate
+            </strong>
+
+            <em>
+                @province
+            </em>
+
+        </div>
+
+    </article>
+
+
+    <article>
+
+        <span>
+            Current status
+        </span>
+
+        <strong id="serviceTrackCurrentStatus">
+            @Model.CurrentStatus
+        </strong>
+
+        <span class="q4u-portal-status @Model.StatusTone"
+              id="serviceTrackStatusBadge">
+            @(Model.ProgressPercent == 100 ? "Complete" : "In progress")
+        </span>
+
+    </article>
+
+
+    <article>
+
+        <span>
+            Contact
+        </span>
+
+        <strong>
+            @Model.ContactPreference
+        </strong>
+
+        <small>
+            Update preference
+        </small>
+
+    </article>
+
+
+    <article>
+
+        <span>
+            Prototype estimate
+        </span>
+
+        <strong>
+            @Model.PrototypeEstimate
+        </strong>
+
+        <small>
+            Not an official quotation
+        </small>
+
+    </article>
+
+</section>
+
+
+<div class="q4u-service-track-layout">
+
+    <section class="q4u-portal-card">
+
+        <div class="q4u-service-section-heading">
+
+            <div>
+
+                <span>
+                    PROGRESS
+                </span>
+
+                <h2>
+                    Service timeline
+                </h2>
+
+            </div>
+
+
+            <span class="q4u-service-track-live">
+
+                <i></i>
+
+                Tracking active
+
+            </span>
+
+        </div>
+
+
+        <div class="q4u-service-track-progress">
+
+            <div>
+
+                <span style="width:@Model.ProgressPercent%"></span>
+
+            </div>
+
+
+            <strong>
+                @Model.ProgressPercent%
+            </strong>
+
+        </div>
+
+
+        <div class="q4u-service-timeline">
+
+            @foreach (var item in Model.Timeline)
+            {
+                <article class="@item.State">
+
+                    <span class="q4u-service-timeline-marker">
+
+                        @if (item.State == "complete")
+                        {
+                            <text>✓</text>
+                        }
+                        else if (item.State == "active")
+                        {
+                            <text>•</text>
+                        }
+
+                    </span>
+
+
+                    <div>
+
+                        <header>
+
+                            <strong>
+                                @item.Title
+                            </strong>
+
+                            <span>
+                                @item.Timestamp
+                            </span>
+
+                        </header>
+
+
+                        <p>
+                            @item.Description
+                        </p>
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+
+    </section>
+
+
+    <aside class="q4u-service-track-side">
+
+        <article class="q4u-portal-card">
+
+            <div class="q4u-service-section-heading">
+
+                <div>
+
+                    <span>
+                        NOTIFICATIONS
+                    </span>
+
+                    <h2>
+                        Keep me updated
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="q4u-service-track-notifications">
+
+                <label>
+
+                    <div>
+
+                        <strong>
+                            SMS
+                        </strong>
+
+                        <small>
+                            Service milestones
+                        </small>
+
+                    </div>
+
+                    <input type="checkbox"
+                           checked
+                           data-service-notification="SMS" />
+
+                    <span></span>
+
+                </label>
+
+
+                <label>
+
+                    <div>
+
+                        <strong>
+                            Portal
+                        </strong>
+
+                        <small>
+                            Notification centre
+                        </small>
+
+                    </div>
+
+                    <input type="checkbox"
+                           checked
+                           data-service-notification="Portal" />
+
+                    <span></span>
+
+                </label>
+
+
+                <label>
+
+                    <div>
+
+                        <strong>
+                            Email
+                        </strong>
+
+                        <small>
+                            Optional updates
+                        </small>
+
+                    </div>
+
+                    <input type="checkbox"
+                           data-service-notification="Email" />
+
+                    <span></span>
+
+                </label>
+
+            </div>
+
+        </article>
+
+
+        <article class="q4u-service-track-message">
+
+            <span>
+                LATEST UPDATE
+            </span>
+
+            <h3>
+                @Model.CurrentStatus
+            </h3>
+
+            <p>
+                @if (Model.IsNewRequest)
+                {
+                    <text>
+                        Your request has entered the Q4U service workflow
+                        and is ready for initial review.
+                    </text>
+                }
+                else if (Model.ProgressPercent == 100)
+                {
+                    <text>
+                        This service request has reached its completed stage.
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        Your service request is progressing through its
+                        current administration stage.
+                    </text>
+                }
+            </p>
+
+            <small>
+                Q4U Service Team
+            </small>
+
+        </article>
+
+
+        <article class="q4u-portal-card">
+
+            <div class="q4u-service-section-heading">
+
+                <div>
+
+                    <span>
+                        REQUEST DETAILS
+                    </span>
+
+                    <h2>
+                        Reference
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <dl class="q4u-service-track-details">
+
+                <div>
+
+                    <dt>
+                        Reference
+                    </dt>
+
+                    <dd>
+                        @Model.Reference
+                    </dd>
+
+                </div>
+
+
+                <div>
+
+                    <dt>
+                        Service
+                    </dt>
+
+                    <dd>
+                        @Model.ServiceName
+                    </dd>
+
+                </div>
+
+
+                <div>
+
+                    <dt>
+                        Registration
+                    </dt>
+
+                    <dd>
+                        @Model.Registration
+                    </dd>
+
+                </div>
+
+
+                <div>
+
+                    <dt>
+                        Submitted
+                    </dt>
+
+                    <dd>
+                        @Model.SubmittedDate
+                    </dd>
+
+                </div>
+
+            </dl>
+
+        </article>
+
+    </aside>
+
+</div>
+
+
+<!-- CANCEL MODAL -->
+
+<div class="modal fade"
+     id="cancelServiceModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content q4u-service-cancel-modal">
+
+            <span>
+                !
+            </span>
+
+            <h3>
+                Cancel this request?
+            </h3>
+
+            <p>
+                This will only change the visual state of this
+                prototype request.
+            </p>
+
+
+            <div>
+
+                <strong>
+                    @Model.Reference
+                </strong>
+
+                <small>
+                    @Model.ServiceName
+                </small>
+
+            </div>
+
+
+            <footer>
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-bs-dismiss="modal">
+
+                    Keep Request
+
+                </button>
+
+
+                <button type="button"
+                        class="q4u-service-danger-button"
+                        id="confirmCancelService">
+
+                    Request Cancellation
+
+                </button>
+
+            </footer>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/js/service-requests.js"
+            asp-append-version="true"></script>
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-za">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] | Q4U Customer Portal</title>
+
+    <meta name="theme-color"
+          content="#071a4b" />
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/auth.css"
+          asp-append-version="true" />
+<link rel="stylesheet" href="/css/workspace.css" /><script src="/js/accessibility.js"></script></head>
+
+<body class="q4u-auth-body"><a class="skip-link" href="#auth-main">Skip to sign-in form</a>
+
+    <div class="q4u-auth-shell">
+
+        <section class="q4u-auth-brand-panel">
+
+            <div class="q4u-auth-pattern"></div>
+            <div class="q4u-auth-glow"></div>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="q4u-auth-brand">
+
+                <span class="q4u-auth-brand-za">
+                    ZA
+                </span>
+
+                <span>
+                    <small>NUMBER PLATES</small>
+                    <strong>
+                        <b>Q</b>4U
+                    </strong>
+                </span>
+            </a>
+
+            <div class="q4u-auth-brand-content">
+
+                <span class="q4u-auth-kicker">
+                    Q4U DIGITAL
+                </span>
+
+                <h1>
+                    Vehicle admin,
+                    <span>finally organised.</span>
+                </h1>
+
+                <p>
+                    Keep your vehicles, documents, renewals and Q4U
+                    service requests together in one simple customer
+                    experience.
+                </p>
+
+                <div class="q4u-auth-demo-card">
+
+                    <div class="q4u-auth-demo-card-header">
+
+                        <span>MY VEHICLE</span>
+
+                        <div class="q4u-auth-demo-status">
+                            Renewal due
+                        </div>
+                    </div>
+
+                    <strong>
+                        Volkswagen Polo 1.0 TSI
+                    </strong>
+
+                    <div class="q4u-auth-number-plate">
+
+                        <span>ZA</span>
+
+                        <b>JT 42 ZN</b>
+
+                        <em>GP</em>
+                    </div>
+
+                    <div class="q4u-auth-demo-footer">
+
+                        <div>
+                            <span>Licence expiry</span>
+                            <strong>28 Sep 2026</strong>
+                        </div>
+
+                        <div>
+                            <span>Documents</span>
+                            <strong>4 ready</strong>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="q4u-auth-brand-footer">
+                <span>35+ years of vehicle administration experience</span>
+                <span>•</span>
+                <span>SABS Approved</span>
+            </div>
+
+        </section>
+
+
+        <section class="q4u-auth-form-panel">
+
+            <div class="q4u-auth-form-top">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="q4u-auth-back">
+                    ← Back to Q4U
+                </a>
+
+                <span class="q4u-auth-secure">
+                    Secure customer portal
+                </span>
+            </div>
+
+            <div class="q4u-auth-form-container" id="auth-main" tabindex="-1">
+
+                @RenderBody()
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

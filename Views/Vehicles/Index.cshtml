@@ -1,0 +1,418 @@
+﻿@model VehicleLibraryViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "My Vehicles";
+    ViewData["ActiveNavigation"] = "Vehicles";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/vehicles.css"
+          asp-append-version="true" />
+}
+
+
+<section class="q4u-vehicle-page-header">
+
+    <div>
+
+        <span class="q4u-vehicle-eyebrow">
+            MY GARAGE
+        </span>
+
+        <h1>My Vehicles</h1>
+
+        <p>
+            Keep the vehicles linked to your Q4U profile organised,
+            current and ready for the services you need.
+        </p>
+
+    </div>
+
+
+    <a asp-controller="Vehicles"
+       asp-action="Add"
+       class="q4u-portal-primary-button q4u-add-vehicle-button">
+
+        Add a Vehicle
+        <span>+</span>
+
+    </a>
+
+</section>
+
+
+<section class="q4u-vehicle-summary-grid">
+
+    <article>
+        <span>VEHICLES</span>
+        <strong id="vehicleLibraryCount">@Model.TotalVehicles</strong>
+        <small>Linked to your profile</small>
+    </article>
+
+    <article class="success">
+        <span>UP TO DATE</span>
+        <strong>@Model.UpToDateCount</strong>
+        <small>No immediate action</small>
+    </article>
+
+    <article class="warning">
+        <span>NEED ATTENTION</span>
+        <strong>@Model.AttentionCount</strong>
+        <small>Renewal-related action</small>
+    </article>
+
+    <article>
+        <span>DOCUMENTS</span>
+        <strong>11</strong>
+        <small>Across all vehicles</small>
+    </article>
+
+</section>
+
+
+<section class="q4u-portal-card q4u-vehicle-library">
+
+    <div class="q4u-vehicle-library-toolbar">
+
+        <div>
+
+            <span class="q4u-vehicle-toolbar-label">
+                VEHICLE LIBRARY
+            </span>
+
+            <h2>Your garage</h2>
+
+        </div>
+
+
+        <div class="q4u-vehicle-toolbar-controls">
+
+            <div class="q4u-vehicle-search">
+
+                <span>⌕</span>
+
+                <input type="text"
+                       id="vehicleSearch"
+                       placeholder="Search vehicle or registration..." />
+
+            </div>
+
+
+            <select id="vehicleStatusFilter"
+                    class="form-select">
+
+                <option value="all">
+                    All statuses
+                </option>
+
+                <option value="success">
+                    Up to date
+                </option>
+
+                <option value="warning">
+                    Due soon
+                </option>
+
+                <option value="danger">
+                    Urgent
+                </option>
+
+            </select>
+
+
+            <select id="vehicleSort"
+                    class="form-select">
+
+                <option value="default">
+                    Sort: Recommended
+                </option>
+
+                <option value="expiry">
+                    Expiry date
+                </option>
+
+                <option value="name">
+                    Vehicle name
+                </option>
+
+            </select>
+
+
+            <div class="q4u-view-switcher">
+
+                <button type="button"
+                        class="active"
+                        data-vehicle-view="grid"
+                        title="Grid view">
+                    ▦
+                </button>
+
+                <button type="button"
+                        data-vehicle-view="list"
+                        title="List view">
+                    ☰
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="q4u-vehicle-card-grid"
+         id="vehicleLibraryGrid">
+
+        @foreach (var vehicle in Model.Vehicles)
+        {
+            <article class="q4u-library-vehicle-card"
+                     data-vehicle-card
+                     data-id="@vehicle.Id"
+                     data-status="@vehicle.StatusTone"
+                     data-expiry="@vehicle.LicenceExpiry.ToString("yyyy-MM-dd")"
+                     data-search="@($"{vehicle.DisplayName} {vehicle.FullRegistration} {vehicle.Colour}".ToLowerInvariant())">
+
+                <div class="q4u-library-card-header">
+
+                    <div class="q4u-library-vehicle-icon">
+                        @vehicle.Make.Substring(0, 1)
+                    </div>
+
+                    <span class="q4u-portal-status @vehicle.StatusTone">
+                        @vehicle.RenewalStatus
+                    </span>
+
+                </div>
+
+
+                <div class="q4u-library-card-title">
+
+                    <span>
+                        @vehicle.Year · @vehicle.Colour
+                    </span>
+
+                    <h3>
+                        @vehicle.Make @vehicle.Model
+                    </h3>
+
+                </div>
+
+
+                <div class="q4u-library-number-plate">
+
+                    <span>ZA</span>
+
+                    <strong>
+                        @vehicle.Registration
+                    </strong>
+
+                    <em>
+                        @vehicle.Province
+                    </em>
+
+                </div>
+
+
+                <div class="q4u-library-expiry">
+
+                    <div>
+                        <span>Licence expiry</span>
+
+                        <strong>
+                            @vehicle.LicenceExpiry.ToString("dd MMM yyyy")
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Remaining</span>
+
+                        <strong class="@vehicle.StatusTone">
+                            @vehicle.DaysRemaining days
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-library-card-stats">
+
+                    <div>
+                        <span>Documents</span>
+                        <strong>@vehicle.DocumentCount</strong>
+                    </div>
+
+                    <div>
+                        <span>Services</span>
+                        <strong>@vehicle.ServiceCount</strong>
+                    </div>
+
+                    <div>
+                        <span>Outstanding</span>
+
+                        <strong>
+                            R@vehicle.OutstandingBalance.ToString("N2")
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-library-card-actions">
+
+                    <a asp-controller="Vehicles"
+                       asp-action="Details"
+                       asp-route-id="@vehicle.Id">
+
+                        View Vehicle
+                        <span>→</span>
+
+                    </a>
+
+
+                    @if (vehicle.StatusTone == "danger" ||
+                         vehicle.StatusTone == "warning")
+                    {
+                        <a asp-controller="Portal"
+                           asp-action="Renewals"
+                           class="secondary">
+
+                            Renewal
+                        </a>
+                    }
+
+                </div>
+
+            </article>
+        }
+
+    </div>
+
+
+    <div class="q4u-vehicle-empty-state d-none"
+         id="vehicleEmptyState">
+
+        <span>⌕</span>
+
+        <h3>No vehicles found</h3>
+
+        <p>
+            Try changing your search or filter.
+        </p>
+
+        <button type="button"
+                id="resetVehicleFilters">
+            Clear filters
+        </button>
+
+    </div>
+
+</section>
+
+
+<template id="sessionVehicleTemplate">
+
+    <article class="q4u-library-vehicle-card"
+             data-vehicle-card
+             data-id="session-added"
+             data-status="success"
+             data-expiry="2027-08-16">
+
+        <div class="q4u-library-card-header">
+
+            <div class="q4u-library-vehicle-icon"
+                 data-added-icon>
+                F
+            </div>
+
+            <span class="q4u-portal-status success">
+                Added
+            </span>
+
+        </div>
+
+
+        <div class="q4u-library-card-title">
+
+            <span data-added-subtitle>
+                2019 · Frozen White
+            </span>
+
+            <h3 data-added-name>
+                Ford Ranger 2.2 TDCi
+            </h3>
+
+        </div>
+
+
+        <div class="q4u-library-number-plate">
+
+            <span>ZA</span>
+
+            <strong data-added-registration>
+                HV 63 PN
+            </strong>
+
+            <em data-added-province>
+                GP
+            </em>
+
+        </div>
+
+
+        <div class="q4u-library-expiry">
+
+            <div>
+                <span>Licence expiry</span>
+                <strong>16 Aug 2027</strong>
+            </div>
+
+            <div>
+                <span>Status</span>
+                <strong class="success">Just added</strong>
+            </div>
+
+        </div>
+
+
+        <div class="q4u-library-card-stats">
+
+            <div>
+                <span>Documents</span>
+                <strong data-added-documents>1</strong>
+            </div>
+
+            <div>
+                <span>Services</span>
+                <strong>0</strong>
+            </div>
+
+            <div>
+                <span>Outstanding</span>
+                <strong>R0.00</strong>
+            </div>
+
+        </div>
+
+
+        <div class="q4u-library-card-actions">
+
+            <button type="button"
+                    data-added-preview>
+                View Vehicle
+                <span>→</span>
+            </button>
+
+        </div>
+
+    </article>
+
+</template>
+
+
+@section Scripts {
+    <script src="~/js/vehicles.js"
+            asp-append-version="true"></script>
+}

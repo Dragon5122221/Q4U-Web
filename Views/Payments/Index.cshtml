@@ -1,0 +1,457 @@
+﻿@model PaymentOverviewViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Payments";
+    ViewData["ActiveNavigation"] = "Payments";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/payments.css"
+          asp-append-version="true" />
+}
+
+
+<section class="q4u-payments-header">
+
+    <div>
+
+        <span>PAYMENTS & RECEIPTS</span>
+
+        <h1>Payments</h1>
+
+        <p>
+            Review outstanding Q4U service amounts, payment history
+            and prototype receipts from one place.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="q4u-payment-summary-grid">
+
+    <article class="warning">
+
+        <span>OUTSTANDING</span>
+
+        <strong id="paymentOutstandingTotal">
+            R@Model.OutstandingTotal.ToString("N2")
+        </strong>
+
+        <small id="paymentOutstandingCount">
+            @Model.OutstandingCount payment due
+        </small>
+
+    </article>
+
+
+    <article class="success">
+
+        <span>PAID</span>
+
+        <strong id="paymentPaidTotal">
+            R@Model.PaidTotal.ToString("N2")
+        </strong>
+
+        <small>
+            Recorded prototype payments
+        </small>
+
+    </article>
+
+
+    <article>
+
+        <span>TRANSACTIONS</span>
+
+        <strong id="paymentTransactionCount">
+            @Model.Charges.Count
+        </strong>
+
+        <small>
+            Service and renewal records
+        </small>
+
+    </article>
+
+
+    <article>
+
+        <span>RECEIPTS</span>
+
+        <strong id="paymentReceiptCount">
+            @Model.PaidCount
+        </strong>
+
+        <small>
+            Available payment receipts
+        </small>
+
+    </article>
+
+</section>
+
+
+@if (Model.OutstandingCount > 0)
+{
+    var outstanding =
+        Model.Charges.First(c => c.IsOutstanding);
+
+    <section class="q4u-outstanding-payment-banner"
+             id="outstandingPaymentBanner">
+
+        <div class="q4u-outstanding-payment-icon">
+            !
+        </div>
+
+
+        <div>
+
+            <span>ACTION REQUIRED</span>
+
+            <h2>
+                You have an outstanding payment.
+            </h2>
+
+            <p>
+                @outstanding.Description for
+                @outstanding.VehicleName ·
+                @outstanding.Registration
+            </p>
+
+        </div>
+
+
+        <div class="q4u-outstanding-payment-amount">
+
+            <span>AMOUNT DUE</span>
+
+            <strong>
+                R@outstanding.Amount.ToString("N2")
+            </strong>
+
+        </div>
+
+
+        <a asp-controller="Payments"
+           asp-action="Pay"
+           asp-route-id="@outstanding.Id"
+           class="q4u-portal-primary-button">
+
+            Pay Now
+            <span>→</span>
+
+        </a>
+
+    </section>
+}
+
+
+<section class="q4u-portal-card q4u-payment-history-card">
+
+    <div class="q4u-payment-toolbar">
+
+        <div>
+
+            <span>TRANSACTION HISTORY</span>
+
+            <h2>
+                Payments & charges
+            </h2>
+
+        </div>
+
+
+        <div class="q4u-payment-toolbar-controls">
+
+            <div class="q4u-payment-search">
+
+                <span>⌕</span>
+
+                <input type="text"
+                       id="paymentSearch"
+                       placeholder="Search transactions..." />
+
+            </div>
+
+
+            <select id="paymentStatusFilter"
+                    class="form-select">
+
+                <option value="all">
+                    All statuses
+                </option>
+
+                <option value="warning">
+                    Payment due
+                </option>
+
+                <option value="success">
+                    Paid
+                </option>
+
+            </select>
+
+
+            <select id="paymentCategoryFilter"
+                    class="form-select">
+
+                <option value="all">
+                    All categories
+                </option>
+
+                <option value="Renewal">
+                    Renewals
+                </option>
+
+                <option value="Service">
+                    Services
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <div class="q4u-payment-table-header">
+
+        <span>REFERENCE</span>
+        <span>DESCRIPTION</span>
+        <span>DATE</span>
+        <span>AMOUNT</span>
+        <span>STATUS</span>
+        <span></span>
+
+    </div>
+
+
+    <div class="q4u-payment-list"
+         id="paymentTransactionList">
+
+        @foreach (var charge in Model.Charges)
+        {
+            <article data-payment-record
+                     data-id="@charge.Id"
+                     data-status="@charge.StatusTone"
+                     data-category="@charge.Category"
+                     data-search="@($"{charge.Reference} {charge.Description} {charge.VehicleName} {charge.Registration}".ToLowerInvariant())">
+
+                <div class="q4u-payment-reference">
+
+                    <strong>
+                        @charge.Reference
+                    </strong>
+
+                    <span>
+                        @charge.Category
+                    </span>
+
+                </div>
+
+
+                <div class="q4u-payment-description">
+
+                    <strong>
+                        @charge.Description
+                    </strong>
+
+                    <span>
+                        @charge.VehicleName
+                    </span>
+
+                    <small>
+                        @charge.Registration
+                    </small>
+
+                </div>
+
+
+                <div class="q4u-payment-date">
+                    @charge.Date
+                </div>
+
+
+                <strong class="q4u-payment-amount">
+                    R@charge.Amount.ToString("N2")
+                </strong>
+
+
+                <span class="q4u-portal-status @charge.StatusTone">
+                    @charge.Status
+                </span>
+
+
+                <div class="q4u-payment-actions">
+
+                    @if (charge.IsOutstanding)
+                    {
+                        <a asp-controller="Payments"
+                           asp-action="Pay"
+                           asp-route-id="@charge.Id">
+
+                            Pay
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Payments"
+                           asp-action="Receipt"
+                           asp-route-reference="@charge.Reference">
+
+                            Receipt
+                        </a>
+                    }
+
+
+                    <div class="dropdown">
+
+                        <button type="button"
+                                data-bs-toggle="dropdown">
+                            •••
+                        </button>
+
+
+                        <div class="dropdown-menu dropdown-menu-end q4u-payment-menu">
+
+                            @if (charge.SourceType == "renewal")
+                            {
+                                <a asp-controller="Renewals"
+                                   asp-action="Track"
+                                   asp-route-reference="@charge.SourceReference"
+                                   class="dropdown-item">
+
+                                    View renewal
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="ServiceRequests"
+                                   asp-action="Track"
+                                   asp-route-reference="@charge.SourceReference"
+                                   class="dropdown-item">
+
+                                    View service request
+                                </a>
+                            }
+
+
+                            @if (!charge.IsOutstanding)
+                            {
+                                <button type="button"
+                                        class="dropdown-item"
+                                        data-prototype-action
+                                        data-message="A prototype receipt download has been prepared.">
+
+                                    Download receipt
+                                </button>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+        }
+
+    </div>
+
+
+    <div class="q4u-payment-empty d-none"
+         id="paymentEmptyState">
+
+        <span>⌕</span>
+
+        <h3>No transactions found</h3>
+
+        <p>
+            Try changing your search or filters.
+        </p>
+
+        <button type="button"
+                id="resetPaymentFilters">
+            Clear filters
+        </button>
+
+    </div>
+
+</section>
+
+
+<template id="sessionPaymentTemplate">
+
+    <article class="q4u-session-payment"
+             data-payment-record
+             data-id="session-payment"
+             data-status="success"
+             data-category="Renewal">
+
+        <div class="q4u-payment-reference">
+
+            <strong>
+                Q4U-260814-018
+            </strong>
+
+            <span>
+                Renewal
+            </span>
+
+        </div>
+
+
+        <div class="q4u-payment-description">
+
+            <strong>
+                Licence Renewal
+            </strong>
+
+            <span>
+                2020 BMW 320i Sport Line
+            </span>
+
+            <small>
+                KP 19 FX GP
+            </small>
+
+        </div>
+
+
+        <div class="q4u-payment-date">
+            16 Aug 2026
+        </div>
+
+
+        <strong class="q4u-payment-amount">
+            R1,284.50
+        </strong>
+
+
+        <span class="q4u-portal-status success">
+            Paid
+        </span>
+
+
+        <div class="q4u-payment-actions">
+
+            <a href="/Payments/Receipt?reference=Q4U-PAY-260816-041&newPayment=true">
+                Receipt
+            </a>
+
+        </div>
+
+    </article>
+
+</template>
+
+
+@section Scripts {
+    <script src="~/js/payments.js"
+            asp-append-version="true"></script>
+}

@@ -1,0 +1,388 @@
+﻿@model RenewalTrackViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Track Renewal";
+    ViewData["ActiveNavigation"] = "Renewals";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/renewals.css"
+          asp-append-version="true" />
+}
+
+
+<div class="q4u-renewal-back">
+
+    <a asp-controller="Renewals"
+       asp-action="Index">
+        ← Back to Renewals
+    </a>
+
+</div>
+
+
+<section class="q4u-track-header">
+
+    <div>
+
+        <span>
+            RENEWAL TRACKING
+        </span>
+
+        <h1>
+            @Model.Reference
+        </h1>
+
+        <p>
+            Submitted @Model.SubmittedDate
+        </p>
+
+    </div>
+
+
+    <div class="q4u-track-header-actions">
+
+        <button type="button"
+                data-prototype-action
+                data-message="A prototype renewal summary has been prepared.">
+
+            Export Summary
+        </button>
+
+        <a href="tel:+27118302067"
+           class="q4u-portal-primary-button">
+            Contact Q4U
+        </a>
+
+    </div>
+
+</section>
+
+
+<section class="q4u-track-summary">
+
+    <div class="q4u-track-vehicle">
+
+        <div>
+
+            <span>VEHICLE</span>
+
+            <h2>
+                @Model.VehicleName
+            </h2>
+
+        </div>
+
+
+        <div class="q4u-track-number-plate">
+
+            <span>ZA</span>
+
+            @{
+                var registrationParts =
+                    Model.Registration.Split(' ');
+
+                var province =
+                    registrationParts.Last();
+
+                var plate =
+                    string.Join(
+                        " ",
+                        registrationParts.Take(
+                            registrationParts.Length - 1));
+            }
+
+            <strong>
+                @plate
+            </strong>
+
+            <em>
+                @province
+            </em>
+
+        </div>
+
+    </div>
+
+
+    <article>
+        <span>Current status</span>
+
+        <strong>
+            @Model.CurrentStatus
+        </strong>
+
+        <span class="q4u-portal-status @Model.StatusTone">
+            In progress
+        </span>
+    </article>
+
+
+    <article>
+        <span>Prototype amount</span>
+
+        <strong>
+            R@Model.Amount.ToString("N2")
+        </strong>
+
+        <small>
+            @Model.PaymentStatus
+        </small>
+    </article>
+
+
+    <article>
+        <span>Progress</span>
+
+        <strong>
+            @Model.ProgressPercent%
+        </strong>
+
+        <small>
+            Renewal journey
+        </small>
+    </article>
+
+</section>
+
+
+<div class="q4u-track-layout">
+
+    <section class="q4u-portal-card">
+
+        <div class="q4u-renewal-card-heading">
+
+            <div>
+                <span>PROGRESS</span>
+                <h2>Renewal timeline</h2>
+            </div>
+
+            <span class="q4u-track-live">
+                <i></i>
+                Tracking active
+            </span>
+
+        </div>
+
+
+        <div class="q4u-track-progress-bar">
+
+            <div>
+                <span style="width:@Model.ProgressPercent%"></span>
+            </div>
+
+            <strong>
+                @Model.ProgressPercent%
+            </strong>
+
+        </div>
+
+
+        <div class="q4u-track-timeline">
+
+            @foreach (var stage in Model.Timeline)
+            {
+                <article class="@stage.State">
+
+                    <div class="q4u-track-stage-marker">
+
+                        @if (stage.State == "complete")
+                        {
+                            <text>✓</text>
+                        }
+                        else if (stage.State == "active")
+                        {
+                            <text>•</text>
+                        }
+                        else
+                        {
+                            <text></text>
+                        }
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="q4u-track-stage-heading">
+
+                            <strong>
+                                @stage.Title
+                            </strong>
+
+                            <span>
+                                @stage.Timestamp
+                            </span>
+
+                        </div>
+
+                        <p>
+                            @stage.Description
+                        </p>
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+
+    </section>
+
+
+    <aside class="q4u-track-side">
+
+        <article class="q4u-portal-card">
+
+            <div class="q4u-renewal-card-heading">
+
+                <div>
+                    <span>UPDATES</span>
+                    <h2>Notification settings</h2>
+                </div>
+
+            </div>
+
+
+            <div class="q4u-track-notification-settings">
+
+                <label>
+
+                    <div>
+                        <strong>SMS updates</strong>
+                        <small>Milestone notifications</small>
+                    </div>
+
+                    <input type="checkbox"
+                           data-track-notification="SMS"
+                           checked />
+
+                    <span></span>
+
+                </label>
+
+
+                <label>
+
+                    <div>
+                        <strong>Portal updates</strong>
+                        <small>Notification centre alerts</small>
+                    </div>
+
+                    <input type="checkbox"
+                           data-track-notification="Portal"
+                           checked />
+
+                    <span></span>
+
+                </label>
+
+
+                <label>
+
+                    <div>
+                        <strong>Email updates</strong>
+                        <small>Optional email notifications</small>
+                    </div>
+
+                    <input type="checkbox"
+                           data-track-notification="Email" />
+
+                    <span></span>
+
+                </label>
+
+            </div>
+
+        </article>
+
+
+        <article class="q4u-track-message-card">
+
+            <span>LAST UPDATE</span>
+
+            <h3>
+                @if (Model.IsNewRequest)
+                {
+                    <text>Request received</text>
+                }
+                else
+                {
+                    <text>Documents received</text>
+                }
+            </h3>
+
+            <p>
+                @if (Model.IsNewRequest)
+                {
+                    <text>
+                        Your renewal request has entered the Q4U
+                        preparation workflow.
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        Your supporting documents have been received
+                        and are now being reviewed.
+                    </text>
+                }
+            </p>
+
+            <small>
+                Q4U Service Team
+            </small>
+
+        </article>
+
+
+        <article class="q4u-portal-card">
+
+            <div class="q4u-renewal-card-heading">
+
+                <div>
+                    <span>REFERENCE</span>
+                    <h2>Request details</h2>
+                </div>
+
+            </div>
+
+
+            <dl class="q4u-track-detail-list">
+
+                <div>
+                    <dt>Reference</dt>
+                    <dd>@Model.Reference</dd>
+                </div>
+
+                <div>
+                    <dt>Vehicle</dt>
+                    <dd>@Model.Registration</dd>
+                </div>
+
+                <div>
+                    <dt>Submitted</dt>
+                    <dd>@Model.SubmittedDate</dd>
+                </div>
+
+                <div>
+                    <dt>Amount</dt>
+                    <dd>R@Model.Amount.ToString("N2")</dd>
+                </div>
+
+            </dl>
+
+        </article>
+
+    </aside>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/js/renewals.js"
+            asp-append-version="true"></script>
+}

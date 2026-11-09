@@ -1,0 +1,604 @@
+﻿@model PaymentStartViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Make Payment";
+    ViewData["ActiveNavigation"] = "Payments";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/payments.css"
+          asp-append-version="true" />
+}
+
+
+<div class="q4u-payment-back">
+
+    <a asp-controller="Payments"
+       asp-action="Index">
+        ← Back to Payments
+    </a>
+
+</div>
+
+
+<section class="q4u-payment-start-header">
+
+    <span>SECURE PAYMENT</span>
+
+    <h1>Make a Payment</h1>
+
+    <p>
+        Review the prototype charge and choose how you would like
+        to demonstrate payment.
+    </p>
+
+</section>
+
+
+<div class="q4u-payment-flow-layout">
+
+    <div class="q4u-payment-flow-main">
+
+        <section class="q4u-portal-card q4u-payment-charge-card">
+
+            <div class="q4u-payment-section-heading">
+
+                <div>
+
+                    <span>PAYMENT FOR</span>
+
+                    <h2>
+                        @Model.Charge.Description
+                    </h2>
+
+                </div>
+
+
+                <span class="q4u-portal-status warning">
+                    Payment due
+                </span>
+
+            </div>
+
+
+            <div class="q4u-payment-charge-vehicle">
+
+                <div>
+
+                    <span>VEHICLE</span>
+
+                    <strong>
+                        @Model.Charge.VehicleName
+                    </strong>
+
+                    <small>
+                        @Model.Charge.Reference
+                    </small>
+
+                </div>
+
+
+                @{
+                    var registrationParts =
+                        Model.Charge.Registration.Split(' ');
+
+                    var province =
+                        registrationParts.Last();
+
+                    var plate =
+                        string.Join(
+                            " ",
+                            registrationParts.Take(
+                                registrationParts.Length - 1));
+                }
+
+
+                <div class="q4u-payment-number-plate">
+
+                    <span>ZA</span>
+
+                    <strong>
+                        @plate
+                    </strong>
+
+                    <em>
+                        @province
+                    </em>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="q4u-portal-card q4u-payment-method-card">
+
+            <div class="q4u-payment-section-heading">
+
+                <div>
+
+                    <span>PAYMENT METHOD</span>
+
+                    <h2>
+                        How would you like to pay?
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="q4u-payment-method-options">
+
+                <label>
+
+                    <input type="radio"
+                           name="prototypePaymentMethod"
+                           value="Card"
+                           checked />
+
+                    <span>CARD</span>
+
+                    <div>
+                        <strong>Card</strong>
+                        <small>Simulated online card payment</small>
+                    </div>
+
+                </label>
+
+
+                <label>
+
+                    <input type="radio"
+                           name="prototypePaymentMethod"
+                           value="EFT" />
+
+                    <span>EFT</span>
+
+                    <div>
+                        <strong>EFT</strong>
+                        <small>Demonstration bank transfer</small>
+                    </div>
+
+                </label>
+
+
+                <label>
+
+                    <input type="radio"
+                           name="prototypePaymentMethod"
+                           value="Pay at Q4U" />
+
+                    <span>Q4U</span>
+
+                    <div>
+                        <strong>Pay at Q4U</strong>
+                        <small>Mayfair payment preference</small>
+                    </div>
+
+                </label>
+
+            </div>
+
+
+            <!-- CARD -->
+
+            <div class="q4u-payment-method-panel"
+                 data-payment-method-panel="Card">
+
+                <div class="q4u-payment-card-demo">
+
+                    <div class="q4u-payment-demo-card">
+
+                        <div>
+
+                            <span>Q4U</span>
+
+                            <strong>
+                                PROTOTYPE
+                            </strong>
+
+                        </div>
+
+
+                        <p>
+                            4111&nbsp;&nbsp;1111&nbsp;&nbsp;1111&nbsp;&nbsp;1111
+                        </p>
+
+
+                        <footer>
+
+                            <div>
+                                <span>CARDHOLDER</span>
+                                <strong>AYESHA KHAN</strong>
+                            </div>
+
+                            <div>
+                                <span>EXPIRES</span>
+                                <strong>08/29</strong>
+                            </div>
+
+                        </footer>
+
+                    </div>
+
+
+                    <div class="q4u-payment-card-fields">
+
+                        <div class="wide">
+
+                            <label>
+                                Card number
+                            </label>
+
+                            <input class="form-control"
+                                   value="4111 1111 1111 1111"
+                                   readonly />
+
+                        </div>
+
+
+                        <div class="wide">
+
+                            <label>
+                                Name on card
+                            </label>
+
+                            <input class="form-control"
+                                   value="AYESHA KHAN"
+                                   readonly />
+
+                        </div>
+
+
+                        <div>
+
+                            <label>
+                                Expiry
+                            </label>
+
+                            <input class="form-control"
+                                   value="08/29"
+                                   readonly />
+
+                        </div>
+
+
+                        <div>
+
+                            <label>
+                                CVV
+                            </label>
+
+                            <input class="form-control"
+                                   value="***"
+                                   readonly />
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-payment-security-note">
+
+                    <span>i</span>
+
+                    <p>
+                        These are demonstration values only. No real
+                        card details are collected, transmitted or stored.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- EFT -->
+
+            <div class="q4u-payment-method-panel d-none"
+                 data-payment-method-panel="EFT">
+
+                <div class="q4u-payment-eft-box">
+
+                    <span>EFT DEMONSTRATION</span>
+
+                    <h3>
+                        Prototype bank transfer
+                    </h3>
+
+                    <p>
+                        A production system could provide verified Q4U
+                        banking instructions and reconcile the payment reference.
+                    </p>
+
+
+                    <dl>
+
+                        <div>
+                            <dt>Account name</dt>
+                            <dd>ZA Number Plates Q4U</dd>
+                        </div>
+
+                        <div>
+                            <dt>Bank</dt>
+                            <dd>Prototype Bank</dd>
+                        </div>
+
+                        <div>
+                            <dt>Reference</dt>
+                            <dd>Q4U-260814-018</dd>
+                        </div>
+
+                    </dl>
+
+
+                    <button type="button"
+                            id="copyPaymentReference">
+
+                        Copy Reference
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAY AT Q4U -->
+
+            <div class="q4u-payment-method-panel d-none"
+                 data-payment-method-panel="Pay at Q4U">
+
+                <div class="q4u-payment-at-q4u">
+
+                    <span>Q4U MAYFAIR</span>
+
+                    <h3>
+                        Pay in person.
+                    </h3>
+
+                    <p>
+                        This prototype records an in-person payment
+                        preference at 103 Church Street, Mayfair.
+                    </p>
+
+                    <strong>
+                        011 830 2067
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="q4u-portal-card q4u-payment-confirmation-card">
+
+            <div class="q4u-payment-section-heading">
+
+                <div>
+
+                    <span>CONFIRMATION</span>
+
+                    <h2>
+                        Before you continue
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <label class="q4u-payment-confirmation-check">
+
+                <input type="checkbox"
+                       id="paymentPrototypeConsent" />
+
+                <span></span>
+
+                <p>
+                    I understand that this is a prototype payment
+                    interaction and no real funds will be transferred.
+                </p>
+
+            </label>
+
+
+            <div class="q4u-payment-submit-row">
+
+                <a asp-controller="Payments"
+                   asp-action="Index"
+                   class="q4u-portal-secondary-button">
+
+                    Cancel
+                </a>
+
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        id="completePrototypePayment"
+                        disabled>
+
+                    Complete Demo Payment
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <section class="q4u-portal-card q4u-payment-success d-none"
+                 id="paymentSuccess">
+
+            <div class="q4u-payment-success-icon">
+                ✓
+            </div>
+
+            <span>PAYMENT COMPLETE</span>
+
+            <h2>
+                Prototype payment successful.
+            </h2>
+
+            <p>
+                The charge has been marked as paid for this browser
+                session and a demonstration receipt is available.
+            </p>
+
+
+            <div class="q4u-payment-success-reference">
+
+                <span>
+                    Payment reference
+                </span>
+
+                <strong>
+                    Q4U-PAY-260816-041
+                </strong>
+
+            </div>
+
+
+            <div class="q4u-payment-success-actions">
+
+                <a asp-controller="Payments"
+                   asp-action="Receipt"
+                   asp-route-reference="Q4U-PAY-260816-041"
+                   asp-route-newPayment="true"
+                   class="q4u-portal-primary-button">
+
+                    View Receipt
+                </a>
+
+
+                <a asp-controller="Payments"
+                   asp-action="Index"
+                   class="q4u-portal-secondary-button">
+
+                    Back to Payments
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <aside class="q4u-payment-flow-side">
+
+        <article class="q4u-payment-order-summary">
+
+            <span>PAYMENT SUMMARY</span>
+
+            <h3>
+                Amount breakdown
+            </h3>
+
+
+            <div>
+
+                <p>
+
+                    <span>
+                        Vehicle renewal
+                        <small>Prototype amount</small>
+                    </span>
+
+                    <strong>
+                        R@Model.ServiceAmount.ToString("N2")
+                    </strong>
+
+                </p>
+
+
+                @if (Model.HandlingAmount > 0)
+                {
+                    <p>
+
+                        <span>
+                            Q4U handling
+                            <small>Prototype service amount</small>
+                        </span>
+
+                        <strong>
+                            R@Model.HandlingAmount.ToString("N2")
+                        </strong>
+
+                    </p>
+                }
+
+            </div>
+
+
+            <footer>
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    R@Model.Total.ToString("N2")
+                </strong>
+
+            </footer>
+
+
+            <p class="q4u-payment-disclaimer">
+                Demonstration amount only. This is not an official
+                statutory fee or final quotation.
+            </p>
+
+        </article>
+
+
+        <article class="q4u-portal-card q4u-payment-source-card">
+
+            <span>LINKED REQUEST</span>
+
+            <h3>
+                @Model.Charge.Reference
+            </h3>
+
+            <p>
+                This charge was generated from the linked
+                @Model.Charge.Description.ToLowerInvariant() request.
+            </p>
+
+
+            @if (Model.Charge.SourceType == "renewal")
+            {
+                <a asp-controller="Renewals"
+                   asp-action="Track"
+                   asp-route-reference="@Model.Charge.SourceReference">
+
+                    View Renewal →
+                </a>
+            }
+            else
+            {
+                <a asp-controller="ServiceRequests"
+                   asp-action="Track"
+                   asp-route-reference="@Model.Charge.SourceReference">
+
+                    View Request →
+                </a>
+            }
+
+        </article>
+
+    </aside>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/js/payments.js"
+            asp-append-version="true"></script>
+}

@@ -1,0 +1,430 @@
+﻿@model RenewalOverviewViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Renewals";
+    ViewData["ActiveNavigation"] = "Renewals";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/renewals.css"
+          asp-append-version="true" />
+}
+
+
+<section class="q4u-renewal-page-header">
+
+    <div>
+
+        <span>
+            LICENCE MANAGEMENT
+        </span>
+
+        <h1>Licence Renewals</h1>
+
+        <p>
+            Stay ahead of vehicle licence expiry dates, prepare your
+            documents and follow renewal requests through the Q4U portal.
+        </p>
+
+    </div>
+
+
+    <a asp-controller="Renewals"
+       asp-action="Start"
+       asp-route-id="bmw"
+       class="q4u-portal-primary-button">
+
+        Start a Renewal
+        <span>→</span>
+
+    </a>
+
+</section>
+
+
+<section class="q4u-renewal-summary-grid">
+
+    <article class="danger">
+        <span>URGENT</span>
+        <strong>@Model.UrgentCount</strong>
+        <small>Expires within 7 days</small>
+    </article>
+
+    <article class="warning">
+        <span>DUE SOON</span>
+        <strong>@Model.DueSoonCount</strong>
+        <small>Upcoming renewal window</small>
+    </article>
+
+    <article class="success">
+        <span>UP TO DATE</span>
+        <strong>@Model.UpToDateCount</strong>
+        <small>No immediate action</small>
+    </article>
+
+    <article>
+        <span>ACTIVE REQUESTS</span>
+        <strong id="renewalActiveCount">
+            @Model.ActiveRequests.Count
+        </strong>
+        <small>Currently being tracked</small>
+    </article>
+
+</section>
+
+
+<div class="q4u-renewal-overview-layout">
+
+    <section class="q4u-portal-card">
+
+        <div class="q4u-renewal-card-heading">
+
+            <div>
+                <span>YOUR VEHICLES</span>
+                <h2>Renewal status</h2>
+            </div>
+
+            <select id="renewalStatusFilter"
+                    class="form-select">
+
+                <option value="all">
+                    All vehicles
+                </option>
+
+                <option value="danger">
+                    Urgent
+                </option>
+
+                <option value="warning">
+                    Due soon
+                </option>
+
+                <option value="success">
+                    Up to date
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="q4u-renewal-vehicle-list"
+             id="renewalVehicleList">
+
+            @foreach (var vehicle in Model.Vehicles)
+            {
+                <article data-renewal-vehicle
+                         data-status="@vehicle.StatusTone">
+
+                    <div class="q4u-renewal-vehicle-icon">
+                        @vehicle.VehicleName.Split(' ')[1].Substring(0, 1)
+                    </div>
+
+
+                    <div class="q4u-renewal-vehicle-copy">
+
+                        <div>
+
+                            <span class="q4u-portal-status @vehicle.StatusTone">
+                                @vehicle.Status
+                            </span>
+
+                            <h3>
+                                @vehicle.VehicleName
+                            </h3>
+
+                            <p>
+                                @vehicle.FullRegistration
+                            </p>
+
+                        </div>
+
+
+                        <div class="q4u-renewal-expiry-data">
+
+                            <span>
+                                LICENCE EXPIRY
+                            </span>
+
+                            <strong>
+                                @vehicle.ExpiryDate.ToString("dd MMM yyyy")
+                            </strong>
+
+                            <small class="@vehicle.StatusTone">
+                                @vehicle.DaysRemaining days remaining
+                            </small>
+
+                        </div>
+
+
+                        <div class="q4u-renewal-document-progress">
+
+                            <div>
+                                <span>
+                                    Documents ready
+                                </span>
+
+                                <strong>
+                                    @vehicle.ReadyDocumentCount /
+                                    @vehicle.RequiredDocumentCount
+                                </strong>
+                            </div>
+
+                            <div class="q4u-renewal-progress-bar">
+                                <span style="width:@((vehicle.ReadyDocumentCount * 100) / vehicle.RequiredDocumentCount)%"></span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="q4u-renewal-vehicle-actions">
+
+                            @if (vehicle.StatusTone == "success")
+                            {
+                                <a asp-controller="Renewals"
+                                   asp-action="Start"
+                                   asp-route-id="@vehicle.Id"
+                                   class="secondary">
+                                    View details
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Renewals"
+                                   asp-action="Start"
+                                   asp-route-id="@vehicle.Id">
+                                    Prepare Renewal
+                                    <span>→</span>
+                                </a>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+
+    </section>
+
+
+    <aside class="q4u-renewal-overview-side">
+
+        <article class="q4u-renewal-reminder-card">
+
+            <div class="q4u-renewal-reminder-icon">
+                !
+            </div>
+
+            <span>AUTOMATIC REMINDERS</span>
+
+            <h3>
+                Don't rely on memory.
+            </h3>
+
+            <p>
+                Q4U can surface upcoming expiry dates through
+                portal alerts and simulated SMS reminders.
+            </p>
+
+
+            <div class="q4u-renewal-reminder-example">
+
+                <span>SMS</span>
+
+                <div>
+                    <strong>
+                        Licence expiry reminder
+                    </strong>
+
+                    <small>
+                        BMW 320i expires in 6 days.
+                    </small>
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <article class="q4u-portal-card">
+
+            <div class="q4u-renewal-card-heading">
+
+                <div>
+                    <span>HOW IT WORKS</span>
+                    <h2>Renew with Q4U</h2>
+                </div>
+
+            </div>
+
+
+            <div class="q4u-renewal-how-list">
+
+                <div>
+                    <span>1</span>
+
+                    <div>
+                        <strong>Select a vehicle</strong>
+                        <small>Check its current renewal status.</small>
+                    </div>
+                </div>
+
+                <div>
+                    <span>2</span>
+
+                    <div>
+                        <strong>Prepare documents</strong>
+                        <small>Review stored and missing paperwork.</small>
+                    </div>
+                </div>
+
+                <div>
+                    <span>3</span>
+
+                    <div>
+                        <strong>Confirm & submit</strong>
+                        <small>Review prototype costs and preferences.</small>
+                    </div>
+                </div>
+
+                <div>
+                    <span>4</span>
+
+                    <div>
+                        <strong>Track progress</strong>
+                        <small>Follow updates until completion.</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </article>
+
+    </aside>
+
+</div>
+
+
+<section class="q4u-portal-card q4u-active-renewals-card">
+
+    <div class="q4u-renewal-card-heading">
+
+        <div>
+            <span>IN PROGRESS</span>
+            <h2>Active renewal requests</h2>
+        </div>
+
+    </div>
+
+
+    <div class="q4u-active-renewal-list"
+         id="activeRenewalList">
+
+        @foreach (var request in Model.ActiveRequests)
+        {
+            <article>
+
+                <div class="q4u-active-renewal-reference">
+                    @request.Reference
+                </div>
+
+                <div>
+                    <strong>
+                        @request.VehicleName
+                    </strong>
+
+                    <span>
+                        @request.Registration ·
+                        Submitted @request.SubmittedDate
+                    </span>
+                </div>
+
+                <div class="q4u-active-renewal-progress">
+
+                    <div>
+                        <span>
+                            @request.CurrentStage
+                        </span>
+
+                        <strong>
+                            @request.ProgressPercent%
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span style="width:@request.ProgressPercent%"></span>
+                    </div>
+
+                </div>
+
+                <a asp-controller="Renewals"
+                   asp-action="Track"
+                   asp-route-reference="@request.Reference">
+
+                    Track
+                    <span>→</span>
+
+                </a>
+
+            </article>
+        }
+
+    </div>
+
+</section>
+
+
+<template id="sessionRenewalTemplate">
+
+    <article class="session-renewal">
+
+        <div class="q4u-active-renewal-reference"
+             data-session-renewal-reference>
+            Q4U-260816-021
+        </div>
+
+        <div>
+
+            <strong data-session-renewal-name>
+                BMW 320i
+            </strong>
+
+            <span data-session-renewal-description>
+                KP 19 FX GP · Submitted today
+            </span>
+
+        </div>
+
+        <div class="q4u-active-renewal-progress">
+
+            <div>
+                <span>Submitted</span>
+                <strong>18%</strong>
+            </div>
+
+            <div>
+                <span style="width:18%"></span>
+            </div>
+
+        </div>
+
+        <a data-session-renewal-link>
+            Track
+            <span>→</span>
+        </a>
+
+    </article>
+
+</template>
+
+
+@section Scripts {
+    <script src="~/js/renewals.js"
+            asp-append-version="true"></script>
+}

@@ -1,0 +1,695 @@
+﻿@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Add Vehicle";
+    ViewData["ActiveNavigation"] = "Vehicles";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/vehicles.css"
+          asp-append-version="true" />
+}
+
+
+<div class="q4u-vehicle-back-row">
+
+    <a asp-controller="Vehicles"
+       asp-action="Index">
+        ← Back to My Vehicles
+    </a>
+
+</div>
+
+
+<section class="q4u-add-vehicle-header">
+
+    <span>MY GARAGE</span>
+
+    <h1>Add a Vehicle</h1>
+
+    <p>
+        Link another vehicle to your Q4U profile and prepare it for
+        documents, renewals and future services.
+    </p>
+
+</section>
+
+
+<div class="q4u-add-vehicle-layout">
+
+    <aside class="q4u-add-stepper">
+
+        <div class="active"
+             data-wizard-indicator="1">
+
+            <span>1</span>
+
+            <div>
+                <strong>Find vehicle</strong>
+                <small>Registration lookup</small>
+            </div>
+
+        </div>
+
+
+        <div data-wizard-indicator="2">
+
+            <span>2</span>
+
+            <div>
+                <strong>Vehicle details</strong>
+                <small>Confirm information</small>
+            </div>
+
+        </div>
+
+
+        <div data-wizard-indicator="3">
+
+            <span>3</span>
+
+            <div>
+                <strong>Documents & alerts</strong>
+                <small>Prepare your profile</small>
+            </div>
+
+        </div>
+
+
+        <div data-wizard-indicator="4">
+
+            <span>4</span>
+
+            <div>
+                <strong>Review</strong>
+                <small>Confirm and add</small>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <div class="q4u-add-vehicle-workspace">
+
+        <!-- STEP 1 -->
+        <section class="q4u-portal-card q4u-add-step"
+                 data-wizard-step="1">
+
+            <div class="q4u-add-step-heading">
+
+                <span>STEP 1 OF 4</span>
+
+                <h2>Let's find your vehicle.</h2>
+
+                <p>
+                    Enter the vehicle registration and province to
+                    simulate retrieving its registration information.
+                </p>
+
+            </div>
+
+
+            <div class="q4u-registration-lookup">
+
+                <div>
+
+                    <label for="addVehicleRegistration">
+                        Registration number
+                    </label>
+
+                    <input id="addVehicleRegistration"
+                           class="form-control text-uppercase"
+                           value="HV 63 PN"
+                           maxlength="12" />
+
+                </div>
+
+
+                <div>
+
+                    <label for="addVehicleProvince">
+                        Province
+                    </label>
+
+                    <select id="addVehicleProvince"
+                            class="form-select">
+
+                        <option value="GP" selected>Gauteng</option>
+                        <option value="NW">North West</option>
+                        <option value="L">Limpopo</option>
+                        <option value="MP">Mpumalanga</option>
+                        <option value="FS">Free State</option>
+                        <option value="KZN">KwaZulu-Natal</option>
+                        <option value="WC">Western Cape</option>
+                        <option value="EC">Eastern Cape</option>
+                        <option value="NC">Northern Cape</option>
+
+                    </select>
+
+                </div>
+
+
+                <button type="button"
+                        id="lookupVehicleButton"
+                        class="q4u-portal-primary-button">
+
+                    <span class="lookup-label">
+                        Look Up Vehicle
+                    </span>
+
+                    <span class="lookup-loading">
+                        Searching...
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <div class="q4u-vehicle-lookup-note">
+
+                <span>i</span>
+
+                <p>
+                    For this prototype the lookup uses demonstration data.
+                    In a production solution this could connect to an
+                    approved vehicle-information service if available.
+                </p>
+
+            </div>
+
+
+            <div id="vehicleLookupResult"
+                 class="q4u-lookup-result d-none">
+
+                <div class="q4u-lookup-result-heading">
+
+                    <div>
+                        <span>VEHICLE FOUND</span>
+                        <h3>2019 Ford Ranger 2.2 TDCi XL</h3>
+                    </div>
+
+                    <span class="q4u-portal-status success">
+                        Match found
+                    </span>
+
+                </div>
+
+
+                <div class="q4u-lookup-number-plate">
+
+                    <span>ZA</span>
+
+                    <strong id="lookupPlateDisplay">
+                        HV 63 PN
+                    </strong>
+
+                    <em id="lookupProvinceDisplay">
+                        GP
+                    </em>
+
+                </div>
+
+
+                <div class="q4u-lookup-data">
+
+                    <div>
+                        <span>Make</span>
+                        <strong>Ford</strong>
+                    </div>
+
+                    <div>
+                        <span>Model</span>
+                        <strong>Ranger 2.2 TDCi XL</strong>
+                    </div>
+
+                    <div>
+                        <span>Year</span>
+                        <strong>2019</strong>
+                    </div>
+
+                    <div>
+                        <span>Colour</span>
+                        <strong>Frozen White</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="q4u-add-step-actions">
+
+                <span></span>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        data-next-step
+                        disabled
+                        id="stepOneContinue">
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 2 -->
+        <section class="q4u-portal-card q4u-add-step d-none"
+                 data-wizard-step="2">
+
+            <div class="q4u-add-step-heading">
+
+                <span>STEP 2 OF 4</span>
+
+                <h2>Confirm vehicle details.</h2>
+
+                <p>
+                    Check the information we found and complete the
+                    remaining profile details.
+                </p>
+
+            </div>
+
+
+            <div class="row g-3 q4u-add-form">
+
+                <div class="col-md-6">
+                    <label>Make</label>
+                    <input class="form-control"
+                           id="newVehicleMake"
+                           value="Ford" />
+                </div>
+
+                <div class="col-md-6">
+                    <label>Model</label>
+                    <input class="form-control"
+                           id="newVehicleModel"
+                           value="Ranger 2.2 TDCi XL" />
+                </div>
+
+                <div class="col-md-4">
+                    <label>Year</label>
+                    <input class="form-control"
+                           id="newVehicleYear"
+                           value="2019" />
+                </div>
+
+                <div class="col-md-4">
+                    <label>Colour</label>
+                    <input class="form-control"
+                           id="newVehicleColour"
+                           value="Frozen White" />
+                </div>
+
+                <div class="col-md-4">
+                    <label>Body type</label>
+
+                    <select class="form-select"
+                            id="newVehicleBody">
+
+                        <option selected>Double Cab</option>
+                        <option>Single Cab</option>
+                        <option>Sedan</option>
+                        <option>Hatchback</option>
+                        <option>SUV</option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label>VIN</label>
+
+                    <input class="form-control"
+                           value="AFAPXXMJ2PKR51926" />
+                </div>
+
+                <div class="col-md-6">
+                    <label>Current odometer</label>
+
+                    <input class="form-control"
+                           value="112,450 km" />
+                </div>
+
+            </div>
+
+
+            <label class="q4u-add-owner-confirm">
+
+                <input type="checkbox"
+                       checked />
+
+                <span></span>
+
+                <div>
+                    <strong>I am the registered owner</strong>
+                    <small>
+                        The vehicle will be linked to Ayesha Khan · Q4U-10482
+                    </small>
+                </div>
+
+            </label>
+
+
+            <div class="q4u-add-step-actions">
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-previous-step>
+                    ← Back
+                </button>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        data-next-step>
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 3 -->
+        <section class="q4u-portal-card q4u-add-step d-none"
+                 data-wizard-step="3">
+
+            <div class="q4u-add-step-heading">
+
+                <span>STEP 3 OF 4</span>
+
+                <h2>Documents & reminders.</h2>
+
+                <p>
+                    Add supporting paperwork now or continue and provide
+                    additional documents later.
+                </p>
+
+            </div>
+
+
+            <div class="q4u-add-upload-area"
+                 id="addVehicleUploadArea">
+
+                <input type="file"
+                       id="addVehicleFileInput"
+                       accept=".pdf,.jpg,.jpeg,.png"
+                       hidden />
+
+                <span class="q4u-add-upload-icon">
+                    ↑
+                </span>
+
+                <h3>Add registration paperwork</h3>
+
+                <p>
+                    PDF, JPG or PNG · Prototype selection only
+                </p>
+
+                <button type="button"
+                        id="chooseVehicleFile">
+                    Choose File
+                </button>
+
+            </div>
+
+
+            <div id="selectedVehicleFile"
+                 class="q4u-added-file d-none">
+
+                <span>PDF</span>
+
+                <div>
+                    <strong id="selectedVehicleFileName">
+                        RegistrationCertificate.pdf
+                    </strong>
+
+                    <small>
+                        Ready to add
+                    </small>
+                </div>
+
+                <button type="button"
+                        id="removeSelectedVehicleFile">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="q4u-add-preferences">
+
+                <span class="q4u-add-preferences-label">
+                    RENEWAL REMINDERS
+                </span>
+
+
+                <label>
+
+                    <div>
+                        <strong>SMS reminders</strong>
+                        <small>Receive upcoming expiry reminders by SMS</small>
+                    </div>
+
+                    <input type="checkbox"
+                           id="addVehicleSms"
+                           checked />
+
+                    <span></span>
+
+                </label>
+
+
+                <label>
+
+                    <div>
+                        <strong>Portal notifications</strong>
+                        <small>Show renewal reminders in your Q4U portal</small>
+                    </div>
+
+                    <input type="checkbox"
+                           id="addVehiclePortalReminder"
+                           checked />
+
+                    <span></span>
+
+                </label>
+
+
+                <label>
+
+                    <div>
+                        <strong>Email reminders</strong>
+                        <small>Receive important vehicle updates by email</small>
+                    </div>
+
+                    <input type="checkbox"
+                           id="addVehicleEmail" />
+
+                    <span></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="q4u-add-step-actions">
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-previous-step>
+                    ← Back
+                </button>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        data-next-step>
+                    Review Vehicle →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 4 -->
+        <section class="q4u-portal-card q4u-add-step d-none"
+                 data-wizard-step="4">
+
+            <div id="addVehicleReview">
+
+                <div class="q4u-add-step-heading">
+
+                    <span>STEP 4 OF 4</span>
+
+                    <h2>Review and add.</h2>
+
+                    <p>
+                        Confirm the vehicle information before adding
+                        it to your Q4U profile.
+                    </p>
+
+                </div>
+
+
+                <div class="q4u-add-review-vehicle">
+
+                    <div>
+
+                        <span>NEW VEHICLE</span>
+
+                        <h3 id="reviewVehicleName">
+                            2019 Ford Ranger 2.2 TDCi XL
+                        </h3>
+
+                        <small id="reviewVehicleColour">
+                            Frozen White · Double Cab
+                        </small>
+
+                    </div>
+
+
+                    <div class="q4u-review-number-plate">
+
+                        <span>ZA</span>
+
+                        <strong id="reviewVehicleRegistration">
+                            HV 63 PN
+                        </strong>
+
+                        <em id="reviewVehicleProvince">
+                            GP
+                        </em>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-add-review-grid">
+
+                    <article>
+                        <span>Registered owner</span>
+                        <strong>Ayesha Khan</strong>
+                        <small>Q4U-10482</small>
+                    </article>
+
+                    <article>
+                        <span>Supporting document</span>
+                        <strong id="reviewDocumentStatus">
+                            Add later
+                        </strong>
+                        <small>Can be changed after setup</small>
+                    </article>
+
+                    <article>
+                        <span>SMS reminders</span>
+                        <strong id="reviewSmsStatus">
+                            Enabled
+                        </strong>
+                        <small>Licence renewal alerts</small>
+                    </article>
+
+                    <article>
+                        <span>Portal reminders</span>
+                        <strong id="reviewPortalStatus">
+                            Enabled
+                        </strong>
+                        <small>Q4U notification centre</small>
+                    </article>
+
+                </div>
+
+
+                <div class="q4u-add-review-notice">
+
+                    <span>✓</span>
+
+                    <p>
+                        This prototype does not submit or verify any
+                        information externally. The vehicle will be
+                        stored only for this browser session.
+                    </p>
+
+                </div>
+
+
+                <div class="q4u-add-step-actions">
+
+                    <button type="button"
+                            class="q4u-portal-secondary-button"
+                            data-previous-step>
+                        ← Back
+                    </button>
+
+                    <button type="button"
+                            class="q4u-portal-primary-button"
+                            id="completeAddVehicle">
+                        Add Vehicle
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div id="addVehicleSuccess"
+                 class="q4u-add-success d-none">
+
+                <div class="q4u-add-success-icon">
+                    ✓
+                </div>
+
+                <span>VEHICLE ADDED</span>
+
+                <h2>
+                    Your Ford Ranger is ready.
+                </h2>
+
+                <p>
+                    The vehicle has been added to this prototype session
+                    and is now available from My Vehicles.
+                </p>
+
+
+                <div class="q4u-add-success-plate">
+
+                    <span>ZA</span>
+                    <strong id="successVehiclePlate">HV 63 PN</strong>
+                    <em id="successVehicleProvince">GP</em>
+
+                </div>
+
+
+                <div class="q4u-add-success-actions">
+
+                    <a asp-controller="Vehicles"
+                       asp-action="Index"
+                       class="q4u-portal-primary-button">
+                        Go to My Vehicles
+                    </a>
+
+                    <a asp-controller="Portal"
+                       asp-action="Documents"
+                       class="q4u-portal-secondary-button">
+                        Add More Documents
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/js/vehicles.js"
+            asp-append-version="true"></script>
+}

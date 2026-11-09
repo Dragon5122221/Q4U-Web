@@ -1,0 +1,416 @@
+﻿@model ServiceRequestOverviewViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Service Requests";
+    ViewData["ActiveNavigation"] = "Requests";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/service-requests.css"
+          asp-append-version="true" />
+}
+
+
+<section class="q4u-service-page-header">
+
+    <div>
+
+        <span>
+            Q4U SERVICES
+        </span>
+
+        <h1>Service Requests</h1>
+
+        <p>
+            Request vehicle administration services, provide the
+            required information and follow every request from one place.
+        </p>
+
+    </div>
+
+
+    <a asp-controller="ServiceRequests"
+       asp-action="Start"
+       class="q4u-portal-primary-button">
+
+        New Service Request
+        <span>+</span>
+
+    </a>
+
+</section>
+
+
+<section class="q4u-service-summary-grid">
+
+    <article>
+
+        <span>ACTIVE</span>
+
+        <strong id="serviceActiveCount">
+            @Model.ActiveCount
+        </strong>
+
+        <small>
+            Currently being handled
+        </small>
+
+    </article>
+
+
+    <article class="warning">
+
+        <span>YOUR ACTION</span>
+
+        <strong>
+            @Model.ActionRequiredCount
+        </strong>
+
+        <small>
+            Awaiting customer input
+        </small>
+
+    </article>
+
+
+    <article class="success">
+
+        <span>COMPLETED</span>
+
+        <strong>
+            @Model.CompletedCount
+        </strong>
+
+        <small>
+            Recent completed requests
+        </small>
+
+    </article>
+
+
+    <article>
+
+        <span>SERVICES</span>
+
+        <strong>
+            @Model.Services.Count
+        </strong>
+
+        <small>
+            Available through Q4U
+        </small>
+
+    </article>
+
+</section>
+
+
+<section class="q4u-service-catalogue-section">
+
+    <div class="q4u-service-catalogue-heading">
+
+        <div>
+
+            <span>
+                SERVICE CATALOGUE
+            </span>
+
+            <h2>
+                What can we help with?
+            </h2>
+
+        </div>
+
+
+        <div class="q4u-service-search">
+
+            <span>⌕</span>
+
+            <input type="text"
+                   id="serviceCatalogueSearch"
+                   placeholder="Search services..." />
+
+        </div>
+
+    </div>
+
+
+    <div class="q4u-service-card-grid"
+         id="serviceCatalogueGrid">
+
+        @foreach (var service in Model.Services)
+        {
+            <article data-service-catalogue-card
+                     data-search="@($"{service.Name} {service.Description}".ToLowerInvariant())">
+
+                <div class="q4u-service-card-top">
+
+                    <span class="q4u-service-card-icon">
+                        @service.Icon
+                    </span>
+
+                    @if (!string.IsNullOrWhiteSpace(service.Badge))
+                    {
+                        <span class="q4u-service-badge @service.BadgeTone">
+                            @service.Badge
+                        </span>
+                    }
+
+                </div>
+
+
+                <div class="q4u-service-card-copy">
+
+                    <h3>
+                        @service.Name
+                    </h3>
+
+                    <p>
+                        @service.Description
+                    </p>
+
+                </div>
+
+
+                <div class="q4u-service-card-meta">
+
+                    <div>
+                        <span>Typical handling</span>
+                        <strong>@service.Turnaround</strong>
+                    </div>
+
+                    <div>
+                        <span>Prototype estimate</span>
+                        <strong>@service.PrototypeEstimate</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-service-card-footer">
+
+                    @if (service.HasDedicatedJourney)
+                    {
+                        <a asp-controller="Renewals"
+                           asp-action="Index">
+
+                            Open Renewal Centre
+                            <span>→</span>
+
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="ServiceRequests"
+                           asp-action="Start"
+                           asp-route-service="@service.Id">
+
+                            Request this service
+                            <span>→</span>
+
+                        </a>
+                    }
+
+                </div>
+
+            </article>
+        }
+
+    </div>
+
+
+    <div class="q4u-service-empty d-none"
+         id="serviceCatalogueEmpty">
+
+        <span>⌕</span>
+
+        <h3>No matching services</h3>
+
+        <p>
+            Try a different search term.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="q4u-portal-card q4u-service-request-list-card">
+
+    <div class="q4u-service-section-heading">
+
+        <div>
+
+            <span>
+                YOUR REQUESTS
+            </span>
+
+            <h2>
+                Recent service activity
+            </h2>
+
+        </div>
+
+
+        <select id="serviceRequestStatusFilter"
+                class="form-select">
+
+            <option value="all">
+                All requests
+            </option>
+
+            <option value="active">
+                In progress
+            </option>
+
+            <option value="success">
+                Completed
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="q4u-service-request-list"
+         id="serviceRequestList">
+
+        @foreach (var request in Model.Requests)
+        {
+            <article data-service-request
+                     data-status="@(request.StatusTone == "success" ? "success" : "active")">
+
+                <div class="q4u-service-request-reference">
+                    @request.Reference
+                </div>
+
+
+                <div class="q4u-service-request-main">
+
+                    <strong>
+                        @request.ServiceName
+                    </strong>
+
+                    <span>
+                        @request.VehicleName ·
+                        @request.Registration
+                    </span>
+
+                    <small>
+                        Submitted @request.SubmittedDate
+                    </small>
+
+                </div>
+
+
+                <span class="q4u-portal-status @request.StatusTone">
+                    @request.Status
+                </span>
+
+
+                <div class="q4u-service-request-progress">
+
+                    <div>
+                        <span>Progress</span>
+
+                        <strong>
+                            @request.ProgressPercent%
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span style="width:@request.ProgressPercent%"></span>
+                    </div>
+
+                </div>
+
+
+                @if (request.ServiceId == "renewal")
+                {
+                    <a asp-controller="Renewals"
+                       asp-action="Track"
+                       asp-route-reference="@request.Reference">
+                        Track →
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="ServiceRequests"
+                       asp-action="Track"
+                       asp-route-reference="@request.Reference">
+                        Track →
+                    </a>
+                }
+
+            </article>
+        }
+
+    </div>
+
+</section>
+
+
+<template id="sessionServiceRequestTemplate">
+
+    <article class="session-service-request"
+             data-service-request
+             data-status="active">
+
+        <div class="q4u-service-request-reference"
+             data-session-service-reference>
+            Q4U-260816-029
+        </div>
+
+
+        <div class="q4u-service-request-main">
+
+            <strong data-session-service-name>
+                Number Plates
+            </strong>
+
+            <span data-session-service-vehicle>
+                Volkswagen Polo · JT 42 ZN GP
+            </span>
+
+            <small>
+                Submitted today
+            </small>
+
+        </div>
+
+
+        <span class="q4u-portal-status info">
+            Request received
+        </span>
+
+
+        <div class="q4u-service-request-progress">
+
+            <div>
+                <span>Progress</span>
+                <strong>20%</strong>
+            </div>
+
+            <div>
+                <span style="width:20%"></span>
+            </div>
+
+        </div>
+
+
+        <a data-session-service-link>
+            Track →
+        </a>
+
+    </article>
+
+</template>
+
+
+@section Scripts {
+    <script src="~/js/service-requests.js"
+            asp-append-version="true"></script>
+}

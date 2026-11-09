@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en-za">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] | ZA Number Plates Q4U</title>
+
+    <meta name="description"
+          content="ZA Number Plates Q4U - vehicle licence renewals, registrations, number plates, roadworthy services, traffic fines and fleet management." />
+
+    <meta name="theme-color" content="#071a4b" />
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/Q4UPrototypeWeb.styles.css"
+          asp-append-version="true" />
+<link rel="stylesheet" href="/css/workspace.css" /><script src="/js/accessibility.js"></script></head>
+
+<body class="q4u-body"><a class="skip-link" href="#public-main">Skip to main content</a>
+
+    <header class="q4u-header">
+        <div class="q4u-topbar">
+            <div class="container q4u-container">
+                <div class="q4u-topbar-inner">
+                    <div class="q4u-topbar-message">
+                        <span class="q4u-topbar-dot"></span>
+                        <span>
+                            Trusted vehicle administration specialists with
+                            <strong>35+ years</strong> of industry experience
+                        </span>
+                    </div>
+
+                    <div class="q4u-topbar-links">
+                        <a href="tel:+27118302067">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M6.6 10.8c1.5 2.9 3.8 5.2 6.7 6.7l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.4.6 3.7.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.7 21 3 13.3 3 3.8c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.7.1.4 0 .8-.3 1.1l-2.2 2.2Z" />
+                            </svg>
+                            011 830 2067
+                        </a>
+
+                        <span class="q4u-topbar-divider"></span>
+
+                        <span class="q4u-topbar-location">
+                            103 Church Street, Mayfair
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-lg q4u-navbar">
+            <div class="container q4u-container">
+
+                <a class="q4u-brand"
+                   asp-controller="Home"
+                   asp-action="Index"
+                   aria-label="ZA Number Plates Q4U home">
+
+                    <span class="q4u-brand-za">ZA</span>
+
+                    <span class="q4u-brand-copy">
+                        <span class="q4u-brand-upper">NUMBER PLATES</span>
+
+                        <span class="q4u-brand-lower">
+                            <span class="q4u-brand-q">Q</span>4U
+                        </span>
+                    </span>
+                </a>
+
+                <button class="navbar-toggler q4u-navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#q4uMainNavigation"
+                        aria-controls="q4uMainNavigation"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div class="collapse navbar-collapse"
+                     id="q4uMainNavigation">
+
+                    <ul class="navbar-nav q4u-nav-links ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Index"
+                               asp-fragment="services">
+                                Services
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Index"
+                               asp-fragment="platform">
+                                Digital Platform
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Index"
+                               asp-fragment="how-it-works">
+                                How It Works
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Index"
+                               asp-fragment="contact">
+                                Contact
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="q4u-nav-actions">
+                        <button type="button"
+                                class="q4u-button q4u-button-outline"
+                                data-bs-toggle="modal"
+                                data-bs-target="#serviceRequestModal">
+                            Book a Service
+                        </button>
+
+                        <a asp-controller="Account"
+   asp-action="Login"
+   class="q4u-button q4u-button-primary">
+
+                            <svg viewBox="0 0 24 24"
+                                 aria-hidden="true">
+                                <path d="m13.2 5.3 5.9 5.9c.4.4.4 1 0 1.4l-5.9 5.9-1.4-1.4 4.2-4.2H5v-2h11l-4.2-4.2 1.4-1.4Z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="public-main" tabindex="-1">
+        @RenderBody()
+    </main>
+
+    <footer class="q4u-footer" id="contact">
+        <div class="q4u-footer-pattern"></div>
+
+        <div class="container q4u-container">
+            <div class="q4u-footer-grid">
+
+                <div class="q4u-footer-brand-column">
+                    <a class="q4u-brand q4u-brand-footer"
+                       asp-controller="Home"
+                       asp-action="Index">
+
+                        <span class="q4u-brand-za">ZA</span>
+
+                        <span class="q4u-brand-copy">
+                            <span class="q4u-brand-upper">NUMBER PLATES</span>
+
+                            <span class="q4u-brand-lower">
+                                <span class="q4u-brand-q">Q</span>4U
+                            </span>
+                        </span>
+                    </a>
+
+                    <p>
+                        Making vehicle administration simpler, faster and
+                        easier to manage — in-store and online.
+                    </p>
+
+                    <div class="q4u-footer-badges">
+                        <span>SABS Approved</span>
+                        <span>35+ Years</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h3>Services</h3>
+
+                    <ul class="q4u-footer-list">
+                        <li>Licence Renewals & Registrations</li>
+                        <li>Number Plates</li>
+                        <li>Personalised Plates</li>
+                        <li>Roadworthy Services</li>
+                        <li>Traffic Fines</li>
+                        <li>Fleet Management</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3>Visit Q4U</h3>
+
+                    <div class="q4u-footer-contact">
+                        <div>
+                            <span class="q4u-footer-label">Address</span>
+                            <span>103 Church Street</span>
+                            <span>Mayfair, Johannesburg</span>
+                        </div>
+
+                        <div>
+                            <span class="q4u-footer-label">Telephone</span>
+                            <a href="tel:+27118302067">
+                                011 830 2067
+                            </a>
+                        </div>
+
+                        <div>
+                            <span class="q4u-footer-label">WhatsApp</span>
+                            <a href="https://wa.me/27837186786"
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                083 718 6786
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="q4u-footer-action-column">
+                    <h3>Need help?</h3>
+
+                    <p>
+                        Tell us what you need and a Q4U consultant can help
+                        you find the right service.
+                    </p>
+
+                    <button class="q4u-button q4u-button-yellow"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#serviceRequestModal">
+                        Request Assistance
+                    </button>
+                </div>
+            </div>
+
+            <div class="q4u-footer-bottom">
+                <span>
+                    © @DateTime.Now.Year ZA Number Plates Q4U.
+                    Prototype demonstration.
+                </span>
+
+                <span>
+                    Designed for the Q4U digital service experience.
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Service Request Modal -->
+    <div class="modal fade"
+         id="serviceRequestModal"
+         tabindex="-1"
+         aria-labelledby="serviceRequestModalLabel"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content q4u-modal">
+
+                <div class="q4u-modal-header">
+                    <div>
+                        <span class="q4u-eyebrow">QUICK REQUEST</span>
+
+                        <h2 id="serviceRequestModalLabel">
+                            How can Q4U help?
+                        </h2>
+
+                        <p>
+                            Manage your service in the Q4U portal.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="q4u-modal-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                        ×
+                    </button>
+                </div>
+
+                <div class="modal-body q4u-modal-body">
+
+                    <p>Open your Q4U workspace to choose a vehicle, submit a request and track its progress.</p>
+                    <div class="actions"><a class="primary" href="/Workspace?section=Requests">Open service requests</a><a class="secondary" href="tel:+27118302067">Call Q4U</a></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+
+        <div id="q4uToast"
+             class="toast q4u-toast"
+             role="status"
+             aria-live="polite"
+             aria-atomic="true">
+
+            <div class="q4u-toast-icon">
+                <svg viewBox="0 0 24 24"
+                     aria-hidden="true">
+                    <path d="m9.2 16.2-4.4-4.4 1.4-1.4 3 3 8.6-8.6 1.4 1.4-10 10Z" />
+                </svg>
+            </div>
+
+            <div class="q4u-toast-content">
+                <strong id="q4uToastTitle">
+                    Done
+                </strong>
+
+                <span id="q4uToastMessage">
+                    Your action was completed.
+                </span>
+            </div>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="toast"
+                    aria-label="Close">
+            </button>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

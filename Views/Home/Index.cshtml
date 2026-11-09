@@ -1,0 +1,872 @@
+﻿@{
+    ViewData["Title"] = "Vehicle Services Made Simple";
+}
+
+<section class="q4u-hero">
+
+    <div class="q4u-hero-pattern"></div>
+    <div class="q4u-hero-glow q4u-hero-glow-one"></div>
+    <div class="q4u-hero-glow q4u-hero-glow-two"></div>
+
+    <div class="container q4u-container q4u-hero-container">
+
+        <div class="q4u-hero-copy">
+
+            <div class="q4u-hero-kicker">
+                <span class="q4u-kicker-line"></span>
+                YOUR VEHICLE ADMINISTRATION PARTNER
+            </div>
+
+            <h1>
+                Your vehicle paperwork.
+                <span>Sorted.</span>
+            </h1>
+
+            <p class="q4u-hero-description">
+                Manage renewals, documentation and essential vehicle services
+                with the trusted Q4U team — now moving into one simple digital
+                experience.
+            </p>
+
+            <div class="q4u-hero-actions">
+                <button class="q4u-button q4u-button-yellow q4u-button-large"
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#serviceRequestModal">
+                    Book a Service
+
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="m13.2 5.3 5.9 5.9c.4.4.4 1 0 1.4l-5.9 5.9-1.4-1.4 4.2-4.2H5v-2h11l-4.2-4.2 1.4-1.4Z" />
+                    </svg>
+                </button>
+
+                <a href="#platform"
+                   class="q4u-hero-secondary-link">
+                    Explore the digital platform
+
+                    <span>↓</span>
+                </a>
+            </div>
+
+            <div class="q4u-hero-trust">
+                <div>
+                    <strong>35+</strong>
+                    <span>Years of experience</span>
+                </div>
+
+                <span class="q4u-trust-divider"></span>
+
+                <div>
+                    <strong>SABS</strong>
+                    <span>Approved plates</span>
+                </div>
+
+                <span class="q4u-trust-divider"></span>
+
+                <div>
+                    <strong>6</strong>
+                    <span>Core vehicle services</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="q4u-hero-visual">
+
+            <div class="q4u-dashboard-preview">
+
+                <div class="q4u-dashboard-preview-header">
+                    <div>
+                        <span class="q4u-preview-label">
+                            MY VEHICLES
+                        </span>
+
+                        <h2>Vehicle overview</h2>
+                    </div>
+
+                    <div class="q4u-preview-user">
+                        AK
+                    </div>
+                </div>
+
+                <div class="q4u-preview-selector">
+                    <label for="heroVehicleSelect">
+                        Selected vehicle
+                    </label>
+
+                    <select id="heroVehicleSelect"
+                            class="form-select">
+                        <option value="polo">
+                            2021 Volkswagen Polo
+                        </option>
+
+                        <option value="hilux">
+                            2022 Toyota Hilux
+                        </option>
+
+                        <option value="bmw">
+                            2020 BMW 320i
+                        </option>
+                    </select>
+                </div>
+
+                <div class="q4u-vehicle-card">
+
+                    <div class="q4u-vehicle-card-top">
+                        <div>
+                            <span class="q4u-card-label">
+                                CURRENT VEHICLE
+                            </span>
+
+                            <h3 class="js-vehicle-model">
+                                Volkswagen Polo 1.0 TSI
+                            </h3>
+                        </div>
+
+                        <span class="q4u-status-pill q4u-status-warning js-renewal-status">
+                            Action required
+                        </span>
+                    </div>
+
+                    <div class="q4u-number-plate">
+                        <div class="q4u-number-plate-country">
+                            ZA
+                        </div>
+
+                        <strong class="js-vehicle-plate">
+                            JT 42 ZN
+                        </strong>
+
+                        <span>GP</span>
+                    </div>
+
+                    <div class="q4u-renewal-summary">
+
+                        <div>
+                            <span>Licence expiry</span>
+
+                            <strong class="js-renewal-date">
+                                28 September 2026
+                            </strong>
+                        </div>
+
+                        <div class="q4u-renewal-days">
+                            <strong class="js-renewal-days">43</strong>
+                            <span>days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="q4u-preview-alert">
+                    <div class="q4u-preview-alert-icon">
+                        !
+                    </div>
+
+                    <div>
+                        <strong>Renewal reminder</strong>
+
+                        <p class="js-renewal-message">
+                            Your licence renewal window is approaching.
+                            Q4U can help you prepare.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="q4u-preview-stats">
+                    <div>
+                        <span class="q4u-preview-stat-icon">
+                            ✓
+                        </span>
+
+                        <div>
+                            <strong>4</strong>
+                            <span>Documents</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="q4u-preview-stat-icon">
+                            R
+                        </span>
+
+                        <div>
+                            <strong>R0.00</strong>
+                            <span>Outstanding</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="q4u-preview-stat-icon">
+                            ↗
+                        </span>
+
+                        <div>
+                            <strong>2</strong>
+                            <span>Past services</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="q4u-floating-badge q4u-floating-badge-one">
+                <span class="q4u-floating-icon">✓</span>
+
+                <div>
+                    <strong>Documents ready</strong>
+                    <span>Stored in one place</span>
+                </div>
+            </div>
+
+            <div class="q4u-floating-badge q4u-floating-badge-two">
+                <span class="q4u-floating-icon q4u-floating-icon-yellow">
+                    43
+                </span>
+
+                <div>
+                    <strong>Renewal reminder</strong>
+                    <span>Never miss an expiry</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="q4u-hero-wave"></div>
+</section>
+
+
+<section class="q4u-brand-strip">
+    <div class="container q4u-container">
+
+        <div class="q4u-brand-strip-inner">
+            <span>
+                LICENCE RENEWALS
+            </span>
+
+            <span class="q4u-brand-strip-dot"></span>
+
+            <span>
+                NUMBER PLATES
+            </span>
+
+            <span class="q4u-brand-strip-dot"></span>
+
+            <span>
+                ROADWORTHY
+            </span>
+
+            <span class="q4u-brand-strip-dot"></span>
+
+            <span>
+                TRAFFIC FINES
+            </span>
+
+            <span class="q4u-brand-strip-dot"></span>
+
+            <span>
+                FLEET MANAGEMENT
+            </span>
+        </div>
+    </div>
+</section>
+
+
+<section class="q4u-section"
+         id="services">
+
+    <div class="container q4u-container">
+
+        <div class="q4u-section-heading q4u-section-heading-centred">
+            <span class="q4u-eyebrow">
+                WHAT WE DO
+            </span>
+
+            <h2>
+                Everything your vehicle needs,
+                <span>without the runaround.</span>
+            </h2>
+
+            <p>
+                Q4U brings essential vehicle administration services together
+                through one experienced team.
+            </p>
+        </div>
+
+        <div class="q4u-service-grid">
+
+            <article class="q4u-service-card">
+                <div class="q4u-service-icon">
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M7 2h10v2h3v18H4V4h3V2Zm2 2h6V3H9v1Zm-3 2v14h12V6h-1v2H7V6H6Zm3 5h6v2H9v-2Zm0 4h6v2H9v-2Z" />
+                    </svg>
+                </div>
+
+                <div class="q4u-service-card-number">
+                    01
+                </div>
+
+                <h3>Licence Renewals & Registrations</h3>
+
+                <p>
+                    Keep your vehicle paperwork current with guidance and
+                    support through the renewal and registration process.
+                </p>
+
+                <button type="button"
+                        class="q4u-service-link"
+                        data-service="Licence Renewal"
+                        data-open-service-modal>
+                    Request this service
+                    <span>→</span>
+                </button>
+            </article>
+
+
+            <article class="q4u-service-card q4u-service-card-featured">
+                <div class="q4u-featured-tag">
+                    WHILE YOU WAIT
+                </div>
+
+                <div class="q4u-service-icon">
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M3 6h18v12H3V6Zm2 2v8h14V8H5Zm2 2h2v4H7v-4Zm4 0h6v2h-6v-2Zm0 3h4v1.5h-4V13Z" />
+                    </svg>
+                </div>
+
+                <div class="q4u-service-card-number">
+                    02
+                </div>
+
+                <h3>Number Plates</h3>
+
+                <p>
+                    SABS-approved number plates manufactured with Q4U's
+                    established while-you-wait service.
+                </p>
+
+                <button type="button"
+                        class="q4u-service-link"
+                        data-service="Number Plates"
+                        data-open-service-modal>
+                    Request this service
+                    <span>→</span>
+                </button>
+            </article>
+
+
+            <article class="q4u-service-card">
+                <div class="q4u-service-icon">
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M12 2 15 8l6 .9-4.5 4.4 1.1 6.2L12 16.6 6.4 19.5l1.1-6.2L3 8.9 9 8l3-6Zm0 4.5-1.7 3.4-3.8.6 2.7 2.7-.6 3.8 3.4-1.8 3.4 1.8-.6-3.8 2.7-2.7-3.8-.6L12 6.5Z" />
+                    </svg>
+                </div>
+
+                <div class="q4u-service-card-number">
+                    03
+                </div>
+
+                <h3>Personalised Plates</h3>
+
+                <p>
+                    Make your registration more personal with assistance
+                    through the personalised plate process.
+                </p>
+
+                <button type="button"
+                        class="q4u-service-link"
+                        data-service="Personalised Plates"
+                        data-open-service-modal>
+                    Request this service
+                    <span>→</span>
+                </button>
+            </article>
+
+
+            <article class="q4u-service-card">
+                <div class="q4u-service-icon">
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M5 11 7.2 5h9.6L19 11h1a2 2 0 0 1 2 2v5h-2v2h-3v-2H7v2H4v-2H2v-5a2 2 0 0 1 2-2h1Zm2.1 0h9.8l-1.5-4H8.6l-1.5 4ZM5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm14 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" />
+                    </svg>
+                </div>
+
+                <div class="q4u-service-card-number">
+                    04
+                </div>
+
+                <h3>Roadworthy</h3>
+
+                <p>
+                    Get support with roadworthy requirements and the
+                    documentation needed to keep the process moving.
+                </p>
+
+                <button type="button"
+                        class="q4u-service-link"
+                        data-service="Roadworthy"
+                        data-open-service-modal>
+                    Request this service
+                    <span>→</span>
+                </button>
+            </article>
+
+
+            <article class="q4u-service-card">
+                <div class="q4u-service-icon">
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm1 3v4.6l3.2 1.9-1 1.7-4.2-2.5V7h2Z" />
+                    </svg>
+                </div>
+
+                <div class="q4u-service-card-number">
+                    05
+                </div>
+
+                <h3>Traffic Fines</h3>
+
+                <p>
+                    Keep track of traffic fine administration with Q4U
+                    assistance and clearer vehicle-related records.
+                </p>
+
+                <button type="button"
+                        class="q4u-service-link"
+                        data-service="Traffic Fines"
+                        data-open-service-modal>
+                    Request this service
+                    <span>→</span>
+                </button>
+            </article>
+
+
+            <article class="q4u-service-card">
+                <div class="q4u-service-icon">
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M3 4h18v6H3V4Zm2 2v2h14V6H5ZM3 12h8v8H3v-8Zm2 2v4h4v-4H5Zm8-2h8v8h-8v-8Zm2 2v4h4v-4h-4Z" />
+                    </svg>
+                </div>
+
+                <div class="q4u-service-card-number">
+                    06
+                </div>
+
+                <h3>Fleet Management</h3>
+
+                <p>
+                    Bring multiple vehicles, renewals and documents together
+                    in a more manageable fleet administration experience.
+                </p>
+
+                <button type="button"
+                        class="q4u-service-link"
+                        data-service="Fleet Management"
+                        data-open-service-modal>
+                    Request this service
+                    <span>→</span>
+                </button>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="q4u-platform-section"
+         id="platform">
+
+    <div class="q4u-platform-pattern"></div>
+
+    <div class="container q4u-container">
+
+        <div class="q4u-platform-grid">
+
+            <div class="q4u-platform-copy">
+
+                <span class="q4u-eyebrow q4u-eyebrow-yellow">
+                    THE NEW Q4U EXPERIENCE
+                </span>
+
+                <h2>
+                    Your vehicles.
+                    <span>Your documents.</span>
+                    One place.
+                </h2>
+
+                <p>
+                    The Q4U digital platform is designed to move everyday
+                    vehicle administration out of paperwork and into a clear,
+                    organised customer experience.
+                </p>
+
+                <div class="q4u-feature-list">
+
+                    <div class="q4u-feature-list-item">
+                        <span>01</span>
+
+                        <div>
+                            <strong>Track your vehicles</strong>
+
+                            <p>
+                                Keep each vehicle and its important information
+                                organised under your account.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="q4u-feature-list-item">
+                        <span>02</span>
+
+                        <div>
+                            <strong>Never miss a renewal</strong>
+
+                            <p>
+                                See upcoming expiry dates and receive clear
+                                reminders when action is required.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="q4u-feature-list-item">
+                        <span>03</span>
+
+                        <div>
+                            <strong>Keep documents together</strong>
+
+                            <p>
+                                View uploaded vehicle paperwork and important
+                                supporting documentation in one place.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="q4u-feature-list-item">
+                        <span>04</span>
+
+                        <div>
+                            <strong>Follow service progress</strong>
+
+                            <p>
+                                Understand what's happening with your requests
+                                through simple statuses and notifications.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button class="q4u-button q4u-button-yellow q4u-button-large"
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#serviceRequestModal">
+                    Try a Service Request
+                </button>
+
+            </div>
+
+
+            <div class="q4u-platform-visual">
+
+                <div class="q4u-platform-window">
+
+                    <div class="q4u-platform-window-top">
+                        <div class="q4u-window-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                        <span>Customer Portal</span>
+
+                        <div class="q4u-platform-window-actions">
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+
+                    <div class="q4u-platform-window-body">
+
+                        <aside class="q4u-demo-sidebar">
+                            <div class="q4u-demo-logo">
+                                Q4U
+                            </div>
+
+                            <span class="active"></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </aside>
+
+                        <div class="q4u-demo-content">
+
+                            <div class="q4u-demo-heading">
+                                <div>
+                                    <small>GOOD AFTERNOON</small>
+                                    <strong>Ayesha</strong>
+                                </div>
+
+                                <span class="q4u-demo-avatar">
+                                    AK
+                                </span>
+                            </div>
+
+                            <div class="q4u-demo-cards">
+
+                                <div class="q4u-demo-card q4u-demo-card-main">
+                                    <small>UPCOMING RENEWAL</small>
+
+                                    <strong>
+                                        28 Sep
+                                    </strong>
+
+                                    <span>
+                                        Volkswagen Polo
+                                    </span>
+
+                                    <div class="q4u-demo-progress">
+                                        <span></span>
+                                    </div>
+                                </div>
+
+                                <div class="q4u-demo-card">
+                                    <small>DOCUMENTS</small>
+                                    <strong>4</strong>
+                                    <span>All available</span>
+                                </div>
+
+                                <div class="q4u-demo-card">
+                                    <small>ACTIVE REQUESTS</small>
+                                    <strong>1</strong>
+                                    <span>In progress</span>
+                                </div>
+
+                            </div>
+
+                            <div class="q4u-demo-list">
+
+                                <div class="q4u-demo-list-heading">
+                                    <strong>Your vehicles</strong>
+                                    <span>View all</span>
+                                </div>
+
+                                <div class="q4u-demo-vehicle">
+                                    <div class="q4u-demo-car-icon">
+                                        V
+                                    </div>
+
+                                    <div>
+                                        <strong>Volkswagen Polo</strong>
+                                        <span>JT 42 ZN GP</span>
+                                    </div>
+
+                                    <span class="q4u-demo-status warning">
+                                        Renewal due
+                                    </span>
+                                </div>
+
+                                <div class="q4u-demo-vehicle">
+                                    <div class="q4u-demo-car-icon">
+                                        T
+                                    </div>
+
+                                    <div>
+                                        <strong>Toyota Hilux</strong>
+                                        <span>LM 81 TK GP</span>
+                                    </div>
+
+                                    <span class="q4u-demo-status good">
+                                        Up to date
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="q4u-platform-accent-card">
+                    <span>SMS</span>
+
+                    <div>
+                        <strong>Renewal reminder sent</strong>
+                        <small>Today · 10:42</small>
+                    </div>
+
+                    <span class="q4u-platform-check">
+                        ✓
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="q4u-section q4u-process-section"
+         id="how-it-works">
+
+    <div class="container q4u-container">
+
+        <div class="q4u-section-heading">
+            <span class="q4u-eyebrow">
+                SIMPLE BY DESIGN
+            </span>
+
+            <h2>
+                From paperwork to
+                <span>peace of mind.</span>
+            </h2>
+
+            <p>
+                The digital experience is being designed around the same Q4U
+                service customers already know, with less unnecessary effort.
+            </p>
+        </div>
+
+        <div class="q4u-process-grid">
+
+            <div class="q4u-process-card">
+                <span class="q4u-process-number">
+                    01
+                </span>
+
+                <div class="q4u-process-icon">
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM4 22v-3c0-3.3 3.6-5 8-5s8 1.7 8 5v3h-2v-3c0-1.7-2.3-3-6-3s-6 1.3-6 3v3H4Z" />
+                    </svg>
+                </div>
+
+                <h3>Create your profile</h3>
+
+                <p>
+                    Keep your details and vehicles organised under one secure
+                    customer profile.
+                </p>
+            </div>
+
+            <div class="q4u-process-line">
+                <span>→</span>
+            </div>
+
+            <div class="q4u-process-card">
+                <span class="q4u-process-number">
+                    02
+                </span>
+
+                <div class="q4u-process-icon">
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M4 2h11l5 5v15H4V2Zm2 2v16h12V8h-4V4H6Zm10 .8V6h1.2L16 4.8ZM8 11h8v2H8v-2Zm0 4h8v2H8v-2Z" />
+                    </svg>
+                </div>
+
+                <h3>Add your documents</h3>
+
+                <p>
+                    Bring the paperwork associated with your vehicle into a
+                    clearer digital record.
+                </p>
+            </div>
+
+            <div class="q4u-process-line">
+                <span>→</span>
+            </div>
+
+            <div class="q4u-process-card">
+                <span class="q4u-process-number">
+                    03
+                </span>
+
+                <div class="q4u-process-icon">
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="M12 22a10 10 0 1 1 10-10 10 10 0 0 1-10 10Zm0-18a8 8 0 1 0 8 8 8 8 0 0 0-8-8Zm1 3v4.6l3.3 2-1 1.7-4.3-2.6V7h2Z" />
+                    </svg>
+                </div>
+
+                <h3>Stay ahead</h3>
+
+                <p>
+                    See what is coming up and receive reminders before
+                    important vehicle dates are missed.
+                </p>
+            </div>
+
+            <div class="q4u-process-line">
+                <span>→</span>
+            </div>
+
+            <div class="q4u-process-card">
+                <span class="q4u-process-number">
+                    04
+                </span>
+
+                <div class="q4u-process-icon">
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="m9.2 16.2-4.4-4.4 1.4-1.4 3 3 8.6-8.6 1.4 1.4-10 10Z" />
+                    </svg>
+                </div>
+
+                <h3>Let Q4U assist</h3>
+
+                <p>
+                    Request the service you need and follow the process through
+                    a simple, understandable journey.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="q4u-cta-section">
+
+    <div class="container q4u-container">
+
+        <div class="q4u-cta-card">
+
+            <div class="q4u-cta-pattern"></div>
+
+            <div class="q4u-cta-copy">
+                <span class="q4u-eyebrow q4u-eyebrow-yellow">
+                    READY WHEN YOU ARE
+                </span>
+
+                <h2>
+                    Vehicle admin doesn't need
+                    to feel complicated.
+                </h2>
+
+                <p>
+                    Tell Q4U what you need and start with one simple request.
+                </p>
+            </div>
+
+            <div class="q4u-cta-actions">
+                <button type="button"
+                        class="q4u-button q4u-button-yellow q4u-button-large"
+                        data-bs-toggle="modal"
+                        data-bs-target="#serviceRequestModal">
+                    Request a Service
+                </button>
+
+                <a href="tel:+27118302067"
+                   class="q4u-button q4u-button-light q4u-button-large">
+                    Call 011 830 2067
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>

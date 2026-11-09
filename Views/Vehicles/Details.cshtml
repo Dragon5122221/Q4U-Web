@@ -1,0 +1,890 @@
+﻿@model VehicleDetailsViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Vehicle Details";
+    ViewData["ActiveNavigation"] = "Vehicles";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/vehicles.css"
+          asp-append-version="true" />
+}
+
+
+<div class="q4u-vehicle-back-row">
+
+    <a asp-controller="Vehicles"
+       asp-action="Index">
+        ← Back to My Vehicles
+    </a>
+
+</div>
+
+
+<section class="q4u-vehicle-detail-hero">
+
+    <div class="q4u-vehicle-detail-hero-main">
+
+        <div class="q4u-vehicle-detail-icon">
+            @Model.Vehicle.Make.Substring(0, 1)
+        </div>
+
+
+        <div>
+
+            <div class="q4u-vehicle-detail-title-row">
+
+                <span>
+                    @Model.Vehicle.Year · @Model.Vehicle.Colour
+                </span>
+
+                <span class="q4u-portal-status @Model.Vehicle.StatusTone">
+                    @Model.Vehicle.RenewalStatus
+                </span>
+
+            </div>
+
+            <h1 id="vehicleDetailName">
+                @Model.Vehicle.Make @Model.Vehicle.Model
+            </h1>
+
+            <p>
+                Vehicle ID:
+                <strong>
+                    Q4U-VH-@Model.Vehicle.VinLastSix
+                </strong>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="q4u-vehicle-detail-actions">
+
+        <button type="button"
+                class="q4u-vehicle-outline-action"
+                data-bs-toggle="modal"
+                data-bs-target="#editVehicleModal">
+
+            Edit Details
+        </button>
+
+        <a asp-controller="Portal"
+           asp-action="Renewals"
+           class="q4u-portal-primary-button">
+
+            Manage Renewal
+        </a>
+
+        <button type="button"
+                class="q4u-vehicle-more-button"
+                data-bs-toggle="dropdown">
+            •••
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-end q4u-vehicle-action-menu">
+
+            <button class="dropdown-item"
+                    type="button"
+                    data-prototype-action
+                    data-message="Vehicle information export prepared.">
+                Export vehicle summary
+            </button>
+
+            <button class="dropdown-item"
+                    type="button"
+                    data-prototype-action
+                    data-message="A vehicle information request has been prepared.">
+                Request information
+            </button>
+
+            <div class="dropdown-divider"></div>
+
+            <button class="dropdown-item danger"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#removeVehicleModal">
+                Remove from account
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="q4u-vehicle-detail-summary">
+
+    <div class="q4u-detail-plate-card">
+
+        <span class="q4u-detail-label">
+            REGISTRATION
+        </span>
+
+        <div class="q4u-detail-number-plate">
+
+            <span>ZA</span>
+
+            <strong>
+                @Model.Vehicle.Registration
+            </strong>
+
+            <em>
+                @Model.Vehicle.Province
+            </em>
+
+        </div>
+
+    </div>
+
+
+    <article>
+
+        <span>Licence expiry</span>
+
+        <strong>
+            @Model.Vehicle.LicenceExpiry.ToString("dd MMMM yyyy")
+        </strong>
+
+        <small>
+            @Model.Vehicle.DaysRemaining days remaining
+        </small>
+
+    </article>
+
+
+    <article>
+
+        <span>Documents</span>
+
+        <strong>
+            @Model.Vehicle.DocumentCount
+        </strong>
+
+        <small>
+            Vehicle files available
+        </small>
+
+    </article>
+
+
+    <article>
+
+        <span>Outstanding</span>
+
+        <strong>
+            R@Model.Vehicle.OutstandingBalance.ToString("N2")
+        </strong>
+
+        <small>
+            Current vehicle balance
+        </small>
+
+    </article>
+
+</section>
+
+
+<div class="q4u-vehicle-detail-layout">
+
+    <div class="q4u-vehicle-detail-main">
+
+        <div class="q4u-vehicle-tabs">
+
+            <button type="button"
+                    class="active"
+                    data-vehicle-tab="overview">
+                Overview
+            </button>
+
+            <button type="button"
+                    data-vehicle-tab="documents">
+                Documents
+                <span>@Model.Documents.Count</span>
+            </button>
+
+            <button type="button"
+                    data-vehicle-tab="history">
+                Service History
+            </button>
+
+            <button type="button"
+                    data-vehicle-tab="activity">
+                Activity
+            </button>
+
+        </div>
+
+
+        <!-- OVERVIEW -->
+        <section data-vehicle-tab-panel="overview">
+
+            <div class="q4u-detail-card-grid">
+
+                <article class="q4u-portal-card q4u-detail-information-card">
+
+                    <div class="q4u-detail-card-heading">
+
+                        <div>
+                            <span>VEHICLE INFORMATION</span>
+                            <h2>Registration details</h2>
+                        </div>
+
+                        <button type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editVehicleModal">
+                            Edit
+                        </button>
+
+                    </div>
+
+
+                    <dl class="q4u-detail-data-list">
+
+                        <div>
+                            <dt>Make</dt>
+                            <dd>@Model.Vehicle.Make</dd>
+                        </div>
+
+                        <div>
+                            <dt>Model</dt>
+                            <dd>@Model.Vehicle.Model</dd>
+                        </div>
+
+                        <div>
+                            <dt>Year</dt>
+                            <dd>@Model.Vehicle.Year</dd>
+                        </div>
+
+                        <div>
+                            <dt>Colour</dt>
+                            <dd>@Model.Vehicle.Colour</dd>
+                        </div>
+
+                        <div>
+                            <dt>Body type</dt>
+                            <dd>@Model.BodyType</dd>
+                        </div>
+
+                        <div>
+                            <dt>Fuel type</dt>
+                            <dd>@Model.FuelType</dd>
+                        </div>
+
+                        <div>
+                            <dt>Transmission</dt>
+                            <dd>@Model.Transmission</dd>
+                        </div>
+
+                        <div>
+                            <dt>Odometer</dt>
+                            <dd id="vehicleDetailOdometer">
+                                @Model.Odometer
+                            </dd>
+                        </div>
+
+                    </dl>
+
+                </article>
+
+
+                <article class="q4u-portal-card q4u-detail-information-card">
+
+                    <div class="q4u-detail-card-heading">
+
+                        <div>
+                            <span>IDENTIFICATION</span>
+                            <h2>Vehicle identifiers</h2>
+                        </div>
+
+                    </div>
+
+
+                    <dl class="q4u-detail-data-list">
+
+                        <div class="wide">
+                            <dt>VIN</dt>
+                            <dd class="mono">@Model.FullVin</dd>
+                        </div>
+
+                        <div class="wide">
+                            <dt>Engine number</dt>
+                            <dd class="mono">@Model.EngineNumber</dd>
+                        </div>
+
+                        <div>
+                            <dt>Licence disc</dt>
+                            <dd>@Model.LicenceDiscNumber</dd>
+                        </div>
+
+                        <div>
+                            <dt>Registered</dt>
+                            <dd>@Model.RegistrationDate</dd>
+                        </div>
+
+                    </dl>
+
+                </article>
+
+            </div>
+
+
+            <article class="q4u-portal-card q4u-renewal-readiness-card">
+
+                <div class="q4u-detail-card-heading">
+
+                    <div>
+                        <span>RENEWAL READINESS</span>
+                        <h2>Licence renewal</h2>
+                    </div>
+
+                    <a asp-controller="Renewals"
+   asp-action="Start"
+   asp-route-id="@Model.Vehicle.Id">
+                        View renewals →
+                    </a>
+
+                </div>
+
+
+                <div class="q4u-renewal-readiness-content">
+
+                    <div class="q4u-renewal-readiness-date @Model.Vehicle.StatusTone">
+
+                        <span>
+                            @Model.Vehicle.LicenceExpiry.ToString("MMM")
+                        </span>
+
+                        <strong>
+                            @Model.Vehicle.LicenceExpiry.Day
+                        </strong>
+
+                        <em>
+                            @Model.Vehicle.LicenceExpiry.Year
+                        </em>
+
+                    </div>
+
+
+                    <div class="q4u-renewal-readiness-copy">
+
+                        <span class="q4u-portal-status @Model.Vehicle.StatusTone">
+                            @Model.Vehicle.RenewalStatus
+                        </span>
+
+                        <h3>
+                            @if (Model.Vehicle.StatusTone == "danger")
+                            {
+                                <text>Renewal requires immediate attention</text>
+                            }
+                            else if (Model.Vehicle.StatusTone == "warning")
+                            {
+                                <text>Your renewal window is approaching</text>
+                            }
+                            else
+                            {
+                                <text>Your licence is currently up to date</text>
+                            }
+                        </h3>
+
+                        <p>
+                            Q4U can use the vehicle information and documents
+                            already linked to your profile to simplify the
+                            renewal preparation process.
+                        </p>
+
+                    </div>
+
+
+                    <a asp-controller="Portal"
+                       asp-action="Renewals"
+                       class="q4u-portal-primary-button">
+
+                        @if (Model.Vehicle.StatusTone == "success")
+                        {
+                            <text>View Renewal Details</text>
+                        }
+                        else
+                        {
+                            <text>Prepare Renewal</text>
+                        }
+
+                    </a>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- DOCUMENTS -->
+        <section class="d-none"
+                 data-vehicle-tab-panel="documents">
+
+            <article class="q4u-portal-card">
+
+                <div class="q4u-detail-card-heading">
+
+                    <div>
+                        <span>VEHICLE FILES</span>
+                        <h2>Documents</h2>
+                    </div>
+
+                    <a asp-controller="Portal"
+                       asp-action="Documents">
+                        Manage documents →
+                    </a>
+
+                </div>
+
+
+                <div class="q4u-detail-document-list">
+
+                    @foreach (var document in Model.Documents)
+                    {
+                        <article>
+
+                            <span class="q4u-detail-document-icon">
+                                @document.FileType
+                            </span>
+
+                            <div>
+                                <strong>@document.Name</strong>
+
+                                <span>
+                                    @document.Category ·
+                                    Uploaded @document.UploadedDate
+                                </span>
+                            </div>
+
+                            <span class="q4u-portal-status @document.StatusTone">
+                                @document.Status
+                            </span>
+
+                            <button type="button"
+                                    data-prototype-action
+                                    data-message="@($"{document.Name} opened in prototype preview.")">
+                                Open
+                            </button>
+
+                        </article>
+                    }
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- SERVICE HISTORY -->
+        <section class="d-none"
+                 data-vehicle-tab-panel="history">
+
+            <article class="q4u-portal-card">
+
+                <div class="q4u-detail-card-heading">
+
+                    <div>
+                        <span>Q4U HISTORY</span>
+                        <h2>Previous services</h2>
+                    </div>
+
+                    <a asp-controller="Portal"
+                       asp-action="Requests">
+                        All requests →
+                    </a>
+
+                </div>
+
+
+                <div class="q4u-detail-history-list">
+
+                    @foreach (var service in Model.ServiceHistory)
+                    {
+                        <article>
+
+                            <span>
+                                @service.Reference
+                            </span>
+
+                            <div>
+                                <strong>@service.Service</strong>
+                                <small>@service.Date</small>
+                            </div>
+
+                            <strong>
+                                @service.Amount
+                            </strong>
+
+                            <span class="q4u-portal-status @service.StatusTone">
+                                @service.Status
+                            </span>
+
+                        </article>
+                    }
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- ACTIVITY -->
+        <section class="d-none"
+                 data-vehicle-tab-panel="activity">
+
+            <article class="q4u-portal-card">
+
+                <div class="q4u-detail-card-heading">
+
+                    <div>
+                        <span>VEHICLE TIMELINE</span>
+                        <h2>Recent activity</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-vehicle-activity-timeline">
+
+                    @foreach (var activity in Model.Activity)
+                    {
+                        <article>
+
+                            <span class="@activity.Tone"></span>
+
+                            <div>
+                                <strong>@activity.Title</strong>
+
+                                <p>@activity.Description</p>
+
+                                <small>@activity.Date</small>
+                            </div>
+
+                        </article>
+                    }
+
+                </div>
+
+            </article>
+
+        </section>
+
+    </div>
+
+
+    <aside class="q4u-vehicle-detail-side">
+
+        <article class="q4u-portal-card">
+
+            <div class="q4u-detail-card-heading">
+
+                <div>
+                    <span>REGISTERED OWNER</span>
+                    <h2>Owner details</h2>
+                </div>
+
+            </div>
+
+
+            <div class="q4u-owner-summary">
+
+                <span>AK</span>
+
+                <div>
+                    <strong>@Model.OwnerName</strong>
+                    <small>@Model.OwnerCustomerNumber</small>
+                </div>
+
+            </div>
+
+
+            <div class="q4u-owner-contact">
+
+                <div>
+                    <span>Email</span>
+                    <strong>ayesha.khan@example.co.za</strong>
+                </div>
+
+                <div>
+                    <span>Mobile</span>
+                    <strong>082 555 0184</strong>
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <article class="q4u-portal-card">
+
+            <div class="q4u-detail-card-heading">
+
+                <div>
+                    <span>QUICK ACTIONS</span>
+                    <h2>Vehicle actions</h2>
+                </div>
+
+            </div>
+
+
+            <div class="q4u-detail-action-list">
+
+                <a asp-controller="Renewals"
+                   asp-action="Start"
+                   asp-route-id="@Model.Vehicle.Id">
+                    <span>R</span>
+                    <div>
+                        <strong>Manage renewal</strong>
+                        <small>Licence status and renewal</small>
+                    </div>
+                    <em>→</em>
+                </a>
+
+                <a asp-controller="Portal"
+                   asp-action="Documents">
+                    <span>↑</span>
+                    <div>
+                        <strong>Add document</strong>
+                        <small>Upload vehicle paperwork</small>
+                    </div>
+                    <em>→</em>
+                </a>
+
+                <a asp-controller="Portal"
+                   asp-action="Requests">
+                    <span>+</span>
+                    <div>
+                        <strong>Request service</strong>
+                        <small>Ask Q4U for assistance</small>
+                    </div>
+                    <em>→</em>
+                </a>
+
+            </div>
+
+        </article>
+
+
+        <article class="q4u-detail-reminder-card">
+
+            <span>REMINDERS</span>
+
+            <h3>Automatic renewal alerts</h3>
+
+            <p>
+                SMS and portal reminders are enabled for this vehicle.
+            </p>
+
+            <label class="q4u-detail-toggle">
+
+                <input type="checkbox"
+                       checked
+                       id="vehicleReminderToggle" />
+
+                <span></span>
+
+                <em>Renewal reminders</em>
+
+            </label>
+
+        </article>
+
+    </aside>
+
+</div>
+
+
+<!-- EDIT VEHICLE MODAL -->
+<div class="modal fade"
+     id="editVehicleModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+
+        <div class="modal-content q4u-vehicle-modal">
+
+            <div class="q4u-vehicle-modal-header">
+
+                <div>
+                    <span>VEHICLE PROFILE</span>
+                    <h2>Edit vehicle details</h2>
+                </div>
+
+                <button type="button"
+                        data-bs-dismiss="modal">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <form id="editVehicleForm">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label>
+                                Vehicle nickname
+                            </label>
+
+                            <input id="editVehicleNickname"
+                                   class="form-control"
+                                   value="@Model.Vehicle.Make @Model.Vehicle.Model" />
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label>
+                                Current odometer
+                            </label>
+
+                            <input id="editVehicleOdometer"
+                                   class="form-control"
+                                   value="@Model.Odometer" />
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label>
+                                Colour
+                            </label>
+
+                            <input class="form-control"
+                                   value="@Model.Vehicle.Colour" />
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label>
+                                Registration
+                            </label>
+
+                            <input class="form-control"
+                                   value="@Model.Vehicle.FullRegistration"
+                                   disabled />
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="q4u-vehicle-modal-note">
+
+                        <span>i</span>
+
+                        <p>
+                            Registration and official vehicle identifiers
+                            cannot be edited directly in this prototype.
+                            A Q4U consultant would verify those changes.
+                        </p>
+
+                    </div>
+
+
+                    <div class="q4u-vehicle-modal-actions">
+
+                        <button type="button"
+                                class="q4u-portal-secondary-button"
+                                data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="q4u-portal-primary-button">
+                            Save Changes
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- REMOVE VEHICLE -->
+<div class="modal fade"
+     id="removeVehicleModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content q4u-remove-vehicle-modal">
+
+            <span class="q4u-remove-warning">
+                !
+            </span>
+
+            <h3>Remove this vehicle?</h3>
+
+            <p>
+                This prototype will demonstrate removal from your Q4U
+                profile. No actual information will be deleted.
+            </p>
+
+
+            <div class="q4u-remove-vehicle-summary">
+
+                <strong>
+                    @Model.Vehicle.Make @Model.Vehicle.Model
+                </strong>
+
+                <span>
+                    @Model.Vehicle.FullRegistration
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-bs-dismiss="modal">
+                    Keep Vehicle
+                </button>
+
+                <button type="button"
+                        class="q4u-danger-button"
+                        id="confirmRemoveVehicle">
+                    Remove Vehicle
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/js/vehicles.js"
+            asp-append-version="true"></script>
+}

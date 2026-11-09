@@ -1,0 +1,19 @@
+.git
+.vs
+**/bin
+**/obj
+**/node_modules
+**/.env
+**/.env.*
+**/*firebase*key*.json
+**/*service*account*.json
+**/*.p12
+**/*.pem
+App_Data
+Properties
+
+# Temporary GitHub authentication and test output
+gha-creds-*.json
+**/gha-creds-*.json
+TestResults/
+**/TestResults/

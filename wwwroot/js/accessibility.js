@@ -1,0 +1,7 @@
+(()=>{
+const key='q4u.accessibility.v1',defaults={text:'100',theme:'default',motion:false,spacing:false,links:false,focus:false,targets:false,simplefont:false};
+let prefs={...defaults};try{prefs={...prefs,...JSON.parse(localStorage.getItem(key)||'{}')};}catch{}
+function apply(){if(!['100','115','130','150','200'].includes(String(prefs.text)))prefs.text='100';if(!['default','dark','contrast'].includes(prefs.theme))prefs.theme='default';document.documentElement.style.fontSize=prefs.text+'%';for(const k of Object.keys(defaults).filter(k=>k!=='text'))document.documentElement.dataset[k]=String(prefs[k]);}
+function save(){try{localStorage.setItem(key,JSON.stringify(prefs));return true;}catch{return false;}}
+apply();document.addEventListener('DOMContentLoaded',()=>{const controls=[...document.querySelectorAll('[data-a11y]')];function sync(){for(const input of controls){const val=prefs[input.dataset.a11y];if(input.type==='checkbox')input.checked=!!val;else input.value=val;}}sync();for(const input of controls)input.addEventListener('change',()=>{prefs[input.dataset.a11y]=input.type==='checkbox'?input.checked:input.value;apply();const persisted=save();document.getElementById('a11y-status').textContent=persisted?'Accessibility preference saved on this browser.':'Applied for this page. Browser storage is unavailable.';});document.getElementById('reset-accessibility')?.addEventListener('click',()=>{prefs={...defaults};apply();save();sync();document.getElementById('a11y-status').textContent='Accessibility preferences reset.';});});
+})();

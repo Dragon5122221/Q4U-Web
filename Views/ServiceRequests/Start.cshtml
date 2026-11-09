@@ -1,0 +1,1327 @@
+﻿@model ServiceRequestStartViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "New Service Request";
+    ViewData["ActiveNavigation"] = "Requests";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/service-requests.css"
+          asp-append-version="true" />
+}
+
+
+<div class="q4u-service-back">
+
+    <a asp-controller="ServiceRequests"
+       asp-action="Index">
+        ← Back to Service Requests
+    </a>
+
+</div>
+
+
+<section class="q4u-service-start-header">
+
+    <span>
+        Q4U SERVICES
+    </span>
+
+    <h1>New Service Request</h1>
+
+    <p>
+        Tell us what you need and we'll prepare a complete prototype
+        service request around the selected vehicle.
+    </p>
+
+</section>
+
+
+<div class="q4u-service-wizard-progress">
+
+    <div class="active"
+         data-service-indicator="1">
+
+        <span>1</span>
+
+        <strong>
+            Service
+        </strong>
+
+    </div>
+
+    <i></i>
+
+
+    <div data-service-indicator="2">
+
+        <span>2</span>
+
+        <strong>
+            Vehicle & Details
+        </strong>
+
+    </div>
+
+    <i></i>
+
+
+    <div data-service-indicator="3">
+
+        <span>3</span>
+
+        <strong>
+            Preferences
+        </strong>
+
+    </div>
+
+    <i></i>
+
+
+    <div data-service-indicator="4">
+
+        <span>4</span>
+
+        <strong>
+            Review
+        </strong>
+
+    </div>
+
+</div>
+
+
+<div class="q4u-service-wizard-layout">
+
+    <div>
+
+        <!-- ===================================================
+             STEP 1
+             =================================================== -->
+
+        <section class="q4u-portal-card q4u-service-wizard-step"
+                 data-service-step="1">
+
+            <div class="q4u-service-step-heading">
+
+                <span>
+                    STEP 1 OF 4
+                </span>
+
+                <h2>
+                    Choose a service.
+                </h2>
+
+                <p>
+                    Select the Q4U service you would like assistance with.
+                </p>
+
+            </div>
+
+
+            <div class="q4u-service-selection-grid">
+
+                @foreach (var service in Model.Services)
+                {
+                    <button type="button"
+                            data-service-choice="@service.Id"
+                            class="@(service.Id == Model.SelectedServiceId ? "selected" : "")">
+
+                        <span class="q4u-service-choice-icon">
+                            @service.Icon
+                        </span>
+
+
+                        <div>
+
+                            <strong>
+                                @service.Name
+                            </strong>
+
+                            <small>
+                                @service.Description
+                            </small>
+
+                        </div>
+
+
+                        <i></i>
+
+                    </button>
+                }
+
+            </div>
+
+
+            <div class="q4u-service-selected-summary">
+
+                <div>
+
+                    <span>
+                        SELECTED SERVICE
+                    </span>
+
+                    <h3 id="selectedServiceName">
+                        Number Plates
+                    </h3>
+
+                    <p id="selectedServiceDescription">
+                        Request replacement or new number plates.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        PROTOTYPE ESTIMATE
+                    </span>
+
+                    <strong id="selectedServiceEstimate">
+                        From R420
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="q4u-service-step-actions">
+
+                <span></span>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        data-service-next>
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             STEP 2
+             =================================================== -->
+
+        <section class="q4u-portal-card q4u-service-wizard-step d-none"
+                 data-service-step="2">
+
+            <div class="q4u-service-step-heading">
+
+                <span>
+                    STEP 2 OF 4
+                </span>
+
+                <h2>
+                    Vehicle & service details.
+                </h2>
+
+                <p id="serviceDetailsInstruction">
+                    Select the vehicle for this request and provide
+                    the relevant service information.
+                </p>
+
+            </div>
+
+
+            <label class="q4u-service-field-label"
+                   for="serviceVehicleSelector">
+
+                Vehicle
+
+            </label>
+
+
+            <select id="serviceVehicleSelector"
+                    class="form-select q4u-service-vehicle-selector">
+
+                @foreach (var vehicle in Model.Vehicles)
+                {
+                    <option value="@vehicle.Id"
+                            data-name="@vehicle.Name"
+                            data-registration="@vehicle.Registration"
+                            data-province="@vehicle.Province"
+                            data-colour="@vehicle.Colour"
+                            selected="@(vehicle.Id == Model.SelectedVehicleId)">
+
+                        @vehicle.Name · @vehicle.FullRegistration
+
+                    </option>
+                }
+
+            </select>
+
+
+            <div class="q4u-service-selected-vehicle">
+
+                <div>
+
+                    <span>
+                        SELECTED VEHICLE
+                    </span>
+
+                    <h3 id="serviceVehicleName">
+                        2021 Volkswagen Polo 1.0 TSI
+                    </h3>
+
+                    <small id="serviceVehicleColour">
+                        Pure White
+                    </small>
+
+                </div>
+
+
+                <div class="q4u-service-number-plate">
+
+                    <span>ZA</span>
+
+                    <strong id="serviceVehicleRegistration">
+                        JT 42 ZN
+                    </strong>
+
+                    <em id="serviceVehicleProvince">
+                        GP
+                    </em>
+
+                </div>
+
+            </div>
+
+
+            <!-- NUMBER PLATES -->
+
+            <div class="q4u-service-specific-panel"
+                 data-service-panel="plates">
+
+                <span class="q4u-service-section-label">
+                    NUMBER PLATE REQUEST
+                </span>
+
+
+                <div class="q4u-service-form-grid">
+
+                    <div>
+
+                        <label for="plateRequestReason">
+                            Reason
+                        </label>
+
+                        <select id="plateRequestReason"
+                                class="form-select">
+
+                            <option>
+                                Replacement / damaged plate
+                            </option>
+
+                            <option>
+                                Lost plate
+                            </option>
+
+                            <option>
+                                New plate required
+                            </option>
+
+                            <option>
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="plateQuantity">
+                            Number of plates
+                        </label>
+
+                        <select id="plateQuantity"
+                                class="form-select">
+
+                            <option value="2"
+                                    selected>
+                                Front and rear
+                            </option>
+
+                            <option value="1">
+                                One plate
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-service-info-note">
+
+                    <span>i</span>
+
+                    <p>
+                        Actual plate requirements and supporting
+                        documentation would be confirmed by Q4U.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PERSONALISED -->
+
+            <div class="q4u-service-specific-panel d-none"
+                 data-service-panel="personalised">
+
+                <span class="q4u-service-section-label">
+                    PERSONALISED PLATE
+                </span>
+
+
+                <div class="q4u-personalised-input-row">
+
+                    <div>
+
+                        <label for="personalisedPlateText">
+                            Preferred plate text
+                        </label>
+
+                        <input id="personalisedPlateText"
+                               class="form-control text-uppercase"
+                               maxlength="8"
+                               value="AK 2026" />
+
+                    </div>
+
+
+                    <button type="button"
+                            id="checkPersonalisedPlate">
+                        Check Availability
+                    </button>
+
+                </div>
+
+
+                <div class="q4u-personalised-preview">
+
+                    <span>ZA</span>
+
+                    <strong id="personalisedPlatePreview">
+                        AK 2026
+                    </strong>
+
+                    <em>GP</em>
+
+                </div>
+
+
+                <div class="q4u-personalised-result d-none"
+                     id="personalisedPlateResult">
+
+                    <span>✓</span>
+
+                    <div>
+
+                        <strong>
+                            Available for this prototype
+                        </strong>
+
+                        <p>
+                            This is a simulated result only. No actual
+                            personalised registration availability has
+                            been checked.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ROADWORTHY -->
+
+            <div class="q4u-service-specific-panel d-none"
+                 data-service-panel="roadworthy">
+
+                <span class="q4u-service-section-label">
+                    ROADWORTHY PREFERENCE
+                </span>
+
+
+                <div class="q4u-service-form-grid three">
+
+                    <div>
+
+                        <label for="roadworthyDate">
+                            Preferred date
+                        </label>
+
+                        <input id="roadworthyDate"
+                               type="date"
+                               class="form-control"
+                               value="2026-08-21" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="roadworthyTime">
+                            Preferred period
+                        </label>
+
+                        <select id="roadworthyTime"
+                                class="form-select">
+
+                            <option>
+                                Morning
+                            </option>
+
+                            <option>
+                                Afternoon
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="roadworthyLocation">
+                            Location preference
+                        </label>
+
+                        <select id="roadworthyLocation"
+                                class="form-select">
+
+                            <option>
+                                Q4U to advise
+                            </option>
+
+                            <option>
+                                Mayfair area
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-service-info-note">
+
+                    <span>i</span>
+
+                    <p>
+                        Date and location selection is a preference only.
+                        No real appointment has been booked.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FINES -->
+
+            <div class="q4u-service-specific-panel d-none"
+                 data-service-panel="fines">
+
+                <span class="q4u-service-section-label">
+                    TRAFFIC FINE INFORMATION
+                </span>
+
+
+                <div class="q4u-service-form-grid">
+
+                    <div>
+
+                        <label for="fineReference">
+                            Fine / notice reference
+                        </label>
+
+                        <input id="fineReference"
+                               class="form-control"
+                               value="JHB-TRF-260812-8472" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="fineAuthority">
+                            Issuing area
+                        </label>
+
+                        <select id="fineAuthority"
+                                class="form-select">
+
+                            <option>
+                                Johannesburg
+                            </option>
+
+                            <option>
+                                Other / unsure
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-service-info-note">
+
+                    <span>!</span>
+
+                    <p>
+                        This prototype does not query or validate any
+                        government traffic-fine system.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FLEET -->
+
+            <div class="q4u-service-specific-panel d-none"
+                 data-service-panel="fleet">
+
+                <span class="q4u-service-section-label">
+                    FLEET REQUIREMENT
+                </span>
+
+
+                <div class="q4u-service-form-grid">
+
+                    <div>
+
+                        <label for="fleetCompany">
+                            Company / organisation
+                        </label>
+
+                        <input id="fleetCompany"
+                               class="form-control"
+                               value="AK Trading (Pty) Ltd" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="fleetVehicleCount">
+                            Approximate fleet size
+                        </label>
+
+                        <select id="fleetVehicleCount"
+                                class="form-select">
+
+                            <option>
+                                2 – 10 vehicles
+                            </option>
+
+                            <option>
+                                11 – 25 vehicles
+                            </option>
+
+                            <option>
+                                26 – 50 vehicles
+                            </option>
+
+                            <option>
+                                50+ vehicles
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <label for="fleetRequirement"
+                       class="q4u-service-field-label">
+                    Tell us what you need
+                </label>
+
+                <textarea id="fleetRequirement"
+                          class="form-control q4u-service-textarea">We would like assistance coordinating annual licence renewals for our vehicle fleet.</textarea>
+
+            </div>
+
+
+            <div class="q4u-service-step-actions">
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-service-previous>
+                    ← Back
+                </button>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        data-service-next>
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             STEP 3
+             =================================================== -->
+
+        <section class="q4u-portal-card q4u-service-wizard-step d-none"
+                 data-service-step="3">
+
+            <div class="q4u-service-step-heading">
+
+                <span>
+                    STEP 3 OF 4
+                </span>
+
+                <h2>
+                    Supporting information.
+                </h2>
+
+                <p>
+                    Add an optional supporting file and tell us how
+                    you would prefer Q4U to contact you.
+                </p>
+
+            </div>
+
+
+            <input type="file"
+                   id="serviceSupportingFileInput"
+                   accept=".pdf,.jpg,.jpeg,.png"
+                   hidden />
+
+
+            <div class="q4u-service-upload-area">
+
+                <span>
+                    ↑
+                </span>
+
+                <div>
+
+                    <strong>
+                        Supporting document
+                    </strong>
+
+                    <p>
+                        Add a photo or PDF if it helps explain the request.
+                    </p>
+
+                </div>
+
+
+                <button type="button"
+                        id="selectServiceSupportingFile">
+                    Choose File
+                </button>
+
+            </div>
+
+
+            <div class="q4u-service-selected-file d-none"
+                 id="serviceSelectedFile">
+
+                <span id="serviceSelectedFileType">
+                    PDF
+                </span>
+
+                <div>
+
+                    <strong id="serviceSelectedFileName">
+                        supporting-document.pdf
+                    </strong>
+
+                    <small>
+                        Selected locally · not uploaded
+                    </small>
+
+                </div>
+
+                <button type="button"
+                        id="removeServiceSupportingFile">
+                    ×
+                </button>
+
+            </div>
+
+
+            <span class="q4u-service-section-label">
+                PREFERRED UPDATES
+            </span>
+
+
+            <div class="q4u-service-contact-options">
+
+                <label>
+
+                    <input type="radio"
+                           name="serviceContactPreference"
+                           value="SMS"
+                           checked />
+
+                    <span>SMS</span>
+
+                    <div>
+                        <strong>SMS</strong>
+                        <small>Updates to 082 555 0184</small>
+                    </div>
+
+                </label>
+
+
+                <label>
+
+                    <input type="radio"
+                           name="serviceContactPreference"
+                           value="Email" />
+
+                    <span>@@</span>
+
+                    <div>
+                        <strong>Email</strong>
+                        <small>ayesha.khan@example.co.za</small>
+                    </div>
+
+                </label>
+
+
+                <label>
+
+                    <input type="radio"
+                           name="serviceContactPreference"
+                           value="Phone call" />
+
+                    <span>☎</span>
+
+                    <div>
+                        <strong>Phone call</strong>
+                        <small>For important service questions</small>
+                    </div>
+
+                </label>
+
+            </div>
+
+
+            <span class="q4u-service-section-label">
+                FULFILMENT PREFERENCE
+            </span>
+
+
+            <div class="q4u-service-fulfilment-options">
+
+                <label>
+
+                    <input type="radio"
+                           name="serviceFulfilment"
+                           value="Collect at Q4U Mayfair"
+                           checked />
+
+                    <span></span>
+
+                    <div>
+                        <strong>
+                            Collect / attend at Q4U Mayfair
+                        </strong>
+
+                        <small>
+                            103 Church Street, Mayfair
+                        </small>
+                    </div>
+
+                </label>
+
+
+                <label>
+
+                    <input type="radio"
+                           name="serviceFulfilment"
+                           value="Contact me about alternatives" />
+
+                    <span></span>
+
+                    <div>
+                        <strong>
+                            Contact me about alternatives
+                        </strong>
+
+                        <small>
+                            Q4U can discuss options where applicable.
+                        </small>
+                    </div>
+
+                </label>
+
+            </div>
+
+
+            <label for="serviceAdditionalNotes"
+                   class="q4u-service-field-label">
+                Additional notes
+            </label>
+
+            <textarea id="serviceAdditionalNotes"
+                      class="form-control q4u-service-textarea"
+                      placeholder="Anything else the Q4U team should know?"></textarea>
+
+
+            <div class="q4u-service-step-actions">
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-service-previous>
+                    ← Back
+                </button>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        data-service-next>
+                    Review Request →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             STEP 4
+             =================================================== -->
+
+        <section class="q4u-portal-card q4u-service-wizard-step d-none"
+                 data-service-step="4">
+
+            <div id="serviceRequestReview">
+
+                <div class="q4u-service-step-heading">
+
+                    <span>
+                        STEP 4 OF 4
+                    </span>
+
+                    <h2>
+                        Review your request.
+                    </h2>
+
+                    <p>
+                        Check the information before creating the
+                        prototype service request.
+                    </p>
+
+                </div>
+
+
+                <div class="q4u-service-review-heading">
+
+                    <span id="serviceReviewIcon">
+                        NP
+                    </span>
+
+
+                    <div>
+
+                        <small>
+                            REQUESTED SERVICE
+                        </small>
+
+                        <h3 id="serviceReviewName">
+                            Number Plates
+                        </h3>
+
+                        <p id="serviceReviewDescription">
+                            Replacement / damaged plate · Front and rear
+                        </p>
+
+                    </div>
+
+
+                    <strong id="serviceReviewEstimate">
+                        From R420
+                    </strong>
+
+                </div>
+
+
+                <div class="q4u-service-review-vehicle">
+
+                    <div>
+
+                        <span>
+                            VEHICLE
+                        </span>
+
+                        <strong id="serviceReviewVehicle">
+                            2021 Volkswagen Polo 1.0 TSI
+                        </strong>
+
+                        <small id="serviceReviewColour">
+                            Pure White
+                        </small>
+
+                    </div>
+
+
+                    <div class="q4u-service-number-plate">
+
+                        <span>ZA</span>
+
+                        <strong id="serviceReviewRegistration">
+                            JT 42 ZN
+                        </strong>
+
+                        <em id="serviceReviewProvince">
+                            GP
+                        </em>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-service-review-grid">
+
+                    <article>
+
+                        <span>
+                            Contact preference
+                        </span>
+
+                        <strong id="serviceReviewContact">
+                            SMS
+                        </strong>
+
+                        <small>
+                            Service updates
+                        </small>
+
+                    </article>
+
+
+                    <article>
+
+                        <span>
+                            Fulfilment
+                        </span>
+
+                        <strong id="serviceReviewFulfilment">
+                            Collect at Q4U Mayfair
+                        </strong>
+
+                        <small>
+                            Prototype preference
+                        </small>
+
+                    </article>
+
+
+                    <article>
+
+                        <span>
+                            Supporting file
+                        </span>
+
+                        <strong id="serviceReviewFile">
+                            None
+                        </strong>
+
+                        <small>
+                            Optional
+                        </small>
+
+                    </article>
+
+
+                    <article>
+
+                        <span>
+                            Prototype estimate
+                        </span>
+
+                        <strong id="serviceReviewEstimateSecondary">
+                            From R420
+                        </strong>
+
+                        <small>
+                            Not a quotation
+                        </small>
+
+                    </article>
+
+                </div>
+
+
+                <div class="q4u-service-prototype-warning">
+
+                    <span>i</span>
+
+                    <p>
+                        Prices, availability, appointments, external lookups
+                        and service outcomes displayed here are prototype
+                        representations only and are not official confirmations.
+                    </p>
+
+                </div>
+
+
+                <label class="q4u-service-consent">
+
+                    <input type="checkbox"
+                           id="serviceRequestConsent" />
+
+                    <span></span>
+
+                    <p>
+                        I confirm that the prototype information above
+                        is correct and understand that no real service
+                        request is being submitted.
+                    </p>
+
+                </label>
+
+
+                <div class="q4u-service-step-actions">
+
+                    <button type="button"
+                            class="q4u-portal-secondary-button"
+                            data-service-previous>
+                        ← Back
+                    </button>
+
+                    <button type="button"
+                            class="q4u-portal-primary-button"
+                            id="submitServiceRequest"
+                            disabled>
+                        Submit Service Request
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUCCESS -->
+
+            <div class="q4u-service-request-success d-none"
+                 id="serviceRequestSuccess">
+
+                <div class="q4u-service-success-icon">
+                    ✓
+                </div>
+
+                <span>
+                    REQUEST RECEIVED
+                </span>
+
+                <h2>
+                    Q4U has your request.
+                </h2>
+
+                <p>
+                    Your prototype service request has been created
+                    and can now be followed from Service Requests.
+                </p>
+
+
+                <div class="q4u-service-success-reference">
+
+                    <div>
+
+                        <span>
+                            Service reference
+                        </span>
+
+                        <strong>
+                            Q4U-260816-029
+                        </strong>
+
+                    </div>
+
+
+                    <button type="button"
+                            id="copyServiceReference">
+                        Copy
+                    </button>
+
+                </div>
+
+
+                <div class="q4u-service-success-message">
+
+                    <span>
+                        SMS
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Confirmation prepared
+                        </strong>
+
+                        <p id="serviceSuccessMessage">
+                            Q4U: Your Number Plates request
+                            Q4U-260816-029 has been received.
+                        </p>
+
+                    </div>
+
+                    <em>
+                        ✓
+                    </em>
+
+                </div>
+
+
+                <div class="q4u-service-success-actions">
+
+                    <a asp-controller="ServiceRequests"
+                       asp-action="Track"
+                       asp-route-reference="Q4U-260816-029"
+                       asp-route-newRequest="true"
+                       class="q4u-portal-primary-button">
+                        Track Request
+                    </a>
+
+
+                    <a asp-controller="ServiceRequests"
+                       asp-action="Index"
+                       class="q4u-portal-secondary-button">
+                        Back to Services
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <aside class="q4u-service-wizard-side">
+
+        <article class="q4u-service-help-card">
+
+            <span>
+                Q4U SUPPORT
+            </span>
+
+            <h3>
+                Not sure which service?
+            </h3>
+
+            <p>
+                The Q4U team can help identify the right vehicle
+                administration service for your situation.
+            </p>
+
+            <a href="tel:+27118302067">
+                011 830 2067
+            </a>
+
+        </article>
+
+
+        <article class="q4u-portal-card q4u-service-side-summary">
+
+            <span>
+                CURRENT REQUEST
+            </span>
+
+            <h3 id="serviceSideName">
+                Number Plates
+            </h3>
+
+            <div>
+
+                <span>
+                    Vehicle
+                </span>
+
+                <strong id="serviceSideVehicle">
+                    Volkswagen Polo
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span>
+                    Registration
+                </span>
+
+                <strong id="serviceSideRegistration">
+                    JT 42 ZN GP
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span>
+                    Estimate
+                </span>
+
+                <strong id="serviceSideEstimate">
+                    From R420
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="q4u-portal-card q4u-service-prototype-card">
+
+            <span>
+                PROTOTYPE
+            </span>
+
+            <h3>
+                No external submission.
+            </h3>
+
+            <p>
+                The journey demonstrates the intended interface and
+                customer experience only.
+            </p>
+
+        </article>
+
+    </aside>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+        window.q4uInitialService =
+            '@Model.SelectedServiceId';
+    </script>
+
+    <script src="~/js/service-requests.js"
+            asp-append-version="true"></script>
+}

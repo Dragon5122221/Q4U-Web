@@ -1,0 +1,51 @@
+@using Q4UPrototypeWeb.Services
+@using Q4UPrototypeWeb.Models
+@model WorkspacePage
+@{
+    var labels = new Dictionary<string,string> { ["Dashboard"]="Overview", ["Vehicles"]="Vehicles", ["Renewals"]="Renewals", ["Requests"]="Service requests", ["Documents"]="Documents", ["Payments"]="Quotes & payments", ["Fleet"]="Fleet operations", ["Team"]="Team invitations", ["Administration"]="Admin work queue", ["Developer"]="Developer centre", ["Notifications"]="Notifications", ["Settings"]="Profile & accessibility", ["Help"]="Help & getting started" };
+    var unread=Model.State.Notices.Count(n=>!n.Read);
+}
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#071a4b" /><title>@labels[Model.Section] | Q4U</title>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/portal.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/workspace.css" asp-append-version="true" />
+<script src="~/js/accessibility.js" asp-append-version="true"></script>
+</head>
+<body class="workspace-body">
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="workspace-shell">
+<aside class="workspace-sidebar" id="workspace-nav" aria-label="Portal navigation">
+<a class="q4u-portal-logo" href="/Workspace"><span>ZA</span><div><small>NUMBER PLATES</small><strong><b>Q</b>4U</strong></div></a>
+<p class="nav-caption">YOUR Q4U WORKSPACE</p>
+<nav aria-label="Main navigation">
+@foreach(var item in labels.Where(x=>WorkspaceService.CanSection(Model.Actor,x.Key))) {
+<a href="/Workspace?section=@item.Key" class="@(Model.Section==item.Key ? "active" : "")" aria-current="@(Model.Section==item.Key ? "page" : null)"><span>@item.Value</span>@if(item.Key=="Notifications" && unread>0){<span class="nav-count">@unread</span>}</a>
+}
+</nav>
+<div class="sidebar-help"><strong>Need a hand?</strong><a href="tel:+27118302067">011 830 2067</a><a href="/">Visit Q4U website ↗</a></div>
+</aside>
+<div class="workspace-main">
+<header class="workspace-topbar">
+<button class="secondary mobile-nav" id="menu-toggle" aria-expanded="false" aria-controls="workspace-nav" type="button">Menu</button>
+<div><span class="eyebrow">Q4U DIGITAL</span><strong>@labels[Model.Section]</strong></div>
+<div class="topbar-profile"><span><strong>@Model.Profile.Name</strong><small>@Model.Actor.Role</small></span><form method="post" action="/Account/Logout">@Html.AntiForgeryToken()<button class="secondary" type="submit">Sign out</button></form></div>
+</header>
+<main id="main" tabindex="-1" class="workspace-content">
+@if(Model.Actor.Demo) {
+<div class="demo-strip"><span><strong>Interactive prototype</strong> · Sample data. No money is charged or invitations sent. Changes last up to 8 hours or until the server restarts.</span>
+<form method="post" action="/Account/Demo">@Html.AntiForgeryToken()<label for="demo-role">Preview profile</label><select id="demo-role" name="role">@foreach(var role in Roles.All){<option value="@role" selected="@(role==Model.Actor.Role)">@role</option>}</select><button type="submit" class="secondary">Switch</button></form></div>
+}
+@if(TempData["Success"] is string success){<div class="feedback success" role="status">@success</div>}
+@if(TempData["Error"] is string error){<div class="feedback error" role="alert" tabindex="-1" id="form-error">@error <span>Review the message before retrying. New vehicle and request drafts are kept in this browser tab.</span></div>}
+@RenderBody()
+<footer class="workspace-footer"><span>ZA Number Plates Q4U</span><a href="/Workspace?section=Help">Help</a><a href="/Workspace?section=Settings#accessibility">Accessibility</a><a href="/Home/Privacy">Privacy</a><span id="connection-status" role="status"></span></footer>
+</main>
+</div></div>
+<dialog id="confirmation"><form method="dialog"><h2>Confirm this action</h2><p id="confirmation-message"></p><div class="actions"><button value="cancel" class="secondary">Keep current state</button><button value="confirm" class="primary">Confirm</button></div></form></dialog>
+<script src="~/js/workspace.js" asp-append-version="true"></script>
+</body></html>

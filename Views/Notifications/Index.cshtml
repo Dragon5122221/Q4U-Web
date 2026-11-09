@@ -1,0 +1,604 @@
+﻿@model NotificationCentreViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Notifications";
+    ViewData["ActiveNavigation"] = "Notifications";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/notifications.css"
+          asp-append-version="true" />
+}
+
+
+<section class="q4u-notifications-header">
+
+    <div>
+
+        <span>
+            NOTIFICATION CENTRE
+        </span>
+
+        <h1>
+            Notifications
+        </h1>
+
+        <p>
+            Keep track of licence reminders, service updates,
+            document activity and payment notifications.
+        </p>
+
+    </div>
+
+
+    <button type="button"
+            class="q4u-notification-mark-all"
+            id="markAllNotificationsRead">
+
+        Mark all as read
+
+        <span>✓</span>
+
+    </button>
+
+</section>
+
+
+<section class="q4u-notification-summary-grid">
+
+    <article>
+
+        <span>UNREAD</span>
+
+        <strong id="notificationUnreadCount">
+            @Model.UnreadCount
+        </strong>
+
+        <small>
+            Need your attention
+        </small>
+
+    </article>
+
+
+    <article class="danger">
+
+        <span>URGENT</span>
+
+        <strong>
+            @Model.UrgentCount
+        </strong>
+
+        <small>
+            Time-sensitive reminder
+        </small>
+
+    </article>
+
+
+    <article class="warning">
+
+        <span>RENEWALS</span>
+
+        <strong>
+            @Model.ReminderCount
+        </strong>
+
+        <small>
+            Licence-related activity
+        </small>
+
+    </article>
+
+
+    <article class="success">
+
+        <span>UPDATES</span>
+
+        <strong>
+            @Model.UpdateCount
+        </strong>
+
+        <small>
+            Services, files and payments
+        </small>
+
+    </article>
+
+</section>
+
+
+<div class="q4u-notification-layout">
+
+    <section class="q4u-portal-card q4u-notification-centre-card">
+
+        <div class="q4u-notification-toolbar">
+
+            <div class="q4u-notification-tabs">
+
+                <button type="button"
+                        class="active"
+                        data-notification-filter="all">
+
+                    All
+
+                    <span id="notificationAllCount">
+                        @Model.Notifications.Count
+                    </span>
+
+                </button>
+
+
+                <button type="button"
+                        data-notification-filter="unread">
+
+                    Unread
+
+                    <span id="notificationUnreadTabCount">
+                        @Model.UnreadCount
+                    </span>
+
+                </button>
+
+
+                <button type="button"
+                        data-notification-filter="renewal">
+                    Renewals
+                </button>
+
+
+                <button type="button"
+                        data-notification-filter="service">
+                    Services
+                </button>
+
+
+                <button type="button"
+                        data-notification-filter="document">
+                    Documents
+                </button>
+
+
+                <button type="button"
+                        data-notification-filter="payment">
+                    Payments
+                </button>
+
+            </div>
+
+
+            <div class="q4u-notification-search">
+
+                <span>⌕</span>
+
+                <input type="text"
+                       id="notificationSearch"
+                       placeholder="Search notifications..." />
+
+            </div>
+
+        </div>
+
+
+        <div class="q4u-notification-list"
+             id="notificationList">
+
+            @foreach (var notification in Model.Notifications)
+            {
+                <article class="q4u-notification-record
+                                @(notification.IsRead ? "read" : "unread")
+                                @notification.Priority"
+                         data-notification-record
+                         data-id="@notification.Id"
+                         data-type="@notification.Type"
+                         data-read="@notification.IsRead.ToString().ToLowerInvariant()"
+                         data-search="@($"{notification.Title} {notification.Message} {notification.Eyebrow}".ToLowerInvariant())">
+
+                    <span class="q4u-notification-unread-dot"></span>
+
+
+                    <div class="q4u-notification-icon @notification.Type">
+                        @notification.Icon
+                    </div>
+
+
+                    <div class="q4u-notification-copy">
+
+                        <div class="q4u-notification-meta">
+
+                            <span>
+                                @notification.Eyebrow
+                            </span>
+
+                            <small>
+                                @notification.Timestamp
+                            </small>
+
+                        </div>
+
+
+                        <h3>
+                            @notification.Title
+                        </h3>
+
+
+                        <p>
+                            @notification.Message
+                        </p>
+
+
+                        <div class="q4u-notification-inline-actions">
+
+                            @if (!string.IsNullOrWhiteSpace(notification.Controller))
+                            {
+                                if (!string.IsNullOrWhiteSpace(notification.RouteId))
+                                {
+                                    <a asp-controller="@notification.Controller"
+                                       asp-action="@notification.Action"
+                                       asp-route-id="@notification.RouteId"
+                                       data-notification-open>
+
+                                        @notification.ActionText
+                                        <span>→</span>
+
+                                    </a>
+                                }
+                                else if (!string.IsNullOrWhiteSpace(notification.RouteReference))
+                                {
+                                    <a asp-controller="@notification.Controller"
+                                       asp-action="@notification.Action"
+                                       asp-route-reference="@notification.RouteReference"
+                                       data-notification-open>
+
+                                        @notification.ActionText
+                                        <span>→</span>
+
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="@notification.Controller"
+                                       asp-action="@notification.Action"
+                                       data-notification-open>
+
+                                        @notification.ActionText
+                                        <span>→</span>
+
+                                    </a>
+                                }
+                            }
+
+
+                            <button type="button"
+                                    data-notification-read-toggle>
+
+                                @(notification.IsRead
+                                    ? "Mark unread"
+                                    : "Mark read")
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="q4u-notification-more dropdown">
+
+                        <button type="button"
+                                data-bs-toggle="dropdown"
+                                aria-label="Notification options">
+                            •••
+                        </button>
+
+
+                        <div class="dropdown-menu dropdown-menu-end q4u-notification-menu">
+
+                            <button type="button"
+                                    class="dropdown-item"
+                                    data-notification-read-toggle>
+
+                                @(notification.IsRead
+                                    ? "Mark as unread"
+                                    : "Mark as read")
+
+                            </button>
+
+
+                            <button type="button"
+                                    class="dropdown-item danger"
+                                    data-dismiss-notification>
+
+                                Dismiss notification
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+
+
+        <div class="q4u-notification-empty d-none"
+             id="notificationEmptyState">
+
+            <span>✓</span>
+
+            <h3>
+                Nothing to show here.
+            </h3>
+
+            <p>
+                Try another notification filter or search term.
+            </p>
+
+
+            <button type="button"
+                    id="resetNotificationFilters">
+
+                Show all notifications
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <aside class="q4u-notification-side">
+
+        <article class="q4u-notification-reminder-card">
+
+            <div class="q4u-notification-reminder-icon">
+                !
+            </div>
+
+            <span>
+                NEXT IMPORTANT DATE
+            </span>
+
+            <h3>
+                BMW licence expiry
+            </h3>
+
+            <p>
+                KP 19 FX GP expires on
+                <strong>22 August 2026</strong>.
+            </p>
+
+
+            <div class="q4u-notification-countdown">
+
+                <strong>
+                    6
+                </strong>
+
+                <span>
+                    days remaining
+                </span>
+
+            </div>
+
+
+            <a asp-controller="Renewals"
+               asp-action="Start"
+               asp-route-id="bmw">
+
+                Prepare Renewal →
+
+            </a>
+
+        </article>
+
+
+        <article class="q4u-portal-card q4u-notification-preferences-card">
+
+            <span>
+                DELIVERY PREFERENCES
+            </span>
+
+            <h3>
+                How should Q4U update you?
+            </h3>
+
+
+            <label>
+
+                <div>
+
+                    <strong>
+                        Portal notifications
+                    </strong>
+
+                    <small>
+                        Show updates here
+                    </small>
+
+                </div>
+
+                <input type="checkbox"
+                       data-notification-preference="Portal"
+                       checked />
+
+                <span></span>
+
+            </label>
+
+
+            <label>
+
+                <div>
+
+                    <strong>
+                        SMS reminders
+                    </strong>
+
+                    <small>
+                        Licence and service alerts
+                    </small>
+
+                </div>
+
+                <input type="checkbox"
+                       data-notification-preference="SMS"
+                       checked />
+
+                <span></span>
+
+            </label>
+
+
+            <label>
+
+                <div>
+
+                    <strong>
+                        Email updates
+                    </strong>
+
+                    <small>
+                        Optional email messages
+                    </small>
+
+                </div>
+
+                <input type="checkbox"
+                       data-notification-preference="Email" />
+
+                <span></span>
+
+            </label>
+
+        </article>
+
+
+        <article class="q4u-portal-card q4u-notification-explanation-card">
+
+            <span>
+                PROTOTYPE
+            </span>
+
+            <h3>
+                Simulated notifications.
+            </h3>
+
+            <p>
+                Portal alerts, SMS reminders and email delivery shown
+                in this prototype do not contact any external service.
+            </p>
+
+        </article>
+
+    </aside>
+
+</div>
+
+
+<!-- =========================================================
+     SESSION NOTIFICATION TEMPLATE
+     ========================================================= -->
+
+<template id="sessionNotificationTemplate">
+
+    <article class="q4u-notification-record unread"
+             data-notification-record
+             data-read="false">
+
+        <span class="q4u-notification-unread-dot"></span>
+
+
+        <div class="q4u-notification-icon"
+             data-session-notification-icon>
+            Q4U
+        </div>
+
+
+        <div class="q4u-notification-copy">
+
+            <div class="q4u-notification-meta">
+
+                <span data-session-notification-eyebrow>
+                    Q4U UPDATE
+                </span>
+
+                <small>
+                    Just now
+                </small>
+
+            </div>
+
+
+            <h3 data-session-notification-title>
+                New activity
+            </h3>
+
+
+            <p data-session-notification-message>
+                New activity has been added during this browser session.
+            </p>
+
+
+            <div class="q4u-notification-inline-actions">
+
+                <a data-session-notification-link
+                   href="#">
+
+                    View
+                    <span>→</span>
+
+                </a>
+
+
+                <button type="button"
+                        data-notification-read-toggle>
+                    Mark read
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="q4u-notification-more dropdown">
+
+            <button type="button"
+                    data-bs-toggle="dropdown">
+                •••
+            </button>
+
+
+            <div class="dropdown-menu dropdown-menu-end q4u-notification-menu">
+
+                <button type="button"
+                        class="dropdown-item"
+                        data-notification-read-toggle>
+                    Mark as read
+                </button>
+
+
+                <button type="button"
+                        class="dropdown-item danger"
+                        data-dismiss-notification>
+                    Dismiss notification
+                </button>
+
+            </div>
+
+        </div>
+
+    </article>
+
+</template>
+
+
+@section Scripts {
+    <script src="~/js/notifications.js"
+            asp-append-version="true"></script>
+}

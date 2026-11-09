@@ -1,0 +1,1464 @@
+﻿@model SettingsViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Account Settings";
+    ViewData["ActiveNavigation"] = "Settings";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/settings.css"
+          asp-append-version="true" />
+}
+
+
+<section class="q4u-settings-header">
+
+    <div>
+
+        <span>
+            CUSTOMER ACCOUNT
+        </span>
+
+        <h1>
+            Account Settings
+        </h1>
+
+        <p>
+            Manage your profile information, communication preferences
+            and prototype account security.
+        </p>
+
+    </div>
+
+
+    <span class="q4u-settings-profile-status">
+
+        <i></i>
+
+        Profile complete
+
+    </span>
+
+</section>
+
+
+<div class="q4u-settings-layout">
+
+    <!-- =====================================================
+         LEFT NAVIGATION
+         ===================================================== -->
+
+    <aside class="q4u-settings-navigation">
+
+        <div class="q4u-settings-profile-card">
+
+            <span class="q4u-settings-avatar">
+                AK
+            </span>
+
+
+            <div>
+
+                <strong id="settingsSideName">
+                    @Model.FullName
+                </strong>
+
+                <span>
+                    @Model.CustomerNumber
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <button type="button"
+                    class="active"
+                    data-settings-tab="profile">
+
+                <span>01</span>
+
+                <div>
+                    <strong>Profile</strong>
+                    <small>Personal information</small>
+                </div>
+
+            </button>
+
+
+            <button type="button"
+                    data-settings-tab="notifications">
+
+                <span>02</span>
+
+                <div>
+                    <strong>Notifications</strong>
+                    <small>Communication preferences</small>
+                </div>
+
+            </button>
+
+
+            <button type="button"
+                    data-settings-tab="security">
+
+                <span>03</span>
+
+                <div>
+                    <strong>Security</strong>
+                    <small>Password & sign-in</small>
+                </div>
+
+            </button>
+
+
+            <button type="button"
+                    data-settings-tab="account">
+
+                <span>04</span>
+
+                <div>
+                    <strong>Account</strong>
+                    <small>Customer information</small>
+                </div>
+
+            </button>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- =====================================================
+         CONTENT
+         ===================================================== -->
+
+    <main class="q4u-settings-content">
+
+        <!-- =================================================
+             PROFILE
+             ================================================= -->
+
+        <section class="q4u-settings-panel"
+                 data-settings-panel="profile">
+
+            <div class="q4u-settings-panel-heading">
+
+                <div>
+
+                    <span>
+                        PERSONAL INFORMATION
+                    </span>
+
+                    <h2>
+                        Your profile
+                    </h2>
+
+                    <p>
+                        Keep your contact information current so Q4U
+                        can prepare vehicle administration services correctly.
+                    </p>
+
+                </div>
+
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        id="editProfileButton">
+
+                    Edit Profile
+
+                </button>
+
+            </div>
+
+
+            <article class="q4u-portal-card q4u-settings-profile-overview">
+
+                <div class="q4u-settings-large-avatar">
+                    AK
+                </div>
+
+
+                <div>
+
+                    <span>
+                        CUSTOMER
+                    </span>
+
+                    <h3 id="settingsProfileName">
+                        @Model.FullName
+                    </h3>
+
+                    <p>
+                        Customer number @Model.CustomerNumber
+                    </p>
+
+                </div>
+
+
+                <span class="q4u-portal-status success">
+                    Complete
+                </span>
+
+            </article>
+
+
+            <div class="q4u-settings-information-grid">
+
+                <article class="q4u-portal-card">
+
+                    <div class="q4u-settings-card-heading">
+
+                        <div>
+
+                            <span>
+                                CONTACT
+                            </span>
+
+                            <h3>
+                                Contact information
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <dl>
+
+                        <div>
+
+                            <dt>
+                                Email address
+                            </dt>
+
+                            <dd id="settingsEmailDisplay">
+                                @Model.EmailAddress
+                            </dd>
+
+                        </div>
+
+
+                        <div>
+
+                            <dt>
+                                Mobile number
+                            </dt>
+
+                            <dd id="settingsMobileDisplay">
+                                @Model.MobileNumber
+                            </dd>
+
+                        </div>
+
+
+                        <div>
+
+                            <dt>
+                                ID number
+                            </dt>
+
+                            <dd>
+                                @Model.IdDisplay
+                            </dd>
+
+                        </div>
+
+                    </dl>
+
+                </article>
+
+
+                <article class="q4u-portal-card">
+
+                    <div class="q4u-settings-card-heading">
+
+                        <div>
+
+                            <span>
+                                ADDRESS
+                            </span>
+
+                            <h3>
+                                Residential address
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <address id="settingsAddressDisplay">
+
+                        @Model.AddressLine1<br />
+
+                        @Model.Suburb,
+                        @Model.City<br />
+
+                        @Model.Province,
+                        @Model.PostalCode
+
+                    </address>
+
+
+                    <div class="q4u-settings-address-status">
+
+                        <span>✓</span>
+
+                        <p>
+                            Proof of address currently marked as verified
+                            in the prototype document library.
+                        </p>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <article class="q4u-portal-card q4u-settings-linked-records">
+
+                <div class="q4u-settings-card-heading">
+
+                    <div>
+
+                        <span>
+                            LINKED RECORDS
+                        </span>
+
+                        <h3>
+                            Your Q4U profile
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <a asp-controller="Vehicles"
+                       asp-action="Index">
+
+                        <span class="q4u-settings-record-icon">
+                            V
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                @Model.VehicleCount vehicles
+                            </strong>
+
+                            <small>
+                                Linked vehicle profiles
+                            </small>
+
+                        </div>
+
+                        <em>→</em>
+
+                    </a>
+
+
+                    <a asp-controller="Documents"
+                       asp-action="Index">
+
+                        <span class="q4u-settings-record-icon">
+                            D
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                @Model.DocumentCount documents
+                            </strong>
+
+                            <small>
+                                Customer and vehicle records
+                            </small>
+
+                        </div>
+
+                        <em>→</em>
+
+                    </a>
+
+
+                    <a asp-controller="ServiceRequests"
+                       asp-action="Index">
+
+                        <span class="q4u-settings-record-icon">
+                            S
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Service history
+                            </strong>
+
+                            <small>
+                                Requests and activity
+                            </small>
+
+                        </div>
+
+                        <em>→</em>
+
+                    </a>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             NOTIFICATION PREFERENCES
+             ================================================= -->
+
+        <section class="q4u-settings-panel d-none"
+                 data-settings-panel="notifications">
+
+            <div class="q4u-settings-panel-heading">
+
+                <div>
+
+                    <span>
+                        COMMUNICATION
+                    </span>
+
+                    <h2>
+                        Notification preferences
+                    </h2>
+
+                    <p>
+                        Choose how the prototype should represent Q4U
+                        reminders and service updates.
+                    </p>
+
+                </div>
+
+
+                <a asp-controller="Notifications"
+                   asp-action="Index"
+                   class="q4u-portal-secondary-button">
+
+                    Open Notifications
+
+                </a>
+
+            </div>
+
+
+            <article class="q4u-portal-card q4u-settings-notification-channel">
+
+                <div>
+
+                    <span class="q4u-settings-channel-icon">
+                        P
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            Portal notifications
+                        </strong>
+
+                        <p>
+                            Show renewal, document, service and payment
+                            activity inside your customer portal.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <label>
+
+                    <input type="checkbox"
+                           data-settings-preference="portal"
+                           checked />
+
+                    <span></span>
+
+                </label>
+
+            </article>
+
+
+            <article class="q4u-portal-card q4u-settings-notification-channel">
+
+                <div>
+
+                    <span class="q4u-settings-channel-icon sms">
+                        SMS
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            SMS reminders
+                        </strong>
+
+                        <p>
+                            Receive simulated licence-expiry and important
+                            service reminders at @Model.MobileNumber.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <label>
+
+                    <input type="checkbox"
+                           data-settings-preference="sms"
+                           checked />
+
+                    <span></span>
+
+                </label>
+
+            </article>
+
+
+            <article class="q4u-portal-card q4u-settings-notification-channel">
+
+                <div>
+
+                    <span class="q4u-settings-channel-icon email">
+                        @@
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            Email updates
+                        </strong>
+
+                        <p>
+                            Demonstrate optional email communication
+                            to @Model.EmailAddress.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <label>
+
+                    <input type="checkbox"
+                           data-settings-preference="email" />
+
+                    <span></span>
+
+                </label>
+
+            </article>
+
+
+            <article class="q4u-portal-card q4u-settings-reminder-options">
+
+                <div class="q4u-settings-card-heading">
+
+                    <div>
+
+                        <span>
+                            LICENCE REMINDERS
+                        </span>
+
+                        <h3>
+                            Reminder schedule
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <p>
+                    Choose when the prototype should represent
+                    licence-renewal reminders.
+                </p>
+
+
+                <div>
+
+                    <label>
+
+                        <input type="checkbox"
+                               data-reminder-period="60"
+                               checked />
+
+                        <span>60 days</span>
+
+                    </label>
+
+
+                    <label>
+
+                        <input type="checkbox"
+                               data-reminder-period="30"
+                               checked />
+
+                        <span>30 days</span>
+
+                    </label>
+
+
+                    <label>
+
+                        <input type="checkbox"
+                               data-reminder-period="14"
+                               checked />
+
+                        <span>14 days</span>
+
+                    </label>
+
+
+                    <label>
+
+                        <input type="checkbox"
+                               data-reminder-period="7"
+                               checked />
+
+                        <span>7 days</span>
+
+                    </label>
+
+                </div>
+
+            </article>
+
+
+            <div class="q4u-settings-save-row">
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        id="saveNotificationPreferences">
+
+                    Save Preferences
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SECURITY
+             ================================================= -->
+
+        <section class="q4u-settings-panel d-none"
+                 data-settings-panel="security">
+
+            <div class="q4u-settings-panel-heading">
+
+                <div>
+
+                    <span>
+                        ACCOUNT SECURITY
+                    </span>
+
+                    <h2>
+                        Password & sign-in
+                    </h2>
+
+                    <p>
+                        Review the prototype security settings associated
+                        with this customer account.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <article class="q4u-portal-card q4u-settings-security-status">
+
+                <span class="q4u-settings-security-icon">
+                    ✓
+                </span>
+
+
+                <div>
+
+                    <span>
+                        SECURITY STATUS
+                    </span>
+
+                    <h3>
+                        Account security looks good.
+                    </h3>
+
+                    <p>
+                        The prototype account has a password and
+                        active sign-in protection.
+                    </p>
+
+                </div>
+
+
+                <span class="q4u-portal-status success">
+                    Secure
+                </span>
+
+            </article>
+
+
+            <article class="q4u-portal-card q4u-settings-security-item">
+
+                <div>
+
+                    <span class="q4u-settings-security-item-icon">
+                        •••
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            Password
+                        </strong>
+
+                        <p>
+                            Last changed @Model.PasswordLastChanged
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#changePasswordModal">
+
+                    Change Password
+
+                </button>
+
+            </article>
+
+
+            <article class="q4u-portal-card q4u-settings-security-item">
+
+                <div>
+
+                    <span class="q4u-settings-security-item-icon">
+                        2
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            Two-step verification
+                        </strong>
+
+                        <p>
+                            Add another sign-in confirmation step.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <label class="q4u-settings-toggle">
+
+                    <input type="checkbox"
+                           id="twoFactorToggle" />
+
+                    <span></span>
+
+                </label>
+
+            </article>
+
+
+            <article class="q4u-portal-card q4u-settings-security-item">
+
+                <div>
+
+                    <span class="q4u-settings-security-item-icon">
+                        ⌁
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            Recent sign-in
+                        </strong>
+
+                        <p>
+                            @Model.LastSignIn · Current prototype session
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <span class="q4u-portal-status success">
+                    Current
+                </span>
+
+            </article>
+
+
+            <article class="q4u-settings-security-note">
+
+                <span>
+                    i
+                </span>
+
+                <p>
+                    Authentication, password storage and two-step verification
+                    are interface demonstrations only. The prototype has no
+                    production authentication backend.
+                </p>
+
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             ACCOUNT
+             ================================================= -->
+
+        <section class="q4u-settings-panel d-none"
+                 data-settings-panel="account">
+
+            <div class="q4u-settings-panel-heading">
+
+                <div>
+
+                    <span>
+                        Q4U ACCOUNT
+                    </span>
+
+                    <h2>
+                        Customer account
+                    </h2>
+
+                    <p>
+                        Review your Q4U customer profile information
+                        and prototype account state.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <article class="q4u-portal-card q4u-settings-account-summary">
+
+                <div>
+
+                    <span>
+                        CUSTOMER NUMBER
+                    </span>
+
+                    <strong>
+                        @Model.CustomerNumber
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        MEMBER SINCE
+                    </span>
+
+                    <strong>
+                        @Model.MemberSince
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        VEHICLES
+                    </span>
+
+                    <strong>
+                        @Model.VehicleCount
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        ACCOUNT STATUS
+                    </span>
+
+                    <strong class="success">
+                        Active
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="q4u-portal-card q4u-settings-account-item">
+
+                <div>
+
+                    <span>
+                        CUSTOMER DATA
+                    </span>
+
+                    <h3>
+                        Prototype account summary
+                    </h3>
+
+                    <p>
+                        View the customer, vehicle, document and service
+                        information represented within this prototype.
+                    </p>
+
+                </div>
+
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        id="exportAccountSummary">
+
+                    Export Summary
+
+                </button>
+
+            </article>
+
+
+            <article class="q4u-portal-card q4u-settings-account-item">
+
+                <div>
+
+                    <span>
+                        SUPPORT
+                    </span>
+
+                    <h3>
+                        Need help with your account?
+                    </h3>
+
+                    <p>
+                        Contact the Q4U Mayfair team for assistance.
+                    </p>
+
+                </div>
+
+
+                <a href="tel:+27118302067"
+                   class="q4u-portal-secondary-button">
+
+                    011 830 2067
+
+                </a>
+
+            </article>
+
+
+            <article class="q4u-settings-danger-zone">
+
+                <div>
+
+                    <span>
+                        PROTOTYPE ACCOUNT
+                    </span>
+
+                    <h3>
+                        Remove account
+                    </h3>
+
+                    <p>
+                        Demonstrate an account-removal confirmation without
+                        deleting any actual customer information.
+                    </p>
+
+                </div>
+
+
+                <button type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteAccountModal">
+
+                    Remove Account
+
+                </button>
+
+            </article>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     EDIT PROFILE
+     ========================================================= -->
+
+<div class="modal fade"
+     id="editProfileModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content q4u-settings-modal">
+
+            <header>
+
+                <div>
+
+                    <span>
+                        PERSONAL INFORMATION
+                    </span>
+
+                    <h2>
+                        Edit your profile
+                    </h2>
+
+                </div>
+
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </header>
+
+
+            <div class="q4u-settings-modal-body">
+
+                <div class="q4u-settings-form-grid">
+
+                    <div>
+
+                        <label for="settingsFirstName">
+                            First name
+                        </label>
+
+                        <input id="settingsFirstName"
+                               class="form-control"
+                               value="@Model.FirstName" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="settingsLastName">
+                            Last name
+                        </label>
+
+                        <input id="settingsLastName"
+                               class="form-control"
+                               value="@Model.LastName" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="settingsEmail">
+                            Email address
+                        </label>
+
+                        <input id="settingsEmail"
+                               type="email"
+                               class="form-control"
+                               value="@Model.EmailAddress" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="settingsMobile">
+                            Mobile number
+                        </label>
+
+                        <input id="settingsMobile"
+                               class="form-control"
+                               value="@Model.MobileNumber" />
+
+                    </div>
+
+
+                    <div class="full">
+
+                        <label for="settingsAddress">
+                            Address
+                        </label>
+
+                        <input id="settingsAddress"
+                               class="form-control"
+                               value="@Model.AddressLine1" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="settingsSuburb">
+                            Suburb
+                        </label>
+
+                        <input id="settingsSuburb"
+                               class="form-control"
+                               value="@Model.Suburb" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="settingsCity">
+                            City
+                        </label>
+
+                        <input id="settingsCity"
+                               class="form-control"
+                               value="@Model.City" />
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="settingsProvince">
+                            Province
+                        </label>
+
+                        <select id="settingsProvince"
+                                class="form-select">
+
+                            <option selected>
+                                Gauteng
+                            </option>
+
+                            <option>
+                                Western Cape
+                            </option>
+
+                            <option>
+                                KwaZulu-Natal
+                            </option>
+
+                            <option>
+                                Eastern Cape
+                            </option>
+
+                            <option>
+                                Free State
+                            </option>
+
+                            <option>
+                                Limpopo
+                            </option>
+
+                            <option>
+                                Mpumalanga
+                            </option>
+
+                            <option>
+                                North West
+                            </option>
+
+                            <option>
+                                Northern Cape
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div>
+
+                        <label for="settingsPostalCode">
+                            Postal code
+                        </label>
+
+                        <input id="settingsPostalCode"
+                               class="form-control"
+                               value="@Model.PostalCode" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <footer>
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        id="saveProfileChanges">
+
+                    Save Changes
+
+                </button>
+
+            </footer>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CHANGE PASSWORD
+     ========================================================= -->
+
+<div class="modal fade"
+     id="changePasswordModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content q4u-settings-modal">
+
+            <header>
+
+                <div>
+
+                    <span>
+                        SECURITY
+                    </span>
+
+                    <h2>
+                        Change password
+                    </h2>
+
+                </div>
+
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </header>
+
+
+            <div class="q4u-settings-modal-body">
+
+                <div class="q4u-settings-password-field">
+
+                    <label for="currentPassword">
+                        Current password
+                    </label>
+
+                    <input type="password"
+                           id="currentPassword"
+                           class="form-control"
+                           value="Q4U2026!" />
+
+                </div>
+
+
+                <div class="q4u-settings-password-field">
+
+                    <label for="newPassword">
+                        New password
+                    </label>
+
+                    <input type="password"
+                           id="newPassword"
+                           class="form-control"
+                           placeholder="Enter a new password" />
+
+                </div>
+
+
+                <div class="q4u-settings-password-field">
+
+                    <label for="confirmNewPassword">
+                        Confirm new password
+                    </label>
+
+                    <input type="password"
+                           id="confirmNewPassword"
+                           class="form-control"
+                           placeholder="Repeat new password" />
+
+                </div>
+
+
+                <div class="q4u-settings-password-strength">
+
+                    <span>
+                        PASSWORD REQUIREMENTS
+                    </span>
+
+                    <div data-password-rule="length">
+                        <i>✓</i>
+                        At least 8 characters
+                    </div>
+
+                    <div data-password-rule="upper">
+                        <i>✓</i>
+                        At least one uppercase letter
+                    </div>
+
+                    <div data-password-rule="number">
+                        <i>✓</i>
+                        At least one number
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <footer>
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-bs-dismiss="modal">
+
+                    Cancel
+
+                </button>
+
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        id="savePasswordChange"
+                        disabled>
+
+                    Update Password
+
+                </button>
+
+            </footer>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     DELETE ACCOUNT
+     ========================================================= -->
+
+<div class="modal fade"
+     id="deleteAccountModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content q4u-settings-delete-modal">
+
+            <span>
+                !
+            </span>
+
+
+            <h3>
+                Remove this prototype account?
+            </h3>
+
+
+            <p>
+                No real customer data will be deleted. This interaction
+                demonstrates the confirmation experience only.
+            </p>
+
+
+            <div>
+
+                <strong>
+                    @Model.FullName
+                </strong>
+
+                <small>
+                    @Model.CustomerNumber
+                </small>
+
+            </div>
+
+
+            <footer>
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-bs-dismiss="modal">
+
+                    Keep Account
+
+                </button>
+
+
+                <button type="button"
+                        class="q4u-settings-danger-button"
+                        id="confirmDeleteAccount">
+
+                    Remove Account
+
+                </button>
+
+            </footer>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/js/settings.js"
+            asp-append-version="true"></script>
+}

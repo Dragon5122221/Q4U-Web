@@ -1,0 +1,495 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://q4u.example/schemas/firestore.json",
+  "title": "Q4U Cloud Firestore documents",
+  "description": "One schema per Firestore collection. Firestore Timestamps are shown as ISO-8601 UTC strings. All documents are written only by the Q4U server (Admin SDK); firebase/firestore.rules denies direct client access. Every document also carries updatedAt, set by the server.",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,128}$"
+    },
+    "tenantId": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_-]{1,80}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Firestore Timestamp"
+    },
+    "membership": {
+      "description": "Path: memberships/{uid}. The trusted link between a Firebase Auth user and a tenant + role. Read on every request; written only by tools/provision or Customer self-registration.",
+      "type": "object",
+      "required": [
+        "active",
+        "tenantId",
+        "role"
+      ],
+      "properties": {
+        "active": {
+          "type": "boolean"
+        },
+        "tenantId": {
+          "$ref": "#/$defs/tenantId"
+        },
+        "role": {
+          "enum": [
+            "Customer",
+            "FleetOwner",
+            "FleetManager",
+            "Administrator",
+            "Developer"
+          ]
+        },
+        "email": {
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "provisioning",
+            "self-registration"
+          ]
+        },
+        "createdAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "active": true,
+          "tenantId": "q4u",
+          "role": "Customer",
+          "email": "ayesha@example.com",
+          "source": "self-registration",
+          "createdAt": "2026-10-04T09:12:00Z"
+        }
+      ]
+    },
+    "tenant": {
+      "description": "Path: tenants/{tenantId}. An organisation (the Q4U shop, or a fleet company). version is the concurrency token for organisation-wide roles.",
+      "type": "object",
+      "required": [
+        "schemaVersion"
+      ],
+      "properties": {
+        "organisation": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "schemaVersion": {
+          "const": 2
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "organisation": "Q4U Licensing Services",
+          "version": 42,
+          "schemaVersion": 2,
+          "updatedAt": "2026-10-04T09:30:00Z"
+        }
+      ]
+    },
+    "vehicle": {
+      "description": "Path: tenants/{tenantId}/vehicles/{vehicleId}",
+      "type": "object",
+      "required": [
+        "tenantId",
+        "ownerUid",
+        "registration",
+        "description",
+        "expiry",
+        "driver",
+        "branch",
+        "archived"
+      ],
+      "properties": {
+        "tenantId": {
+          "$ref": "#/$defs/tenantId"
+        },
+        "ownerUid": {
+          "type": "string",
+          "description": "Firebase UID of the person who added it"
+        },
+        "registration": {
+          "type": "string",
+          "pattern": "^[A-Z0-9 -]{3,20}$"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "expiry": {
+          "type": "string",
+          "format": "date",
+          "description": "Licence expiry, yyyy-MM-dd"
+        },
+        "driver": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "branch": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "archived": {
+          "type": "boolean"
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "tenantId": "q4u",
+          "ownerUid": "Xk3pQ9vUeLh2",
+          "registration": "JT 42 ZN GP",
+          "description": "Volkswagen Polo · 2021",
+          "expiry": "2027-08-22",
+          "driver": "Unassigned",
+          "branch": "Main",
+          "archived": false,
+          "updatedAt": "2026-10-04T09:15:00Z"
+        }
+      ]
+    },
+    "request": {
+      "description": "Path: tenants/{tenantId}/requests/{requestId}. A Q4U service request (licence renewal, number plates, ...). Status flow: Submitted -> Quoted -> Processing -> Ready -> Completed, or Cancelled before payment.",
+      "type": "object",
+      "required": [
+        "tenantId",
+        "reference",
+        "vehicleId",
+        "ownerUid",
+        "service",
+        "status",
+        "fulfilment",
+        "amountCents",
+        "paid",
+        "createdAt"
+      ],
+      "properties": {
+        "tenantId": {
+          "$ref": "#/$defs/tenantId"
+        },
+        "reference": {
+          "type": "string",
+          "pattern": "^Q4U-[0-9A-F]{8}$"
+        },
+        "vehicleId": {
+          "$ref": "#/$defs/id"
+        },
+        "ownerUid": {
+          "type": "string"
+        },
+        "service": {
+          "enum": [
+            "Licence renewal",
+            "Number plates",
+            "Change of ownership",
+            "Vehicle registration",
+            "Traffic fine assistance",
+            "Personalised plates",
+            "Roadworthy assistance",
+            "Fleet enquiry",
+            "Support enquiry",
+            "Privacy request"
+          ]
+        },
+        "status": {
+          "enum": [
+            "Submitted",
+            "Quoted",
+            "Processing",
+            "Ready",
+            "Completed",
+            "Cancelled"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "fulfilment": {
+          "enum": [
+            "Collection",
+            "Delivery"
+          ]
+        },
+        "amountCents": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000,
+          "description": "Quote in ZAR cents (R1 284,50 = 128450). Integers avoid floating-point rounding errors."
+        },
+        "paid": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "tenantId": "q4u",
+          "reference": "Q4U-A18B6024",
+          "vehicleId": "a18b6024cabc412781de84807d02aa11",
+          "ownerUid": "Xk3pQ9vUeLh2",
+          "service": "Licence renewal",
+          "status": "Processing",
+          "notes": "",
+          "fulfilment": "Collection",
+          "amountCents": 128450,
+          "paid": true,
+          "createdAt": "2026-10-04T09:20:00Z",
+          "updatedAt": "2026-10-04T11:02:00Z"
+        }
+      ]
+    },
+    "document": {
+      "description": "Path: tenants/{tenantId}/documents/{documentId}. Metadata only; the file is a private Cloud Storage object at storageKey, streamed by the server after an access check.",
+      "type": "object",
+      "required": [
+        "tenantId",
+        "vehicleId",
+        "ownerUid",
+        "fileName",
+        "contentType",
+        "storageKey",
+        "category",
+        "status",
+        "bytes",
+        "createdAt"
+      ],
+      "properties": {
+        "tenantId": {
+          "$ref": "#/$defs/tenantId"
+        },
+        "vehicleId": {
+          "$ref": "#/$defs/id"
+        },
+        "ownerUid": {
+          "type": "string"
+        },
+        "fileName": {
+          "type": "string",
+          "maxLength": 150
+        },
+        "contentType": {
+          "enum": [
+            "application/pdf",
+            "image/png",
+            "image/jpeg"
+          ]
+        },
+        "storageKey": {
+          "type": "string",
+          "pattern": "^tenants/[a-zA-Z0-9_-]{1,80}/[0-9a-f]{32}$"
+        },
+        "category": {
+          "enum": [
+            "Identity",
+            "Proof of address",
+            "Registration",
+            "Licence disc",
+            "Other"
+          ]
+        },
+        "status": {
+          "enum": [
+            "Pending review",
+            "Verified",
+            "Rejected"
+          ]
+        },
+        "reviewNote": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5242880
+        },
+        "createdAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "tenantId": "q4u",
+          "vehicleId": "a18b6024cabc412781de84807d02aa11",
+          "ownerUid": "Xk3pQ9vUeLh2",
+          "fileName": "registration.pdf",
+          "contentType": "application/pdf",
+          "storageKey": "tenants/q4u/9f2c4e0d1b7a4c38a6e5d2f1c0b9a887",
+          "category": "Registration",
+          "status": "Pending review",
+          "reviewNote": "",
+          "bytes": 182044,
+          "createdAt": "2026-10-04T09:18:00Z"
+        }
+      ]
+    },
+    "member": {
+      "description": "Path: tenants/{tenantId}/members/{invitationId}. An invitation draft. It does not grant access; a membership does.",
+      "type": "object",
+      "required": [
+        "tenantId",
+        "email",
+        "role",
+        "status"
+      ],
+      "properties": {
+        "tenantId": {
+          "$ref": "#/$defs/tenantId"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "role": {
+          "enum": [
+            "Customer",
+            "FleetManager"
+          ]
+        },
+        "status": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false
+    },
+    "user": {
+      "description": "Path: tenants/{tenantId}/users/{uid}. Profile and contact preferences. version is the concurrency token for that person's own records.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "renewalReminders": {
+          "type": "boolean"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "name": "Ayesha Khan",
+          "phone": "082 555 0101",
+          "address": "",
+          "renewalReminders": true,
+          "version": 7,
+          "updatedAt": "2026-10-04T11:02:00Z"
+        }
+      ]
+    },
+    "notice": {
+      "description": "Path: tenants/{tenantId}/users/{uid}/notices/{noticeId}. In-app notification for one person. Append-only.",
+      "type": "object",
+      "required": [
+        "tenantId",
+        "uid",
+        "message",
+        "read",
+        "createdAt"
+      ],
+      "properties": {
+        "tenantId": {
+          "$ref": "#/$defs/tenantId"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "read": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false
+    },
+    "audit": {
+      "description": "Path: tenants/{tenantId}/audit/{auditId}. Who did what and when. Append-only; never edited or deleted by the application.",
+      "type": "object",
+      "required": [
+        "tenantId",
+        "uid",
+        "action",
+        "createdAt"
+      ],
+      "properties": {
+        "tenantId": {
+          "$ref": "#/$defs/tenantId"
+        },
+        "uid": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "createdAt": {
+          "$ref": "#/$defs/timestamp"
+        },
+        "updatedAt": {
+          "$ref": "#/$defs/timestamp"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "tenantId": "q4u",
+          "uid": "AdminUid0001",
+          "action": "quote",
+          "createdAt": "2026-10-04T11:02:00Z"
+        }
+      ]
+    }
+  }
+}

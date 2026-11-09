@@ -1,0 +1,184 @@
+﻿@model PortalSectionViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = Model.Title;
+    ViewData["ActiveNavigation"] = Model.ActiveNavigation;
+}
+
+<section class="q4u-section-page-header">
+
+    <div>
+
+        <span>
+            @Model.Eyebrow
+        </span>
+
+        <h1>
+            @Model.Title
+        </h1>
+
+        <p>
+            @Model.Description
+        </p>
+
+    </div>
+
+
+    <button type="button"
+            class="q4u-portal-primary-button"
+            data-prototype-action
+            data-message="@Model.PrimaryActionMessage">
+
+        @Model.PrimaryActionLabel
+
+        <span>+</span>
+
+    </button>
+
+</section>
+
+
+<section class="q4u-section-metrics">
+
+    @foreach (var metric in Model.Metrics)
+    {
+        <article class="@metric.Tone">
+
+            <span>
+                @metric.Label
+            </span>
+
+            <strong>
+                @metric.Value
+            </strong>
+
+            <small>
+                @metric.SupportingText
+            </small>
+
+        </article>
+    }
+
+</section>
+
+
+<section class="q4u-portal-card q4u-section-list-card">
+
+    <div class="q4u-portal-card-heading">
+
+        <div>
+            <span>OVERVIEW</span>
+
+            <h2>
+                @Model.Title
+            </h2>
+        </div>
+
+
+        <div class="q4u-section-tools">
+
+            <div class="q4u-section-search">
+
+                <span>⌕</span>
+
+                <input type="text"
+                       id="sectionSearch"
+                       placeholder="Search..." />
+
+            </div>
+
+
+            <select class="form-select"
+                    id="sectionStatusFilter">
+
+                <option value="all">
+                    All statuses
+                </option>
+
+                <option value="success">
+                    Up to date / complete
+                </option>
+
+                <option value="warning">
+                    Attention
+                </option>
+
+                <option value="danger">
+                    Urgent
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <div class="q4u-section-item-list"
+         id="sectionItemList">
+
+        @foreach (var item in Model.Items)
+        {
+            <article data-section-item
+                     data-status="@item.StatusTone"
+                     data-search="@($"{item.Reference} {item.Title} {item.Subtitle} {item.Meta}".ToLowerInvariant())">
+
+                <div class="q4u-section-item-reference">
+                    @item.Reference
+                </div>
+
+
+                <div class="q4u-section-item-copy">
+
+                    <strong>
+                        @item.Title
+                    </strong>
+
+                    <span>
+                        @item.Subtitle
+                    </span>
+
+                    <small>
+                        @item.Meta
+                    </small>
+
+                </div>
+
+
+                <span class="q4u-portal-status @item.StatusTone">
+                    @item.Status
+                </span>
+
+
+                <button type="button"
+                        data-prototype-action
+                        data-message="@($"{item.Title} selected.")">
+
+                    @item.ActionLabel
+
+                    <span>→</span>
+
+                </button>
+
+            </article>
+        }
+
+    </div>
+
+
+    <div class="q4u-section-empty-state d-none"
+         id="sectionEmptyState">
+
+        <span>⌕</span>
+
+        <h3>No matching items</h3>
+
+        <p>
+            Try changing your search or status filter.
+        </p>
+
+    </div>
+
+</section>

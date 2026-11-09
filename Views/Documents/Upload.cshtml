@@ -1,0 +1,689 @@
+﻿@model DocumentUploadViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Upload Document";
+    ViewData["ActiveNavigation"] = "Documents";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/documents.css"
+          asp-append-version="true" />
+}
+
+
+<div class="q4u-documents-back">
+
+    <a asp-controller="Documents"
+       asp-action="Index">
+        ← Back to Documents
+    </a>
+
+</div>
+
+
+<section class="q4u-document-upload-header">
+
+    <span>
+        DIGITAL RECORDS
+    </span>
+
+    <h1>Upload a Document</h1>
+
+    <p>
+        Add customer or vehicle paperwork to your Q4U prototype profile.
+    </p>
+
+</section>
+
+
+<div class="q4u-document-upload-layout">
+
+    <aside class="q4u-document-upload-stepper">
+
+        <div class="active"
+             data-document-upload-indicator="1">
+
+            <span>1</span>
+
+            <div>
+                <strong>Select file</strong>
+                <small>Choose your document</small>
+            </div>
+
+        </div>
+
+
+        <div data-document-upload-indicator="2">
+
+            <span>2</span>
+
+            <div>
+                <strong>Classify</strong>
+                <small>Category and association</small>
+            </div>
+
+        </div>
+
+
+        <div data-document-upload-indicator="3">
+
+            <span>3</span>
+
+            <div>
+                <strong>Review</strong>
+                <small>Check document details</small>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <div class="q4u-document-upload-workspace">
+
+        <!-- STEP 1 -->
+        <section class="q4u-portal-card q4u-document-upload-step"
+                 data-document-upload-step="1">
+
+            <div class="q4u-document-upload-step-heading">
+
+                <span>
+                    STEP 1 OF 3
+                </span>
+
+                <h2>
+                    Choose your document.
+                </h2>
+
+                <p>
+                    Drag a file into the area below or select one from
+                    your computer.
+                </p>
+
+            </div>
+
+
+            <input type="file"
+                   id="documentUploadInput"
+                   accept=".pdf,.jpg,.jpeg,.png"
+                   hidden />
+
+
+            <div class="q4u-document-dropzone"
+                 id="documentDropzone">
+
+                <span class="q4u-document-dropzone-icon">
+                    ↑
+                </span>
+
+                <h3>
+                    Drop your document here
+                </h3>
+
+                <p>
+                    PDF, JPG, JPEG or PNG
+                </p>
+
+                <button type="button"
+                        id="selectDocumentFile">
+                    Browse Files
+                </button>
+
+                <small>
+                    Prototype selection only · Nothing is uploaded
+                </small>
+
+            </div>
+
+
+            <div class="q4u-document-selected-file d-none"
+                 id="documentSelectedFile">
+
+                <span id="selectedDocumentType">
+                    PDF
+                </span>
+
+
+                <div>
+
+                    <strong id="selectedDocumentName">
+                        VehicleRegistration.pdf
+                    </strong>
+
+                    <small id="selectedDocumentMeta">
+                        1.2 MB · Ready
+                    </small>
+
+                </div>
+
+
+                <button type="button"
+                        id="removeUploadDocument">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="q4u-document-upload-safety">
+
+                <span>i</span>
+
+                <p>
+                    The prototype reads only the selected file name,
+                    type and size for visual demonstration. The file
+                    is not uploaded to Q4U or any third-party service.
+                </p>
+
+            </div>
+
+
+            <div class="q4u-document-upload-actions">
+
+                <span></span>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        id="documentUploadStepOneContinue"
+                        data-document-upload-next
+                        disabled>
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 2 -->
+        <section class="q4u-portal-card q4u-document-upload-step d-none"
+                 data-document-upload-step="2">
+
+            <div class="q4u-document-upload-step-heading">
+
+                <span>
+                    STEP 2 OF 3
+                </span>
+
+                <h2>
+                    Tell us what this file is.
+                </h2>
+
+                <p>
+                    Categorise the document and decide whether it belongs
+                    to your customer profile or a specific vehicle.
+                </p>
+
+            </div>
+
+
+            <div class="q4u-document-classification-grid">
+
+                <div>
+
+                    <label for="uploadDocumentTitle">
+                        Document title
+                    </label>
+
+                    <input id="uploadDocumentTitle"
+                           class="form-control"
+                           value="Vehicle Registration Certificate" />
+
+                </div>
+
+
+                <div>
+
+                    <label for="uploadDocumentCategory">
+                        Category
+                    </label>
+
+                    <select id="uploadDocumentCategory"
+                            class="form-select">
+
+                        <option value="Registration"
+                                selected>
+                            Registration
+                        </option>
+
+                        <option value="Renewal">
+                            Renewal
+                        </option>
+
+                        <option value="Licence">
+                            Licence
+                        </option>
+
+                        <option value="Identity">
+                            Identity
+                        </option>
+
+                        <option value="Customer">
+                            Customer
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <span class="q4u-document-section-label">
+                DOCUMENT BELONGS TO
+            </span>
+
+
+            <div class="q4u-document-association-choices">
+
+                <label>
+
+                    <input type="radio"
+                           name="documentAssociation"
+                           value="vehicle"
+                           checked />
+
+                    <span></span>
+
+                    <div>
+                        <strong>
+                            A vehicle
+                        </strong>
+
+                        <small>
+                            Link the document to one of your vehicles.
+                        </small>
+                    </div>
+
+                </label>
+
+
+                <label>
+
+                    <input type="radio"
+                           name="documentAssociation"
+                           value="customer" />
+
+                    <span></span>
+
+                    <div>
+                        <strong>
+                            My customer profile
+                        </strong>
+
+                        <small>
+                            Store it as a general customer document.
+                        </small>
+                    </div>
+
+                </label>
+
+            </div>
+
+
+            <div id="vehicleDocumentAssociation">
+
+                <label for="uploadDocumentVehicle">
+                    Select vehicle
+                </label>
+
+
+                <select id="uploadDocumentVehicle"
+                        class="form-select">
+
+                    @foreach (var vehicle in Model.Vehicles)
+                    {
+                        <option value="@vehicle.Id"
+                                data-name="@vehicle.Name"
+                                data-registration="@vehicle.Registration"
+                                data-province="@vehicle.Province">
+
+                            @vehicle.Display
+
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+
+            <label class="q4u-document-renewal-toggle">
+
+                <div>
+                    <strong>
+                        Useful for licence renewal
+                    </strong>
+
+                    <small>
+                        Mark this document as relevant to renewal preparation.
+                    </small>
+                </div>
+
+                <input type="checkbox"
+                       id="uploadDocumentRenewalRelevant"
+                       checked />
+
+                <span></span>
+
+            </label>
+
+
+            <div class="q4u-document-upload-actions">
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-document-upload-previous>
+                    ← Back
+                </button>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        data-document-upload-next>
+                    Review Document →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 3 -->
+        <section class="q4u-portal-card q4u-document-upload-step d-none"
+                 data-document-upload-step="3">
+
+            <div id="documentUploadReview">
+
+                <div class="q4u-document-upload-step-heading">
+
+                    <span>
+                        STEP 3 OF 3
+                    </span>
+
+                    <h2>
+                        Review your document.
+                    </h2>
+
+                    <p>
+                        Confirm the prototype metadata before adding
+                        the file to your document library.
+                    </p>
+
+                </div>
+
+
+                <div class="q4u-document-review-file">
+
+                    <span id="reviewDocumentFileType">
+                        PDF
+                    </span>
+
+
+                    <div>
+
+                        <strong id="reviewDocumentName">
+                            Vehicle Registration Certificate
+                        </strong>
+
+                        <small id="reviewDocumentFilename">
+                            VehicleRegistration.pdf
+                        </small>
+
+                    </div>
+
+
+                    <span class="q4u-portal-status info">
+                        New
+                    </span>
+
+                </div>
+
+
+                <div class="q4u-document-review-grid">
+
+                    <article>
+
+                        <span>
+                            Category
+                        </span>
+
+                        <strong id="reviewDocumentCategory">
+                            Registration
+                        </strong>
+
+                        <small>
+                            Document classification
+                        </small>
+
+                    </article>
+
+
+                    <article>
+
+                        <span>
+                            Association
+                        </span>
+
+                        <strong id="reviewDocumentAssociation">
+                            Volkswagen Polo
+                        </strong>
+
+                        <small id="reviewDocumentRegistration">
+                            JT 42 ZN GP
+                        </small>
+
+                    </article>
+
+
+                    <article>
+
+                        <span>
+                            Renewal relevance
+                        </span>
+
+                        <strong id="reviewDocumentRenewal">
+                            Yes
+                        </strong>
+
+                        <small>
+                            Prototype preparation flag
+                        </small>
+
+                    </article>
+
+
+                    <article>
+
+                        <span>
+                            Initial status
+                        </span>
+
+                        <strong>
+                            Stored
+                        </strong>
+
+                        <small>
+                            Verification not performed
+                        </small>
+
+                    </article>
+
+                </div>
+
+
+                <div class="q4u-document-review-warning">
+
+                    <span>i</span>
+
+                    <p>
+                        Adding the document does not verify its authenticity
+                        or submit it to Q4U. Verification shown elsewhere
+                        in the prototype represents a possible future process.
+                    </p>
+
+                </div>
+
+
+                <div class="q4u-document-upload-actions">
+
+                    <button type="button"
+                            class="q4u-portal-secondary-button"
+                            data-document-upload-previous>
+                        ← Back
+                    </button>
+
+                    <button type="button"
+                            class="q4u-portal-primary-button"
+                            id="completeDocumentUpload">
+                        Add Document
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUCCESS -->
+
+            <div class="q4u-document-upload-success d-none"
+                 id="documentUploadSuccess">
+
+                <div>
+                    ✓
+                </div>
+
+                <span>
+                    DOCUMENT ADDED
+                </span>
+
+                <h2>
+                    Your document is in the library.
+                </h2>
+
+                <p>
+                    The document metadata has been saved for this
+                    browser session and will appear in the Documents Centre.
+                </p>
+
+
+                <div class="q4u-document-upload-success-file">
+
+                    <span id="successDocumentFileType">
+                        PDF
+                    </span>
+
+                    <div>
+
+                        <strong id="successDocumentName">
+                            Vehicle Registration Certificate
+                        </strong>
+
+                        <small id="successDocumentAssociation">
+                            Volkswagen Polo · JT 42 ZN GP
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-document-upload-success-actions">
+
+                    <a asp-controller="Documents"
+                       asp-action="Index"
+                       class="q4u-portal-primary-button">
+                        View Documents
+                    </a>
+
+                    <button type="button"
+                            class="q4u-portal-secondary-button"
+                            id="uploadAnotherDocument">
+                        Upload Another
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <aside class="q4u-document-upload-side">
+
+        <article class="q4u-document-upload-help">
+
+            <span>
+                DOCUMENT TIPS
+            </span>
+
+            <h3>
+                Keep important files clear.
+            </h3>
+
+            <p>
+                For a future production solution, vehicle paperwork
+                should be readable, current and linked to the correct vehicle.
+            </p>
+
+
+            <div>
+
+                <span>✓</span>
+                <p>Use clear scans or photographs</p>
+
+            </div>
+
+
+            <div>
+
+                <span>✓</span>
+                <p>Check the correct vehicle is selected</p>
+
+            </div>
+
+
+            <div>
+
+                <span>✓</span>
+                <p>Keep renewal-related files current</p>
+
+            </div>
+
+        </article>
+
+
+        <article class="q4u-portal-card q4u-document-upload-security">
+
+            <span>
+                PROTOTYPE PRIVACY
+            </span>
+
+            <h3>
+                Your file stays local.
+            </h3>
+
+            <p>
+                This interface stores only demonstration metadata
+                in browser session storage.
+            </p>
+
+        </article>
+
+    </aside>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/js/documents.js"
+            asp-append-version="true"></script>
+}

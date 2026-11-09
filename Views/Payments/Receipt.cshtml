@@ -1,0 +1,350 @@
+﻿@model PaymentReceiptViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Payment Receipt";
+    ViewData["ActiveNavigation"] = "Payments";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/payments.css"
+          asp-append-version="true" />
+}
+
+
+<div class="q4u-payment-back no-print">
+
+    <a asp-controller="Payments"
+       asp-action="Index">
+        ← Back to Payments
+    </a>
+
+</div>
+
+
+<section class="q4u-receipt-page-header no-print">
+
+    <div>
+
+        <span>PAYMENT RECEIPT</span>
+
+        <h1>
+            @Model.PaymentReference
+        </h1>
+
+        <p>
+            Prototype receipt for a Q4U payment record.
+        </p>
+
+    </div>
+
+
+    <div>
+
+        <button type="button"
+                id="printPrototypeReceipt">
+            Print
+        </button>
+
+        <button type="button"
+                data-prototype-action
+                data-message="A prototype receipt download has been prepared.">
+            Download
+        </button>
+
+    </div>
+
+</section>
+
+
+<div class="q4u-receipt-wrapper">
+
+    <article class="q4u-payment-receipt">
+
+        <header class="q4u-receipt-brand">
+
+            <div>
+
+                <span class="q4u-receipt-logo">
+                    ZA
+                </span>
+
+                <div>
+                    <strong>
+                        NUMBER PLATES Q4U
+                    </strong>
+
+                    <small>
+                        Mayfair · Johannesburg
+                    </small>
+                </div>
+
+            </div>
+
+
+            <span class="q4u-receipt-paid-stamp">
+                PAID
+            </span>
+
+        </header>
+
+
+        <section class="q4u-receipt-title">
+
+            <span>PAYMENT RECEIPT</span>
+
+            <h2>
+                Thank you, Ayesha.
+            </h2>
+
+            <p>
+                This document represents a prototype payment receipt
+                and has no accounting or legal value.
+            </p>
+
+        </section>
+
+
+        <section class="q4u-receipt-reference-grid">
+
+            <div>
+
+                <span>Payment reference</span>
+
+                <strong>
+                    @Model.PaymentReference
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Service reference</span>
+
+                <strong>
+                    @Model.ServiceReference
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Payment date</span>
+
+                <strong>
+                    @Model.PaymentDate
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Payment method</span>
+
+                <strong>
+                    @Model.PaymentMethod
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <section class="q4u-receipt-customer">
+
+            <div>
+
+                <span>CUSTOMER</span>
+
+                <strong>
+                    Ayesha Khan
+                </strong>
+
+                <p>
+                    Q4U-10482<br />
+                    ayesha.khan@example.co.za<br />
+                    082 555 0184
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <span>VEHICLE</span>
+
+                <strong>
+                    @Model.VehicleName
+                </strong>
+
+                <div class="q4u-receipt-number-plate">
+
+                    <span>ZA</span>
+
+                    @{
+                        var registrationParts =
+                            Model.Registration.Split(' ');
+
+                        var province =
+                            registrationParts.Last();
+
+                        var plate =
+                            string.Join(
+                                " ",
+                                registrationParts.Take(
+                                    registrationParts.Length - 1));
+                    }
+
+                    <strong>
+                        @plate
+                    </strong>
+
+                    <em>
+                        @province
+                    </em>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="q4u-receipt-line-items">
+
+            <header>
+
+                <span>DESCRIPTION</span>
+                <span>AMOUNT</span>
+
+            </header>
+
+
+            <div>
+
+                <div>
+
+                    <strong>
+                        @Model.Description
+                    </strong>
+
+                    <small>
+                        @Model.ServiceReference
+                    </small>
+
+                </div>
+
+
+                <strong>
+                    R@Model.Amount.ToString("N2")
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <section class="q4u-receipt-total">
+
+            <span>
+                TOTAL PAID
+            </span>
+
+            <strong>
+                R@Model.Amount.ToString("N2")
+            </strong>
+
+        </section>
+
+
+        <section class="q4u-receipt-payment-status">
+
+            <span>
+                ✓
+            </span>
+
+            <div>
+
+                <strong>
+                    Payment recorded successfully
+                </strong>
+
+                <p>
+                    @Model.Status · @Model.PaymentMethod
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <footer class="q4u-receipt-footer">
+
+            <div>
+
+                <strong>
+                    ZA Number Plates Q4U
+                </strong>
+
+                <span>
+                    103 Church Street · Mayfair
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    011 830 2067
+                </strong>
+
+                <span>
+                    Prototype receipt
+                </span>
+
+            </div>
+
+        </footer>
+
+
+        <div class="q4u-receipt-watermark">
+            DEMO
+        </div>
+
+    </article>
+
+</div>
+
+
+<div class="q4u-receipt-actions no-print">
+
+    <a asp-controller="Payments"
+       asp-action="Index"
+       class="q4u-portal-primary-button">
+        Back to Payments
+    </a>
+
+    @if (Model.IsNewPayment)
+    {
+        <a asp-controller="Renewals"
+           asp-action="Track"
+           asp-route-reference="@Model.ServiceReference"
+           class="q4u-portal-secondary-button">
+
+            View Renewal
+        </a>
+    }
+
+</div>
+
+
+@section Scripts {
+    <script src="~/js/payments.js"
+            asp-append-version="true"></script>
+}

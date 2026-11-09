@@ -1,0 +1,766 @@
+﻿@{
+    var activeNavigation =
+        ViewData["ActiveNavigation"]?.ToString() ?? "Dashboard";
+
+    var pageTitle =
+        ViewData["Title"]?.ToString() ?? "Customer Portal";
+}
+
+<!DOCTYPE html>
+<html lang="en-za">
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@pageTitle | Q4U Customer Portal</title>
+
+    <meta name="theme-color"
+          content="#071a4b" />
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/portal.css"
+          asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+</head>
+
+
+<body class="q4u-portal-body">
+
+    <div class="q4u-portal-shell">
+
+        <aside class="q4u-portal-sidebar"
+               id="portalSidebar">
+
+            <div class="q4u-portal-sidebar-pattern"></div>
+
+
+            <div class="q4u-portal-sidebar-top">
+
+                <a asp-controller="Portal"
+                   asp-action="Dashboard"
+                   class="q4u-portal-logo">
+
+                    <span>ZA</span>
+
+                    <div>
+                        <small>NUMBER PLATES</small>
+                        <strong><b>Q</b>4U</strong>
+                    </div>
+
+                </a>
+
+
+                <button type="button"
+                        class="q4u-sidebar-close"
+                        id="closePortalSidebar"
+                        aria-label="Close navigation">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="q4u-portal-sidebar-section-label">
+                CUSTOMER PORTAL
+            </div>
+
+
+            <nav class="q4u-portal-nav">
+
+                <!-- DASHBOARD -->
+                <a asp-controller="Portal"
+                   asp-action="Dashboard"
+                   class="@(activeNavigation == "Dashboard" ? "active" : "")">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 3h8v8H3V3Zm2 2v4h4V5H5Zm8-2h8v5h-8V3Zm2 2v1h4V5h-4Zm-2 5h8v11h-8V10Zm2 2v7h4v-7h-4ZM3 13h8v8H3v-8Zm2 2v4h4v-4H5Z" />
+                    </svg>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <!-- VEHICLES -->
+                <a asp-controller="Portal"
+                   asp-action="Vehicles"
+                   class="@(activeNavigation == "Vehicles" ? "active" : "")">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 11 7.2 5h9.6L19 11h1a2 2 0 0 1 2 2v5h-2v2h-3v-2H7v2H4v-2H2v-5a2 2 0 0 1 2-2h1Zm2.1 0h9.8l-1.5-4H8.6l-1.5 4ZM5 13a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm14 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" />
+                    </svg>
+
+                    <span>My Vehicles</span>
+
+                    <em>3</em>
+
+                </a>
+
+
+                <!-- RENEWALS -->
+                <a asp-controller="Portal"
+                   asp-action="Renewals"
+                   class="@(activeNavigation == "Renewals" ? "active" : "")">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7 2h10v2h3v18H4V4h3V2Zm2 2h6V3H9v1Zm-3 2v14h12V6h-1v2H7V6H6Zm3 5h6v2H9v-2Zm0 4h6v2H9v-2Z" />
+                    </svg>
+
+                    <span>Renewals</span>
+
+                    <em class="warning">2</em>
+
+                </a>
+
+
+                <!-- DOCUMENTS -->
+                <a asp-controller="Portal"
+                   asp-action="Documents"
+                   class="@(activeNavigation == "Documents" ? "active" : "")">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 2h11l5 5v15H4V2Zm2 2v16h12V8h-4V4H6Zm10 .8V6h1.2L16 4.8ZM8 11h8v2H8v-2Zm0 4h8v2H8v-2Z" />
+                    </svg>
+
+                    <span>Documents</span>
+
+                </a>
+
+
+                <!-- SERVICE REQUESTS -->
+                <a asp-controller="Portal"
+                   asp-action="Requests"
+                   class="@(activeNavigation == "Requests" ? "active" : "")">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 4h18v4H3V4Zm2 2h14V6H5Zm-2 4h18v10H3V10Zm2 2v6h14v-6H5Zm2 1h5v2H7v-2Z" />
+                    </svg>
+
+                    <span>Service Requests</span>
+
+                    <em>2</em>
+
+                </a>
+
+
+                <!-- PAYMENTS -->
+                <a asp-controller="Portal"
+                   asp-action="Payments"
+                   class="@(activeNavigation == "Payments" ? "active" : "")">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 5h18v14H3V5Zm2 2v2h14V7H5Zm0 4v6h14v-6H5Zm2 2h5v2H7v-2Z" />
+                    </svg>
+
+                    <span>Payments</span>
+
+                </a>
+
+            </nav>
+
+
+            <div class="q4u-portal-sidebar-divider"></div>
+
+
+            <nav class="q4u-portal-nav q4u-portal-nav-secondary">
+
+                <!-- =================================================
+                     NEW: NOTIFICATIONS
+                     ================================================= -->
+
+                <a asp-controller="Portal"
+                   asp-action="Notifications"
+                   class="@(activeNavigation == "Notifications" ? "active" : "")">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 22a2.4 2.4 0 0 0 2.3-2h-4.6a2.4 2.4 0 0 0 2.3 2Zm7-6v-5a7 7 0 0 0-5-6.7V3a2 2 0 0 0-4 0v1.3A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2Zm-12 1v-6a5 5 0 0 1 10 0v6H7Z" />
+                    </svg>
+
+                    <span>Notifications</span>
+
+                    <em id="notificationSidebarBadge">
+                        5
+                    </em>
+
+                </a>
+
+
+                <!-- SETTINGS -->
+                <a asp-controller="Portal"
+                   asp-action="Settings"
+                   class="@(activeNavigation == "Settings" ? "active" : "")">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19.4 13a7.9 7.9 0 0 0 .1-1 7.9 7.9 0 0 0-.1-1l2.1-1.6-2-3.4-2.5 1a8.4 8.4 0 0 0-1.7-1L15 3.3h-4L10.6 6a8.4 8.4 0 0 0-1.7 1L6.4 6l-2 3.4L6.5 11a7.9 7.9 0 0 0-.1 1 7.9 7.9 0 0 0 .1 1l-2.1 1.6 2 3.4 2.5-1a8.4 8.4 0 0 0 1.7 1l.4 2.7h4l.4-2.7a8.4 8.4 0 0 0 1.7-1l2.5 1 2-3.4L19.4 13ZM13 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z" />
+                    </svg>
+
+                    <span>Settings</span>
+
+                </a>
+
+
+                <!-- WEBSITE -->
+                <a asp-controller="Home"
+                   asp-action="Index">
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 3 2 11h3v9h6v-6h2v6h6v-9h3L12 3Zm0 2.5 6 4.8V18h-3v-6H9v6H7v-7.7l5-4.8Z" />
+                    </svg>
+
+                    <span>Q4U Website</span>
+
+                </a>
+
+            </nav>
+
+
+            <div class="q4u-portal-support-card">
+
+                <span class="q4u-portal-support-icon">
+                    ?
+                </span>
+
+                <div>
+
+                    <strong>
+                        Need assistance?
+                    </strong>
+
+                    <p>
+                        Speak to the Q4U team.
+                    </p>
+
+                    <a href="tel:+27118302067">
+                        011 830 2067
+                    </a>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <div class="q4u-sidebar-overlay"
+             id="portalSidebarOverlay">
+        </div>
+
+
+        <div class="q4u-portal-main">
+
+            <header class="q4u-portal-topbar">
+
+                <div class="q4u-portal-topbar-left">
+
+                    <button type="button"
+                            class="q4u-mobile-menu-button"
+                            id="openPortalSidebar">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </button>
+
+
+                    <div class="q4u-portal-page-context">
+
+                        <span>
+                            Q4U CUSTOMER PORTAL
+                        </span>
+
+                        <strong>
+                            @pageTitle
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-portal-topbar-actions">
+
+                    <!-- QUICK NOTIFICATION BELL -->
+                    <button type="button"
+                            class="q4u-topbar-icon-button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#notificationPanel"
+                            aria-label="Notifications">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 22a2.4 2.4 0 0 0 2.3-2h-4.6a2.4 2.4 0 0 0 2.3 2Zm7-6v-5a7 7 0 0 0-5-6.7V3a2 2 0 0 0-4 0v1.3A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2Zm-12 1v-6a5 5 0 0 1 10 0v6H7Z" />
+                        </svg>
+
+                        <span class="q4u-notification-badge"
+                              id="notificationBadge">
+                            5
+                        </span>
+
+                    </button>
+
+
+                    <div class="dropdown">
+
+                        <button class="q4u-profile-button"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+
+                            <span class="q4u-profile-avatar">
+                                AK
+                            </span>
+
+                            <span class="q4u-profile-copy">
+
+                                <strong>
+                                    Ayesha Khan
+                                </strong>
+
+                                <small>
+                                    Q4U-10482
+                                </small>
+
+                            </span>
+
+                            <span class="q4u-profile-chevron">
+                                ▾
+                            </span>
+
+                        </button>
+
+
+                        <div class="dropdown-menu dropdown-menu-end q4u-profile-menu">
+
+                            <div class="q4u-profile-menu-heading">
+
+                                <span>
+                                    Signed in as
+                                </span>
+
+                                <strong>
+                                    ayesha.khan@example.co.za
+                                </strong>
+
+                            </div>
+
+
+                            <!-- NEW -->
+                            <a asp-controller="Portal"
+                               asp-action="Notifications"
+                               class="dropdown-item">
+                                Notifications
+                            </a>
+
+
+                            <a asp-controller="Portal"
+                               asp-action="Settings"
+                               class="dropdown-item">
+                                Account settings
+                            </a>
+
+
+                            <a asp-controller="Home"
+                               asp-action="Index"
+                               class="dropdown-item">
+                                Visit Q4U website
+                            </a>
+
+
+                            <div class="dropdown-divider"></div>
+
+
+                            <button type="button"
+                                    class="dropdown-item q4u-profile-logout"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#logoutModal">
+
+                                Sign out
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <main class="q4u-portal-content">
+
+                @RenderBody()
+
+            </main>
+
+        </div>
+
+    </div>
+
+
+    <!-- =======================================================
+         QUICK NOTIFICATION PANEL
+         ======================================================= -->
+
+    <div class="offcanvas offcanvas-end q4u-notification-panel"
+         tabindex="-1"
+         id="notificationPanel">
+
+        <div class="offcanvas-header q4u-notification-header">
+
+            <div>
+
+                <span>
+                    YOUR UPDATES
+                </span>
+
+                <h2>
+                    Notifications
+                </h2>
+
+            </div>
+
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="offcanvas">
+            </button>
+
+        </div>
+
+
+        <div class="q4u-notification-actions">
+
+            <span>
+
+                <strong id="notificationUnreadText">
+                    5
+                </strong>
+
+                unread
+
+            </span>
+
+
+            <div class="d-flex align-items-center gap-3">
+
+                <!-- NEW: OPEN THE FULL CENTRE -->
+                <a asp-controller="Portal"
+                   asp-action="Notifications"
+                   class="text-decoration-none fw-bold">
+                    View all
+                </a>
+
+
+                <button type="button"
+                        id="markAllNotificationsRead">
+
+                    Mark all as read
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="offcanvas-body q4u-notification-list">
+
+            <!-- BMW EXPIRY -->
+            <button class="q4u-notification-item unread"
+                    data-notification
+                    data-notification-id="bmw-expiry">
+
+                <span class="q4u-notification-icon warning">
+                    !
+                </span>
+
+                <span class="q4u-notification-copy">
+
+                    <strong>
+                        Licence expires in 6 days
+                    </strong>
+
+                    <span>
+                        BMW 320i · KP 19 FX GP
+                    </span>
+
+                    <small>
+                        Today · 08:15
+                    </small>
+
+                </span>
+
+                <em></em>
+
+            </button>
+
+
+            <!-- BMW RENEWAL -->
+            <button class="q4u-notification-item unread"
+                    data-notification
+                    data-notification-id="bmw-documents">
+
+                <span class="q4u-notification-icon info">
+                    i
+                </span>
+
+                <span class="q4u-notification-copy">
+
+                    <strong>
+                        Documents received
+                    </strong>
+
+                    <span>
+                        Supporting documents for your BMW renewal are ready for review.
+                    </span>
+
+                    <small>
+                        Today · 11:03
+                    </small>
+
+                </span>
+
+                <em></em>
+
+            </button>
+
+
+            <!-- POLO PLATES -->
+            <button class="q4u-notification-item unread"
+                    data-notification
+                    data-notification-id="polo-plates-ready">
+
+                <span class="q4u-notification-icon success">
+                    ✓
+                </span>
+
+                <span class="q4u-notification-copy">
+
+                    <strong>
+                        Number plates ready
+                    </strong>
+
+                    <span>
+                        Your JT 42 ZN GP plates are ready for collection.
+                    </span>
+
+                    <small>
+                        Yesterday · 15:16
+                    </small>
+
+                </span>
+
+                <em></em>
+
+            </button>
+
+
+            <!-- DOCUMENT REVIEW -->
+            <button class="q4u-notification-item unread"
+                    data-notification
+                    data-notification-id="bmw-disc-review">
+
+                <span class="q4u-notification-icon warning">
+                    !
+                </span>
+
+                <span class="q4u-notification-copy">
+
+                    <strong>
+                        Licence disc image needs review
+                    </strong>
+
+                    <span>
+                        A BMW vehicle document is awaiting review.
+                    </span>
+
+                    <small>
+                        Today · 09:42
+                    </small>
+
+                </span>
+
+                <em></em>
+
+            </button>
+
+
+            <!-- PAYMENT DUE -->
+            <button class="q4u-notification-item unread"
+                    data-notification
+                    data-notification-id="bmw-payment">
+
+                <span class="q4u-notification-icon warning">
+                    R
+                </span>
+
+                <span class="q4u-notification-copy">
+
+                    <strong>
+                        BMW renewal payment required
+                    </strong>
+
+                    <span>
+                        R1,284.50 is outstanding against your renewal.
+                    </span>
+
+                    <small>
+                        14 Aug · 09:21
+                    </small>
+
+                </span>
+
+                <em></em>
+
+            </button>
+
+
+            <!-- READ PAYMENT -->
+            <button class="q4u-notification-item"
+                    data-notification
+                    data-notification-id="polo-payment">
+
+                <span class="q4u-notification-icon success">
+                    ✓
+                </span>
+
+                <span class="q4u-notification-copy">
+
+                    <strong>
+                        Payment confirmed
+                    </strong>
+
+                    <span>
+                        R420.00 received for your number plate request.
+                    </span>
+
+                    <small>
+                        10 Aug · 12:40
+                    </small>
+
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =======================================================
+         LOGOUT
+         ======================================================= -->
+
+    <div class="modal fade"
+         id="logoutModal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content q4u-portal-modal">
+
+                <div class="q4u-logout-icon">
+                    →
+                </div>
+
+
+                <h3>
+                    Sign out?
+                </h3>
+
+
+                <p>
+                    You'll return to the Q4U customer sign-in screen.
+                </p>
+
+
+                <div class="q4u-portal-modal-actions">
+
+                    <button type="button"
+                            class="q4u-portal-secondary-button"
+                            data-bs-dismiss="modal">
+
+                        Stay signed in
+
+                    </button>
+
+
+                    <a asp-controller="Account"
+                       asp-action="Login"
+                       class="q4u-portal-primary-button">
+
+                        Sign out
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =======================================================
+         PORTAL TOAST
+         ======================================================= -->
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+
+        <div id="portalToast"
+             class="toast q4u-portal-toast">
+
+            <div class="q4u-portal-toast-icon">
+                ✓
+            </div>
+
+
+            <div>
+
+                <strong id="portalToastTitle">
+                    Done
+                </strong>
+
+                <span id="portalToastMessage">
+                    Your action was completed.
+                </span>
+
+            </div>
+
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="toast">
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/portal.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

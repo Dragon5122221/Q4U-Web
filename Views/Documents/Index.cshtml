@@ -1,0 +1,783 @@
+﻿@model DocumentLibraryViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Documents";
+    ViewData["ActiveNavigation"] = "Documents";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/documents.css"
+          asp-append-version="true" />
+}
+
+
+<section class="q4u-documents-header">
+
+    <div>
+
+        <span>
+            DIGITAL RECORDS
+        </span>
+
+        <h1>Documents</h1>
+
+        <p>
+            Keep your customer and vehicle paperwork together,
+            ready for Q4U services when you need it.
+        </p>
+
+    </div>
+
+
+    <a asp-controller="Documents"
+       asp-action="Upload"
+       class="q4u-portal-primary-button">
+
+        Upload Document
+
+        <span>↑</span>
+
+    </a>
+
+</section>
+
+
+<section class="q4u-document-summary-grid">
+
+    <article>
+
+        <span>DOCUMENTS</span>
+
+        <strong id="documentTotalCount">
+            @Model.TotalDocuments
+        </strong>
+
+        <small>
+            Stored in your profile
+        </small>
+
+    </article>
+
+
+    <article class="success">
+
+        <span>VERIFIED</span>
+
+        <strong>
+            @Model.VerifiedDocuments
+        </strong>
+
+        <small>
+            Ready for use
+        </small>
+
+    </article>
+
+
+    <article class="warning">
+
+        <span>ATTENTION</span>
+
+        <strong>
+            @Model.AttentionDocuments
+        </strong>
+
+        <small>
+            Require review
+        </small>
+
+    </article>
+
+
+    <article>
+
+        <span>VEHICLE FILES</span>
+
+        <strong>
+            @Model.VehicleDocuments
+        </strong>
+
+        <small>
+            Linked to vehicles
+        </small>
+
+    </article>
+
+</section>
+
+
+<section class="q4u-portal-card q4u-document-library">
+
+    <div class="q4u-document-toolbar">
+
+        <div>
+
+            <span>
+                DOCUMENT LIBRARY
+            </span>
+
+            <h2>
+                Your files
+            </h2>
+
+        </div>
+
+
+        <div class="q4u-document-toolbar-controls">
+
+            <div class="q4u-document-search">
+
+                <span>⌕</span>
+
+                <input id="documentSearch"
+                       type="text"
+                       placeholder="Search documents..." />
+
+            </div>
+
+
+            <select id="documentCategoryFilter"
+                    class="form-select">
+
+                <option value="all">
+                    All categories
+                </option>
+
+                <option value="Registration">
+                    Registration
+                </option>
+
+                <option value="Renewal">
+                    Renewal
+                </option>
+
+                <option value="Licence">
+                    Licence
+                </option>
+
+                <option value="Identity">
+                    Identity
+                </option>
+
+                <option value="Customer">
+                    Customer
+                </option>
+
+                <option value="Other">
+                    Other
+                </option>
+
+            </select>
+
+
+            <select id="documentVehicleFilter"
+                    class="form-select">
+
+                <option value="all">
+                    All vehicles
+                </option>
+
+                <option value="customer">
+                    Customer profile
+                </option>
+
+                <option value="polo">
+                    Volkswagen Polo
+                </option>
+
+                <option value="hilux">
+                    Toyota Hilux
+                </option>
+
+                <option value="bmw">
+                    BMW 320i
+                </option>
+
+            </select>
+
+
+            <select id="documentStatusFilter"
+                    class="form-select">
+
+                <option value="all">
+                    All statuses
+                </option>
+
+                <option value="success">
+                    Verified
+                </option>
+
+                <option value="warning">
+                    Review
+                </option>
+
+                <option value="info">
+                    Stored
+                </option>
+
+            </select>
+
+
+            <div class="q4u-document-view-switcher">
+
+                <button type="button"
+                        class="active"
+                        data-document-view="list">
+                    ☰
+                </button>
+
+                <button type="button"
+                        data-document-view="grid">
+                    ▦
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="q4u-document-table-header">
+
+        <span>DOCUMENT</span>
+        <span>ASSOCIATION</span>
+        <span>UPLOADED</span>
+        <span>STATUS</span>
+        <span></span>
+
+    </div>
+
+
+    <div class="q4u-document-list"
+         id="documentLibraryList">
+
+        @foreach (var document in Model.Documents)
+        {
+            <article class="q4u-document-record"
+                     data-document-record
+                     data-id="@document.Id"
+                     data-category="@document.Category"
+                     data-status="@document.StatusTone"
+                     data-vehicle="@(document.CustomerLevel ? "customer" : document.VehicleId)"
+                     data-search="@($"{document.Name} {document.Category} {document.Association} {document.FileType}".ToLowerInvariant())"
+                     data-name="@document.Name"
+                     data-file-type="@document.FileType"
+                     data-file-size="@document.FileSize"
+                     data-uploaded="@document.UploadedDate"
+                     data-uploader="@document.UploadedBy"
+                     data-association="@document.Association"
+                     data-description="@document.Description"
+                     data-document-status="@document.Status"
+                     data-document-tone="@document.StatusTone"
+                     data-renewal="@document.RenewalRelevant.ToString().ToLowerInvariant()">
+
+                <div class="q4u-document-record-primary">
+
+                    <span class="q4u-document-file-icon">
+                        @document.FileType
+                    </span>
+
+
+                    <div>
+
+                        <strong>
+                            @document.Name
+                        </strong>
+
+                        <span>
+                            @document.Category ·
+                            @document.FileSize
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-document-association">
+
+                    @if (document.CustomerLevel)
+                    {
+                        <span class="q4u-document-association-icon">
+                            AK
+                        </span>
+
+                        <div>
+                            <strong>Customer profile</strong>
+                            <small>Ayesha Khan</small>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="q4u-document-association-icon vehicle">
+                            V
+                        </span>
+
+                        <div>
+                            <strong>
+                                @document.VehicleName
+                            </strong>
+
+                            <small>
+                                @document.Registration
+                            </small>
+                        </div>
+                    }
+
+                </div>
+
+
+                <div class="q4u-document-date">
+
+                    <strong>
+                        @document.UploadedDate
+                    </strong>
+
+                    <small>
+                        @document.UploadedBy
+                    </small>
+
+                </div>
+
+
+                <span class="q4u-portal-status @document.StatusTone">
+                    @document.Status
+                </span>
+
+
+                <div class="q4u-document-record-actions">
+
+                    <button type="button"
+                            data-preview-document>
+                        Preview
+                    </button>
+
+
+                    <div class="dropdown">
+
+                        <button type="button"
+                                data-bs-toggle="dropdown">
+                            •••
+                        </button>
+
+
+                        <div class="dropdown-menu dropdown-menu-end q4u-document-action-menu">
+
+                            <button type="button"
+                                    class="dropdown-item"
+                                    data-preview-document>
+                                Open details
+                            </button>
+
+                            <button type="button"
+                                    class="dropdown-item"
+                                    data-replace-document>
+                                Replace file
+                            </button>
+
+                            @if (document.RenewalRelevant)
+                            {
+                                <a asp-controller="Renewals"
+                                   asp-action="Index"
+                                   class="dropdown-item">
+                                    View renewals
+                                </a>
+                            }
+
+                            <div class="dropdown-divider"></div>
+
+                            <button type="button"
+                                    class="dropdown-item danger"
+                                    data-delete-document>
+                                Remove document
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+        }
+
+    </div>
+
+
+    <div class="q4u-document-empty-state d-none"
+         id="documentEmptyState">
+
+        <span>⌕</span>
+
+        <h3>No documents found</h3>
+
+        <p>
+            Try changing your search or filters.
+        </p>
+
+        <button type="button"
+                id="resetDocumentFilters">
+            Clear filters
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- SESSION UPLOAD TEMPLATE -->
+<template id="sessionDocumentTemplate">
+
+    <article class="q4u-document-record session-document"
+             data-document-record
+             data-id="session-document"
+             data-status="info">
+
+        <div class="q4u-document-record-primary">
+
+            <span class="q4u-document-file-icon"
+                  data-session-file-type>
+                PDF
+            </span>
+
+
+            <div>
+
+                <strong data-session-name>
+                    New Document
+                </strong>
+
+                <span data-session-category>
+                    Other · 1.0 MB
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="q4u-document-association">
+
+            <span class="q4u-document-association-icon vehicle">
+                V
+            </span>
+
+            <div>
+                <strong data-session-association>
+                    Volkswagen Polo
+                </strong>
+
+                <small data-session-registration>
+                    JT 42 ZN GP
+                </small>
+            </div>
+
+        </div>
+
+
+        <div class="q4u-document-date">
+
+            <strong>
+                16 August 2026
+            </strong>
+
+            <small>
+                Ayesha Khan
+            </small>
+
+        </div>
+
+
+        <span class="q4u-portal-status info">
+            Stored
+        </span>
+
+
+        <div class="q4u-document-record-actions">
+
+            <button type="button"
+                    data-preview-document>
+                Preview
+            </button>
+
+            <button type="button"
+                    data-delete-session-document>
+                •••
+            </button>
+
+        </div>
+
+    </article>
+
+</template>
+
+
+<!-- PREVIEW MODAL -->
+<div class="modal fade"
+     id="documentPreviewModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+
+        <div class="modal-content q4u-document-preview-modal">
+
+            <div class="q4u-document-preview-header">
+
+                <div>
+
+                    <span id="previewDocumentCategory">
+                        DOCUMENT PREVIEW
+                    </span>
+
+                    <h2 id="previewDocumentName">
+                        Vehicle Registration Certificate
+                    </h2>
+
+                </div>
+
+
+                <button type="button"
+                        data-bs-dismiss="modal">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="q4u-document-preview-layout">
+
+                <div class="q4u-document-preview-stage">
+
+                    <div class="q4u-document-preview-page">
+
+                        <div class="q4u-preview-document-brand">
+
+                            <span>ZA</span>
+
+                            <strong>
+                                Q4U DOCUMENT
+                            </strong>
+
+                        </div>
+
+
+                        <div class="q4u-preview-document-title">
+
+                            <span>
+                                PROTOTYPE DOCUMENT PREVIEW
+                            </span>
+
+                            <h3 id="previewPageDocumentName">
+                                Vehicle Registration Certificate
+                            </h3>
+
+                        </div>
+
+
+                        <div class="q4u-preview-redacted-line wide"></div>
+                        <div class="q4u-preview-redacted-line"></div>
+                        <div class="q4u-preview-redacted-line medium"></div>
+
+
+                        <div class="q4u-preview-document-box">
+
+                            <span>
+                                Linked record
+                            </span>
+
+                            <strong id="previewPageAssociation">
+                                Volkswagen Polo · JT 42 ZN GP
+                            </strong>
+
+                        </div>
+
+
+                        <div class="q4u-preview-redacted-line wide"></div>
+                        <div class="q4u-preview-redacted-line medium"></div>
+                        <div class="q4u-preview-redacted-line"></div>
+
+
+                        <div class="q4u-preview-watermark">
+                            DEMO
+                        </div>
+
+                    </div>
+
+
+                    <p>
+                        Visual prototype only — the source file is not
+                        being rendered or transmitted.
+                    </p>
+
+                </div>
+
+
+                <aside class="q4u-document-preview-sidebar">
+
+                    <div class="q4u-document-preview-status">
+
+                        <span id="previewStatusIcon">
+                            ✓
+                        </span>
+
+                        <div>
+                            <small>STATUS</small>
+
+                            <strong id="previewDocumentStatus">
+                                Verified
+                            </strong>
+                        </div>
+
+                    </div>
+
+
+                    <dl>
+
+                        <div>
+                            <dt>File type</dt>
+                            <dd id="previewDocumentType">PDF</dd>
+                        </div>
+
+                        <div>
+                            <dt>File size</dt>
+                            <dd id="previewDocumentSize">1.2 MB</dd>
+                        </div>
+
+                        <div>
+                            <dt>Association</dt>
+                            <dd id="previewDocumentAssociation">
+                                Customer profile
+                            </dd>
+                        </div>
+
+                        <div>
+                            <dt>Uploaded</dt>
+                            <dd id="previewDocumentUploaded">
+                                04 August 2026
+                            </dd>
+                        </div>
+
+                        <div>
+                            <dt>Uploaded by</dt>
+                            <dd id="previewDocumentUploader">
+                                Ayesha Khan
+                            </dd>
+                        </div>
+
+                    </dl>
+
+
+                    <div class="q4u-document-preview-description">
+
+                        <span>ABOUT THIS FILE</span>
+
+                        <p id="previewDocumentDescription">
+                            Document information.
+                        </p>
+
+                    </div>
+
+
+                    <div class="q4u-document-preview-actions">
+
+                        <button type="button"
+                                class="q4u-portal-primary-button"
+                                data-download-document>
+                            Download Copy
+                        </button>
+
+                        <button type="button"
+                                class="q4u-portal-secondary-button"
+                                id="previewReplaceDocument">
+                            Replace
+                        </button>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- REPLACE FILE INPUT -->
+<input type="file"
+       id="replaceDocumentInput"
+       accept=".pdf,.jpg,.jpeg,.png"
+       hidden />
+
+
+<!-- DELETE MODAL -->
+<div class="modal fade"
+     id="deleteDocumentModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content q4u-document-delete-modal">
+
+            <span>
+                !
+            </span>
+
+            <h3>
+                Remove this document?
+            </h3>
+
+            <p>
+                This prototype will demonstrate removing the selected
+                document from the customer portal.
+            </p>
+
+
+            <div>
+
+                <strong id="deleteDocumentName">
+                    Document
+                </strong>
+
+                <small id="deleteDocumentAssociation">
+                    Vehicle
+                </small>
+
+            </div>
+
+
+            <footer>
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-bs-dismiss="modal">
+                    Keep Document
+                </button>
+
+                <button type="button"
+                        class="q4u-document-danger-button"
+                        id="confirmDeleteDocument">
+                    Remove Document
+                </button>
+
+            </footer>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/js/documents.js"
+            asp-append-version="true"></script>
+}

@@ -1,0 +1,80 @@
+name: Q4U tests and deployment
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [Part2]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+      - name: Restore
+        run: dotnet restore tests/Q4UPrototypeWeb.Tests/Q4UPrototypeWeb.Tests.csproj
+      - name: Build
+        run: dotnet build tests/Q4UPrototypeWeb.Tests/Q4UPrototypeWeb.Tests.csproj --configuration Release --no-restore
+      - name: Run unit tests
+        run: dotnet test tests/Q4UPrototypeWeb.Tests/Q4UPrototypeWeb.Tests.csproj --configuration Release --no-build --logger "trx;LogFileName=q4u-tests.trx" --results-directory TestResults
+      - name: Save test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q4u-test-results
+          path: TestResults/*.trx
+          if-no-files-found: warn
+          retention-days: 14
+
+  deploy:
+    name: Deploy to Cloud Run
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/Part2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: q4u-production
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      IMAGE: europe-west1-docker.pkg.dev/q4u-licensing-2354/cloud-run-source-deploy/q4u-web:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build container
+        run: docker build --tag "$IMAGE" .
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: q4u-licensing-2354
+          workload_identity_provider: projects/626614350043/locations/global/workloadIdentityPools/q4u-github/providers/github
+          service_account: q4u-github-deploy@q4u-licensing-2354.iam.gserviceaccount.com
+          token_format: access_token
+      - uses: google-github-actions/setup-gcloud@v3
+      - name: Push container
+        env:
+          ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: |
+          printf '%s' "$ACCESS_TOKEN" | docker login -u oauth2accesstoken --password-stdin https://europe-west1-docker.pkg.dev
+          docker push "$IMAGE"
+      - name: Update live service
+        run: |
+          gcloud run deploy q4u-web \
+            --project=q4u-licensing-2354 \
+            --region=europe-west1 \
+            --image="$IMAGE" \
+            --service-account=q4u-runtime@q4u-licensing-2354.iam.gserviceaccount.com \
+            --port=8080 --memory=512Mi --cpu=1 \
+            --min=0 --max=1 --concurrency=20 --timeout=300 --quiet
+      - name: Check public home page
+        run: curl --fail --silent --show-error --location --retry 5 --retry-delay 5 --max-time 30 --output /dev/null https://q4u-web-626614350043.europe-west1.run.app/

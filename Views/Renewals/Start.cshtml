@@ -1,0 +1,1015 @@
+﻿@model RenewalStartViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Prepare Renewal";
+    ViewData["ActiveNavigation"] = "Renewals";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/renewals.css"
+          asp-append-version="true" />
+}
+
+
+<div class="q4u-renewal-back">
+
+    <a asp-controller="Renewals"
+       asp-action="Index">
+        ← Back to Renewals
+    </a>
+
+</div>
+
+
+<section class="q4u-renewal-start-heading">
+
+    <span>LICENCE RENEWAL</span>
+
+    <h1>Prepare your renewal.</h1>
+
+    <p>
+        We'll walk through the vehicle, documents and prototype
+        service details before anything is submitted.
+    </p>
+
+</section>
+
+
+<div class="q4u-renewal-wizard-progress">
+
+    <div class="active"
+         data-renewal-indicator="1">
+        <span>1</span>
+        <strong>Vehicle</strong>
+    </div>
+
+    <i></i>
+
+    <div data-renewal-indicator="2">
+        <span>2</span>
+        <strong>Documents</strong>
+    </div>
+
+    <i></i>
+
+    <div data-renewal-indicator="3">
+        <span>3</span>
+        <strong>Service & Payment</strong>
+    </div>
+
+    <i></i>
+
+    <div data-renewal-indicator="4">
+        <span>4</span>
+        <strong>Review</strong>
+    </div>
+
+</div>
+
+
+<div class="q4u-renewal-wizard-layout">
+
+    <div class="q4u-renewal-wizard-main">
+
+        <!-- STEP 1 -->
+        <section class="q4u-portal-card q4u-renewal-step"
+                 data-renewal-step="1">
+
+            <div class="q4u-renewal-step-heading">
+
+                <span>STEP 1 OF 4</span>
+
+                <h2>Choose the vehicle.</h2>
+
+                <p>
+                    Select the vehicle you want to prepare for licence renewal.
+                </p>
+
+            </div>
+
+
+            <label class="q4u-renewal-field-label"
+                   for="renewalVehicleSelector">
+                Vehicle
+            </label>
+
+
+            <select id="renewalVehicleSelector"
+                    class="form-select q4u-renewal-vehicle-selector">
+
+                @foreach (var vehicle in Model.Vehicles)
+                {
+                    <option value="@vehicle.Id"
+                            data-name="@vehicle.VehicleName"
+                            data-registration="@vehicle.Registration"
+                            data-province="@vehicle.Province"
+                            data-expiry="@vehicle.ExpiryDate.ToString("dd MMMM yyyy")"
+                            data-days="@vehicle.DaysRemaining"
+                            data-status="@vehicle.Status"
+                            data-tone="@vehicle.StatusTone"
+                            data-estimate="@vehicle.PrototypeEstimate.ToString("0.00")"
+                            selected="@(vehicle.Id == Model.SelectedVehicle.Id)">
+                        @vehicle.VehicleName · @vehicle.FullRegistration
+                    </option>
+                }
+
+            </select>
+
+
+            <div class="q4u-renewal-selected-vehicle">
+
+                <div class="q4u-renewal-selected-heading">
+
+                    <div>
+
+                        <span>CURRENT SELECTION</span>
+
+                        <h3 id="renewalSelectedName">
+                            @Model.SelectedVehicle.VehicleName
+                        </h3>
+
+                    </div>
+
+                    <span id="renewalSelectedStatus"
+                          class="q4u-portal-status @Model.SelectedVehicle.StatusTone">
+                        @Model.SelectedVehicle.Status
+                    </span>
+
+                </div>
+
+
+                <div class="q4u-renewal-number-plate">
+
+                    <span>ZA</span>
+
+                    <strong id="renewalSelectedRegistration">
+                        @Model.SelectedVehicle.Registration
+                    </strong>
+
+                    <em id="renewalSelectedProvince">
+                        @Model.SelectedVehicle.Province
+                    </em>
+
+                </div>
+
+
+                <div class="q4u-renewal-selected-data">
+
+                    <div>
+                        <span>Licence expiry</span>
+
+                        <strong id="renewalSelectedExpiry">
+                            @Model.SelectedVehicle.ExpiryDate.ToString("dd MMMM yyyy")
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Time remaining</span>
+
+                        <strong id="renewalSelectedDays"
+                                class="@Model.SelectedVehicle.StatusTone">
+                            @Model.SelectedVehicle.DaysRemaining days
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Prototype estimate</span>
+
+                        <strong>
+                            R<span id="renewalSelectedEstimate">
+                                @Model.SelectedVehicle.PrototypeEstimate.ToString("N2")
+                            </span>
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div id="renewalEligibilityMessage"
+                 class="q4u-renewal-eligibility @Model.SelectedVehicle.StatusTone">
+
+                <span>!</span>
+
+                <div>
+
+                    <strong id="renewalEligibilityHeading">
+                        @if (Model.SelectedVehicle.StatusTone == "danger")
+                        {
+                            <text>Urgent renewal recommended</text>
+                        }
+                        else if (Model.SelectedVehicle.StatusTone == "warning")
+                        {
+                            <text>Renewal preparation is available</text>
+                        }
+                        else
+                        {
+                            <text>No immediate renewal required</text>
+                        }
+                    </strong>
+
+                    <p id="renewalEligibilityCopy">
+                        @if (Model.SelectedVehicle.StatusTone == "danger")
+                        {
+                            <text>
+                                This vehicle expires very soon.
+                                Preparing the renewal should be prioritised.
+                            </text>
+                        }
+                        else if (Model.SelectedVehicle.StatusTone == "warning")
+                        {
+                            <text>
+                                This vehicle is approaching its renewal window.
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                                This vehicle is currently up to date.
+                                You may still review the renewal preparation journey.
+                            </text>
+                        }
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="q4u-renewal-step-actions">
+
+                <span></span>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        data-renewal-next>
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 2 -->
+        <section class="q4u-portal-card q4u-renewal-step d-none"
+                 data-renewal-step="2">
+
+            <div class="q4u-renewal-step-heading">
+
+                <span>STEP 2 OF 4</span>
+
+                <h2>Check your documents.</h2>
+
+                <p>
+                    These are prototype preparation items only.
+                    Final renewal requirements would be confirmed by Q4U.
+                </p>
+
+            </div>
+
+
+            <div class="q4u-renewal-document-list">
+
+                @foreach (var document in Model.Documents)
+                {
+                    <article data-renewal-document
+                             data-document-ready="@document.IsReady.ToString().ToLower()"
+                             data-document-id="@document.Id">
+
+                        <div class="q4u-renewal-document-icon @document.StatusTone">
+
+                            @if (document.IsReady)
+                            {
+                                <text>✓</text>
+                            }
+                            else
+                            {
+                                <text>!</text>
+                            }
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                @document.Name
+                            </strong>
+
+                            <span>
+                                @document.Description
+                            </span>
+
+                            @if (document.IsRequired)
+                            {
+                                <small>Required for this prototype checklist</small>
+                            }
+
+                        </div>
+
+
+                        <span class="q4u-portal-status @document.StatusTone"
+                              data-document-status>
+                            @document.Status
+                        </span>
+
+
+                        @if (!document.IsReady)
+                        {
+                            <button type="button"
+                                    data-add-renewal-document>
+                                Add file
+                            </button>
+                        }
+
+                    </article>
+                }
+
+            </div>
+
+
+            <input type="file"
+                   id="renewalDocumentInput"
+                   accept=".pdf,.jpg,.jpeg,.png"
+                   hidden />
+
+
+            <div id="renewalDocumentFile"
+                 class="q4u-renewal-added-document d-none">
+
+                <span>FILE</span>
+
+                <div>
+                    <strong id="renewalDocumentFileName">
+                        LicenceDisc.jpg
+                    </strong>
+
+                    <small>
+                        Added to prototype renewal checklist
+                    </small>
+                </div>
+
+                <button type="button"
+                        id="removeRenewalDocument">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="q4u-renewal-document-summary">
+
+                <span class="q4u-renewal-document-summary-icon">
+                    ✓
+                </span>
+
+                <div>
+
+                    <strong id="renewalDocumentSummaryHeading">
+                        4 of 5 preparation items ready
+                    </strong>
+
+                    <p id="renewalDocumentSummaryCopy">
+                        Add the missing licence disc image before continuing.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="q4u-renewal-step-actions">
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-renewal-previous>
+                    ← Back
+                </button>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        id="renewalDocumentsContinue"
+                        data-renewal-next
+                        disabled>
+                    Continue →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 3 -->
+        <section class="q4u-portal-card q4u-renewal-step d-none"
+                 data-renewal-step="3">
+
+            <div class="q4u-renewal-step-heading">
+
+                <span>STEP 3 OF 4</span>
+
+                <h2>Service & payment preference.</h2>
+
+                <p>
+                    Choose how you would like to handle this prototype request.
+                    No real transaction will take place.
+                </p>
+
+            </div>
+
+
+            <div class="q4u-renewal-step-three-grid">
+
+                <div>
+
+                    <span class="q4u-renewal-subheading">
+                        HANDLING PREFERENCE
+                    </span>
+
+
+                    <div class="q4u-renewal-choice-list">
+
+                        <label>
+
+                            <input type="radio"
+                                   name="collectionPreference"
+                                   value="Collect at Q4U Mayfair"
+                                   checked />
+
+                            <span></span>
+
+                            <div>
+                                <strong>Collect at Q4U Mayfair</strong>
+                                <small>103 Church Street, Mayfair</small>
+                            </div>
+
+                        </label>
+
+
+                        <label>
+
+                            <input type="radio"
+                                   name="collectionPreference"
+                                   value="Contact me about alternatives" />
+
+                            <span></span>
+
+                            <div>
+                                <strong>Contact me about alternatives</strong>
+
+                                <small>
+                                    A Q4U consultant can discuss available options.
+                                </small>
+                            </div>
+
+                        </label>
+
+                    </div>
+
+
+                    <span class="q4u-renewal-subheading">
+                        PAYMENT PREFERENCE
+                    </span>
+
+
+                    <div class="q4u-renewal-payment-options">
+
+                        <label>
+
+                            <input type="radio"
+                                   name="paymentMethod"
+                                   value="Card"
+                                   checked />
+
+                            <span>
+                                CARD
+                            </span>
+
+                            <strong>
+                                Card
+                            </strong>
+
+                        </label>
+
+
+                        <label>
+
+                            <input type="radio"
+                                   name="paymentMethod"
+                                   value="EFT" />
+
+                            <span>
+                                EFT
+                            </span>
+
+                            <strong>
+                                EFT
+                            </strong>
+
+                        </label>
+
+
+                        <label>
+
+                            <input type="radio"
+                                   name="paymentMethod"
+                                   value="Pay at Q4U" />
+
+                            <span>
+                                Q4U
+                            </span>
+
+                            <strong>
+                                Pay at Q4U
+                            </strong>
+
+                        </label>
+
+                    </div>
+
+
+                    <div id="renewalCardFields"
+                         class="q4u-renewal-card-fields">
+
+                        <div>
+
+                            <label>
+                                Card number
+                            </label>
+
+                            <input class="form-control"
+                                   value="4111 1111 1111 1111"
+                                   readonly />
+
+                        </div>
+
+
+                        <div>
+
+                            <label>
+                                Name on card
+                            </label>
+
+                            <input class="form-control"
+                                   value="AYESHA KHAN"
+                                   readonly />
+
+                        </div>
+
+
+                        <div>
+
+                            <label>
+                                Expiry
+                            </label>
+
+                            <input class="form-control"
+                                   value="08/29"
+                                   readonly />
+
+                        </div>
+
+
+                        <div>
+
+                            <label>
+                                CVV
+                            </label>
+
+                            <input class="form-control"
+                                   value="***"
+                                   readonly />
+
+                        </div>
+
+
+                        <p>
+                            Demonstration card details only.
+                            No payment information is processed or stored.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <aside class="q4u-renewal-quote-card">
+
+                    <span>
+                        PROTOTYPE ESTIMATE
+                    </span>
+
+                    <h3>
+                        Renewal summary
+                    </h3>
+
+
+                    <div>
+
+                        <p>
+                            <span>
+                                Vehicle renewal amount
+                                <small>Prototype estimate</small>
+                            </span>
+
+                            <strong>
+                                R<span id="renewalVehicleFee">
+                                    @Model.PrototypeVehicleAmount.ToString("N2")
+                                </span>
+                            </strong>
+                        </p>
+
+
+                        <p>
+                            <span>
+                                Q4U handling
+                                <small>Prototype service amount</small>
+                            </span>
+
+                            <strong>
+                                R<span id="renewalHandlingFee">
+                                    @Model.PrototypeHandlingAmount.ToString("N2")
+                                </span>
+                            </strong>
+                        </p>
+
+                    </div>
+
+
+                    <div class="q4u-renewal-total">
+
+                        <span>
+                            Prototype total
+                        </span>
+
+                        <strong>
+                            R<span id="renewalTotal">
+                                @Model.PrototypeTotal.ToString("N2")
+                            </span>
+                        </strong>
+
+                    </div>
+
+
+                    <p class="q4u-renewal-quote-disclaimer">
+                        Demonstration amount only. It is not an official
+                        quotation or statutory renewal fee.
+                    </p>
+
+                </aside>
+
+            </div>
+
+
+            <div class="q4u-renewal-step-actions">
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-renewal-previous>
+                    ← Back
+                </button>
+
+                <button type="button"
+                        class="q4u-portal-primary-button"
+                        data-renewal-next>
+                    Review Request →
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- STEP 4 -->
+        <section class="q4u-portal-card q4u-renewal-step d-none"
+                 data-renewal-step="4">
+
+            <div id="renewalReviewContent">
+
+                <div class="q4u-renewal-step-heading">
+
+                    <span>STEP 4 OF 4</span>
+
+                    <h2>Review your request.</h2>
+
+                    <p>
+                        Check the prototype information before submitting.
+                    </p>
+
+                </div>
+
+
+                <div class="q4u-renewal-review-vehicle">
+
+                    <div>
+
+                        <span>VEHICLE</span>
+
+                        <h3 id="renewalReviewVehicle">
+                            @Model.SelectedVehicle.VehicleName
+                        </h3>
+
+                        <small id="renewalReviewExpiry">
+                            Expires @Model.SelectedVehicle.ExpiryDate.ToString("dd MMMM yyyy")
+                        </small>
+
+                    </div>
+
+
+                    <div class="q4u-renewal-number-plate">
+
+                        <span>ZA</span>
+
+                        <strong id="renewalReviewRegistration">
+                            @Model.SelectedVehicle.Registration
+                        </strong>
+
+                        <em id="renewalReviewProvince">
+                            @Model.SelectedVehicle.Province
+                        </em>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-renewal-review-grid">
+
+                    <article>
+                        <span>Documents</span>
+                        <strong>Preparation complete</strong>
+                        <small>5 of 5 items ready</small>
+                    </article>
+
+                    <article>
+                        <span>Collection / handling</span>
+                        <strong id="renewalReviewCollection">
+                            Collect at Q4U Mayfair
+                        </strong>
+                        <small>Prototype preference</small>
+                    </article>
+
+                    <article>
+                        <span>Payment</span>
+                        <strong id="renewalReviewPayment">
+                            Card
+                        </strong>
+                        <small>No actual transaction</small>
+                    </article>
+
+                    <article>
+                        <span>Prototype total</span>
+
+                        <strong>
+                            R<span id="renewalReviewTotal">
+                                @Model.PrototypeTotal.ToString("N2")
+                            </span>
+                        </strong>
+
+                        <small>Not an official quotation</small>
+                    </article>
+
+                </div>
+
+
+                <div class="q4u-renewal-notification-preferences">
+
+                    <span>
+                        KEEP ME UPDATED
+                    </span>
+
+
+                    <label>
+
+                        <div>
+                            <strong>SMS updates</strong>
+                            <small>Renewal milestones and completion</small>
+                        </div>
+
+                        <input type="checkbox"
+                               id="renewalSmsUpdates"
+                               checked />
+
+                        <i></i>
+
+                    </label>
+
+
+                    <label>
+
+                        <div>
+                            <strong>Portal notifications</strong>
+                            <small>Show updates in the Q4U notification centre</small>
+                        </div>
+
+                        <input type="checkbox"
+                               id="renewalPortalUpdates"
+                               checked />
+
+                        <i></i>
+
+                    </label>
+
+                </div>
+
+
+                <label class="q4u-renewal-consent">
+
+                    <input type="checkbox"
+                           id="renewalConsent" />
+
+                    <span></span>
+
+                    <p>
+                        I confirm that the prototype information displayed
+                        above is correct and understand that this demonstration
+                        does not submit a real renewal or payment.
+                    </p>
+
+                </label>
+
+
+                <div class="q4u-renewal-step-actions">
+
+                    <button type="button"
+                            class="q4u-portal-secondary-button"
+                            data-renewal-previous>
+                        ← Back
+                    </button>
+
+                    <button type="button"
+                            class="q4u-portal-primary-button"
+                            id="submitRenewalRequest"
+                            disabled>
+                        Submit Renewal Request
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUCCESS -->
+            <div id="renewalSuccess"
+                 class="q4u-renewal-success d-none">
+
+                <div class="q4u-renewal-success-icon">
+                    ✓
+                </div>
+
+                <span>
+                    REQUEST SUBMITTED
+                </span>
+
+                <h2>
+                    Your renewal is now with Q4U.
+                </h2>
+
+                <p>
+                    The prototype request has been created and your
+                    notification preferences have been applied.
+                </p>
+
+
+                <div class="q4u-renewal-reference-card">
+
+                    <span>
+                        Renewal reference
+                    </span>
+
+                    <strong>
+                        Q4U-260816-021
+                    </strong>
+
+                    <button type="button"
+                            id="copyRenewalReference">
+                        Copy
+                    </button>
+
+                </div>
+
+
+                <div class="q4u-renewal-success-notification">
+
+                    <span>SMS</span>
+
+                    <div>
+                        <strong>
+                            Confirmation sent
+                        </strong>
+
+                        <p>
+                            Q4U: Renewal request Q4U-260816-021
+                            has been received.
+                        </p>
+                    </div>
+
+                    <em>✓</em>
+
+                </div>
+
+
+                <div class="q4u-renewal-success-timeline">
+
+                    <div class="complete">
+                        <span>✓</span>
+                        <strong>Submitted</strong>
+                    </div>
+
+                    <i></i>
+
+                    <div class="active">
+                        <span>2</span>
+                        <strong>Document review</strong>
+                    </div>
+
+                    <i></i>
+
+                    <div>
+                        <span>3</span>
+                        <strong>Processing</strong>
+                    </div>
+
+                    <i></i>
+
+                    <div>
+                        <span>4</span>
+                        <strong>Complete</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-renewal-success-actions">
+
+                    <a asp-controller="Renewals"
+                       asp-action="Track"
+                       asp-route-reference="Q4U-260816-021"
+                       asp-route-newRequest="true"
+                       class="q4u-portal-primary-button">
+                        Track Renewal
+                    </a>
+
+                    <a asp-controller="Renewals"
+                       asp-action="Index"
+                       class="q4u-portal-secondary-button">
+                        Back to Renewals
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <aside class="q4u-renewal-wizard-side">
+
+        <article class="q4u-renewal-help-card">
+
+            <span>Q4U SUPPORT</span>
+
+            <h3>
+                Need help preparing?
+            </h3>
+
+            <p>
+                The Q4U team can assist with vehicle administration
+                and clarify the documents needed for the actual service.
+            </p>
+
+            <a href="tel:+27118302067">
+                011 830 2067
+            </a>
+
+        </article>
+
+
+        <article class="q4u-portal-card q4u-renewal-security-card">
+
+            <span>PROTOTYPE SAFETY</span>
+
+            <h3>No real transaction occurs</h3>
+
+            <p>
+                Files, card details, payments, SMS messages and renewal
+                submissions shown here are demonstration interactions only.
+            </p>
+
+        </article>
+
+    </aside>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/js/renewals.js"
+            asp-append-version="true"></script>
+}

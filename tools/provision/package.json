@@ -1,0 +1,9 @@
+{
+  "name": "q4u-provision",
+  "private": true,
+  "description": "Trusted admin tool: creates Q4U tenants and Firebase users with their workspace membership.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": { "provision": "node provision.mjs" },
+  "dependencies": { "firebase-admin": "^14.5.0" }
+}

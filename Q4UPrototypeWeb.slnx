@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Q4UPrototypeWeb.csproj" />
+  <Project Path="tests/Q4UPrototypeWeb.Tests/Q4UPrototypeWeb.Tests.csproj" />
+</Solution>

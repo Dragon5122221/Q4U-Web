@@ -1,0 +1,26 @@
+Q4U Part2 automated tests and deployment
+
+1. In GitHub Desktop, select Part2 and Fetch/Pull origin before copying files.
+2. Copy ALL CONTENTS of repo-files into your LOCAL repository root (the folder
+   containing Program.cs and Q4UPrototypeWeb.csproj). Replace matching files.
+   Do not copy the repo-files folder itself. Include the .github folder.
+   Application source and your existing README are not replaced.
+3. Optional local check: open the solution, or run from the repository folder:
+   dotnet test tests/Q4UPrototypeWeb.Tests/Q4UPrototypeWeb.Tests.csproj -c Release
+4. Before pushing, upload setup-github-cloud.sh (beside this text file) into
+   Google Cloud Shell using its Upload file menu. Then run:
+   bash ~/setup-github-cloud.sh
+   Wait for SETUP COMPLETE. If an error appears, stop and share the error text.
+5. Commit the copied files in GitHub Desktop on Part2:
+   Add automated tests and Cloud Run deployment
+   Push origin.
+6. GitHub repository > Actions > Q4U tests and deployment > latest run.
+   Build and test must pass before Deploy to Cloud Run starts.
+   Share the result, or expand the first red step and share its error.
+7. After both jobs are green, open the live URL, sign in again if necessary,
+   and confirm Vehicles loads and a sample change persists after refresh.
+
+This package has been statically checked, but tests have not been executed
+in the preparation environment because .NET SDK was unavailable.
+Read docs/CI-CD.md for coverage, branching, limitations and evidence to capture.
+Do not upload firebase-key.json or any other private key.

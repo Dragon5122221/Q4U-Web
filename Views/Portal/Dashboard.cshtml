@@ -1,0 +1,571 @@
+﻿@model PortalDashboardViewModel
+
+@{
+    Layout = "_PortalLayout";
+
+    ViewData["Title"] = "Dashboard";
+    ViewData["ActiveNavigation"] = "Dashboard";
+
+    var selected = Model.SelectedVehicle;
+}
+
+<section class="q4u-dashboard-welcome">
+
+    <div>
+
+        <span class="q4u-dashboard-eyebrow"
+              id="dashboardGreeting">
+            GOOD AFTERNOON
+        </span>
+
+        <h1>
+            Welcome back,
+            <span>@Model.FirstName.</span>
+        </h1>
+
+        <p>
+            Here's what's happening across your vehicles today.
+        </p>
+
+    </div>
+
+
+    <div class="q4u-dashboard-date">
+
+        <span>
+            TODAY
+        </span>
+
+        <strong>
+            16 August 2026
+        </strong>
+
+    </div>
+
+</section>
+
+
+<section class="q4u-dashboard-stats">
+
+    <article>
+
+        <div class="q4u-dashboard-stat-icon blue">
+            V
+        </div>
+
+        <div>
+            <span>Vehicles</span>
+            <strong>@Model.Vehicles.Count</strong>
+            <small>Linked to your account</small>
+        </div>
+
+    </article>
+
+
+    <article>
+
+        <div class="q4u-dashboard-stat-icon yellow">
+            !
+        </div>
+
+        <div>
+            <span>Renewals</span>
+            <strong>2</strong>
+            <small>Require attention</small>
+        </div>
+
+    </article>
+
+
+    <article>
+
+        <div class="q4u-dashboard-stat-icon green">
+            ✓
+        </div>
+
+        <div>
+            <span>Documents</span>
+            <strong>11</strong>
+            <small>9 verified</small>
+        </div>
+
+    </article>
+
+
+    <article>
+
+        <div class="q4u-dashboard-stat-icon navy">
+            R
+        </div>
+
+        <div>
+            <span>Outstanding</span>
+            <strong>R1,284.50</strong>
+            <small>1 payment due</small>
+        </div>
+
+    </article>
+
+</section>
+
+
+<div class="q4u-dashboard-grid">
+
+    <div class="q4u-dashboard-main-column">
+
+        <section class="q4u-portal-card q4u-current-vehicle-card">
+
+            <div class="q4u-portal-card-heading">
+
+                <div>
+                    <span>MY GARAGE</span>
+                    <h2>Vehicle overview</h2>
+                </div>
+
+                <a asp-controller="Portal"
+                   asp-action="Vehicles">
+                    View all vehicles →
+                </a>
+
+            </div>
+
+
+            <div class="q4u-dashboard-vehicle-selector">
+
+                <label for="dashboardVehicleSelect">
+                    Selected vehicle
+                </label>
+
+                <select id="dashboardVehicleSelect"
+                        class="form-select">
+
+                    @foreach (var vehicle in Model.Vehicles)
+                    {
+                        <option value="@vehicle.Id"
+                                data-model="@vehicle.DisplayName"
+                                data-registration="@vehicle.Registration"
+                                data-province="@vehicle.Province"
+                                data-expiry="@vehicle.LicenceExpiry.ToString("dd MMMM yyyy")"
+                                data-days="@vehicle.DaysRemaining"
+                                data-status="@vehicle.RenewalStatus"
+                                data-tone="@vehicle.StatusTone"
+                                data-documents="@vehicle.DocumentCount"
+                                data-balance="@vehicle.OutstandingBalance.ToString("0.00")"
+                                data-services="@vehicle.CompletedServices">
+                            @vehicle.DisplayName · @vehicle.Registration @vehicle.Province
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+
+
+            <div class="q4u-dashboard-vehicle-panel">
+
+                <div class="q4u-dashboard-vehicle-main">
+
+                    <div class="q4u-dashboard-vehicle-heading">
+
+                        <div>
+                            <span>CURRENT VEHICLE</span>
+
+                            <h3 id="dashboardVehicleModel">
+                                @selected.DisplayName
+                            </h3>
+                        </div>
+
+
+                        <span id="dashboardVehicleStatus"
+                              class="q4u-portal-status @selected.StatusTone">
+                            @selected.RenewalStatus
+                        </span>
+
+                    </div>
+
+
+                    <div class="q4u-dashboard-number-plate">
+
+                        <span>ZA</span>
+
+                        <strong id="dashboardVehicleRegistration">
+                            @selected.Registration
+                        </strong>
+
+                        <em id="dashboardVehicleProvince">
+                            @selected.Province
+                        </em>
+
+                    </div>
+
+
+                    <div class="q4u-dashboard-vehicle-data">
+
+                        <div>
+                            <span>Licence expiry</span>
+
+                            <strong id="dashboardVehicleExpiry">
+                                @selected.LicenceExpiry.ToString("dd MMMM yyyy")
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Time remaining</span>
+
+                            <strong>
+                                <b id="dashboardVehicleDays">
+                                    @selected.DaysRemaining
+                                </b>
+                                days
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="q4u-dashboard-renewal-panel">
+
+                    <span class="q4u-dashboard-renewal-icon">
+                        !
+                    </span>
+
+                    <div>
+                        <span>LICENCE STATUS</span>
+
+                        <h3 id="dashboardRenewalHeading">
+                            Renewal approaching
+                        </h3>
+
+                        <p id="dashboardRenewalMessage">
+                            Your vehicle's licence renewal window is approaching.
+                            Start preparing now to avoid unnecessary delays.
+                        </p>
+
+                        <button type="button"
+                                class="q4u-dashboard-renewal-action"
+                                data-bs-toggle="modal"
+                                data-bs-target="#renewalPromptModal">
+                            Review renewal
+                            <span>→</span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="q4u-dashboard-vehicle-metrics">
+
+                <div>
+                    <span>Documents</span>
+
+                    <strong id="dashboardVehicleDocuments">
+                        @selected.DocumentCount
+                    </strong>
+
+                    <small>Available</small>
+                </div>
+
+                <div>
+                    <span>Outstanding</span>
+
+                    <strong>
+                        R<span id="dashboardVehicleBalance">
+                        @selected.OutstandingBalance.ToString("0.00")
+                    </span>
+                </strong>
+
+                <small>Current balance</small>
+            </div>
+
+            <div>
+                <span>Services</span>
+
+                <strong id="dashboardVehicleServices">
+                    @selected.CompletedServices
+                </strong>
+
+                <small>Completed</small>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="q4u-portal-card">
+
+        <div class="q4u-portal-card-heading">
+
+            <div>
+                <span>LATEST ACTIVITY</span>
+                <h2>Service requests</h2>
+            </div>
+
+            <a asp-controller="Portal"
+               asp-action="Requests">
+                View all →
+            </a>
+
+        </div>
+
+
+        <div class="q4u-dashboard-request-list">
+
+            @foreach (var request in Model.RecentRequests)
+            {
+                <article>
+
+                    <div class="q4u-request-reference">
+                        @request.Reference
+                    </div>
+
+                    <div class="q4u-request-description">
+
+                        <strong>
+                            @request.ServiceName
+                        </strong>
+
+                        <span>
+                            @request.Registration · @request.SubmittedDate
+                        </span>
+
+                    </div>
+
+                    <span class="q4u-portal-status @request.StatusTone">
+                        @request.Status
+                    </span>
+
+                    <a asp-controller="Portal"
+                       asp-action="Requests">
+                        →
+                    </a>
+
+                </article>
+            }
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<aside class="q4u-dashboard-side-column">
+
+    <section class="q4u-portal-card">
+
+        <div class="q4u-portal-card-heading">
+
+            <div>
+                <span>SHORTCUTS</span>
+                <h2>Quick actions</h2>
+            </div>
+
+        </div>
+
+
+        <div class="q4u-dashboard-quick-actions">
+
+            <a asp-controller="Renewals"
+               asp-action="Start"
+               asp-route-id="@selected.Id">
+
+                <span class="yellow">R</span>
+
+                <div>
+                    <strong>Renew a licence</strong>
+                    <small>Start a vehicle renewal</small>
+                </div>
+
+                <em>→</em>
+            </a>
+
+
+            <a asp-controller="Portal"
+               asp-action="Documents">
+
+                <span class="blue">↑</span>
+
+                <div>
+                    <strong>Upload document</strong>
+                    <small>Add paperwork to a vehicle</small>
+                </div>
+
+                <em>→</em>
+            </a>
+
+
+            <a asp-controller="Portal"
+               asp-action="Requests">
+
+                <span class="navy">+</span>
+
+                <div>
+                    <strong>Request a service</strong>
+                    <small>Ask Q4U for assistance</small>
+                </div>
+
+                <em>→</em>
+            </a>
+
+
+            <a asp-controller="Portal"
+               asp-action="Payments">
+
+                <span class="green">R</span>
+
+                <div>
+                    <strong>View payments</strong>
+                    <small>Amounts, receipts and history</small>
+                </div>
+
+                <em>→</em>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <section class="q4u-portal-card">
+
+        <div class="q4u-portal-card-heading">
+
+            <div>
+                <span>RECENT FILES</span>
+                <h2>Documents</h2>
+            </div>
+
+            <a asp-controller="Portal"
+               asp-action="Documents">
+                View all →
+            </a>
+
+        </div>
+
+
+        <div class="q4u-dashboard-document-list">
+
+            @foreach (var document in Model.RecentDocuments)
+            {
+                <article>
+
+                    <span class="q4u-document-icon">
+                        DOC
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            @document.Name
+                        </strong>
+
+                        <span>
+                            @document.Registration
+                        </span>
+
+                    </div>
+
+                    <span class="q4u-portal-status @document.StatusTone">
+                        @document.Status
+                    </span>
+
+                </article>
+            }
+
+        </div>
+
+    </section>
+
+
+    <section class="q4u-dashboard-help-card">
+
+        <div>
+            <span>Q4U SUPPORT</span>
+
+            <h3>Need a hand?</h3>
+
+            <p>
+                Speak to the Q4U team about a vehicle,
+                document or service request.
+            </p>
+        </div>
+
+        <a href="tel:+27118302067">
+            Call 011 830 2067
+        </a>
+
+    </section>
+
+</aside>
+
+</div>
+
+
+<!-- Renewal warning modal -->
+<div class="modal fade"
+     id="renewalPromptModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content q4u-renewal-modal">
+
+            <div class="q4u-renewal-modal-icon">
+                !
+            </div>
+
+            <span>LICENCE RENEWAL</span>
+
+            <h3>
+                Ready to prepare your renewal?
+            </h3>
+
+            <p>
+                Q4U will guide you through the required details
+                and supporting documents for the selected vehicle.
+            </p>
+
+            <div class="q4u-renewal-modal-summary">
+
+                <div>
+                    <span>Vehicle</span>
+                    <strong id="renewalModalVehicle">
+                        @selected.DisplayName
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Registration</span>
+                    <strong id="renewalModalRegistration">
+                        @selected.Registration @selected.Province
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="q4u-renewal-modal-actions">
+
+                <button type="button"
+                        class="q4u-portal-secondary-button"
+                        data-bs-dismiss="modal">
+                    Not now
+                </button>
+
+                <a asp-controller="Portal"
+                   asp-action="Renewals"
+                   class="q4u-portal-primary-button">
+                    Start Renewal
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
